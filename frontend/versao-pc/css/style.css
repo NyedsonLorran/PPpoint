@@ -11,7 +11,7 @@ html {
 body {
   font-family: Arial, sans-serif;
   text-align: center;
-  background-image: url("/versao-pc/frontend/imagens/fundo-point.png");  
+  background-image: url("/frontend/versao-pc/imagens/fundo-point.png");  
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
