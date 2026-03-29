@@ -4,376 +4,70 @@
   box-sizing: border-box;
 }
 
-html {
-  background: none;
-}
-
 body {
   font-family: Arial, sans-serif;
-  text-align: center;
-  background-image: url("/frontend/versao-pc/imagens/fundo-point.png");  
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  min-height: 100vh; 
-  position: relative;
-}
-
-.topo-container {
+  background: #f5f5f5; 
+  height: 100vh;
   display: flex;
-  justify-content: center;
   align-items: center;
-  width: 100%;
-  max-width: 1200px;
-  margin: 30px auto 10px;
-  padding: 0 20px;
-  gap: 20px;
-  position: relative;
-  z-index: 10;
-}
-
-.menu-wrapper {
-  display: flex;
   justify-content: center;
-  gap: 10px;
-  font-family: 'Poppins', sans-serif;
 }
 
-.menu-wrapper button {
-  padding: 12px 18px;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  background: transparent;
-  color: #2B2525;
-  font-weight: 600;
-  font-family: 'Poppins', sans-serif;
-  transition: all 0.2s ease;
-}
-
-.menu-wrapper button:hover {
-  background-color: #d84315;
-  color: #2B2525;
-}
-
-.menu-wrapper button.active {
-  background-color: #d84315;
-  color: #2B2525;
-}
-
-.login-wrapper {
-  position: absolute;
-  right: 20px;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-.btn-login-topo {
-  padding: 12px 18px;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  background: transparent;
-  color: #2B2525;
-  font-weight: 600;
-  font-family: 'Poppins', sans-serif;
-  transition: all 0.2s ease;
-}
-
-.btn-login-topo.logged {
-  background: #d84315;
-  color: #2B2525;
-}
-
-.btn-login-topo:hover {
-  background: #d84315;
-  color: #2B2525;
-}
-
-.paginas {
-  width: 100%;
-}
-
-.pagina {
-  display: none;
-}
-
-.pagina.active {
-  display: block;
-}
-
-/* CENTRALIZAR MOCKUP NA PROGRAMAÇÃO */
-.pagina#programacao .janelalogin.aviso.programacao {
-  position: relative;
-  top: auto;
-  left: auto;
-  transform: none;
-  margin: 40px auto;
-  max-width: 360px;
-  width: 90%;
-  padding: 20px;
-  border-radius: 20px;
-}
-
-/* CALENDARIO */
-.calendario {
-  margin: 20px auto;
-  padding: 20px 50px;
-  position: relative;
-  background-color: transparent;
-  max-width: 650px;
-  width: min(65%, 650px);
-  border-radius: 15px;
-}
-
-.cabeçalho {
+/* CONTAINER CENTRAL */
+.container {
   text-align: center;
 }
 
-.cabeçalho .Mes {
-  font-family: 'Montserrat', sans-serif;
-  font-size: 28px;
-  font-weight: normal;
-  margin: -10px 0 10px;
-  color: #2B2525;
-}
 
-#antes,
-#proximo {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  cursor: pointer;
-  z-index: 50;
-  background: transparent;
-  border: none;
-  color: #2B2525;
-  font-size: 26px;
-  font-weight: 900;
-}
 
-#antes { left: -5px; }
-#proximo { right: -5px; }
 
-.semanas,
-.dias {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  width: 100%;
-  margin: 20px auto;
-  gap: 15px;
-}
-
-.semanas div {
-  font-weight: bold;
-  font-size: 18px;
-  color: #2B2525;
-  text-align: center;
-}
-
-.flag {
-  background: #d4c22c;
-  color: #2B2525;
-  width: 100%;
-  max-width: 80px;
-  margin: auto;
-  aspect-ratio: 1 / 1.1;
-  padding: 10px 0;
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  font-size: clamp(12px, 2.5vw, 20px);
-  font-weight: 800;
-  clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 50% 70%, 0% 100%);
-}
-
-.flag.fora { opacity: 0.6; }
-.flag.bloqueado { background: #D7462D; }
-.flag.encerrado { background: #859371; }
-.flag.disponivel { background: #219332; }
-
-.flag.disponivel:hover { background: #2aa83d; cursor: pointer; }
-.flag.bloqueado:hover { background: #c43d26; cursor: pointer; }
-.flag.encerrado:hover { background: #7d8a6b; cursor: default; }
-
-/* MODAL BASE */
-.modal {
-  display: none;
-  position: fixed;
-  z-index: 999;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.6);
-}
-
-/* MODAL LOGIN */
-.janelalogin.login {
-  background: #ffffff;
-  width: 90%;
-  max-width: 350px;
-  margin: 10% auto;
-  padding: 30px 20px 150px;
-  text-align: center;
+/* CELULAR */
+.box {
+  background: #c0bbbb;
+  width: 320px;
+  height: 600px;
+  border-radius: 30px;
+  padding: 40px 20px 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
   position: relative;
-  clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 50% 80%, 0% 100%);
-}
-
-/* MODAL AVISOS */
-.janelalogin.aviso.encerrado {
-  background: #859371;
-  max-width: 270px;
-  margin: 10% auto;
-  padding: 30px 50px 110px;
-  text-align: center;
-  position: relative;
-  clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 50% 80%, 0% 100%);
-}
-
-.janelalogin.aviso.bloqueado {
-  background: #D7462D;
-  max-width: 270px;
-  margin: 10% auto;
-  padding: 30px 50px 110px;
-  text-align: center;
-  position: relative;
-  clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 50% 80%, 0% 100%);
-}
-
-.janelalogin.aviso.disponivel {
-  background: #219332;
-  width: 80px;
-  aspect-ratio: 1 / 1.1;
-  padding: 10px;
-  max-width: 270px;
-  margin: 10% auto;
-  text-align: center;
-  position: relative;
-  clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 50% 70%, 0% 100%);
-}
-
-.janelalogin.aviso.retrospectiva {
-  background: #219332;
   display: flex;
   flex-direction: column;
-  padding: 15px 20px;
-  border-radius: 15px;
-  color: #fff;
-  font-weight: 600;
-  text-align: center;
-  position: relative;
+  align-items: center;
+  justify-content: center;
 }
 
-.janelalogin.aviso.programacao {
-  background: #D7462D;
-  display: flex;
-  flex-direction: column;
-  padding: 15px 20px;
-  border-radius: 15px;
-  color: #fff;
-  font-weight: 600;
-  text-align: center;
-  position: relative;
+/* NOTCH */
+.box::before {
+  content: "";
+  width: 100px;
+  height: 15px;
+  background: #000;
+  border-radius: 10px;
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
-.janelalogin.aviso h3 {
+.box h1 {
+  color: #2B2525;
+  margin-bottom: 100px;
+}
+
+.box h2 {
+  color: #2B2525;
   margin-bottom: 10px;
-  Color: #2B2525;
-  font-size: 20px;
-  text-align: center;
 }
 
-.janelalogin.aviso.programacao h3,
-.janelalogin.aviso.retrospectiva h3
-{ font-size: 16px;
-  margin-bottom: 5px;
-}
-
-.janelalogin.aviso.programacao p,
-.janelalogin.aviso.retrospectiva p{
+.box p {
   font-size: 14px;
-  margin: 0;
-}
-
-.janelalogin.aviso p {
-  font-size: 14px;
-  color: #333;
-  text-align: center;
-}
-
-.modal input::placeholder {
-  color: #0000008e;
-  opacity: 1;
-}
-
-.close {
-  position: absolute;
-  top: 5px; right: 15px;
-  cursor: pointer;
-  font-size: 22px;
-}
-
-.modal input {
-  width: 100%;
-  outline: none;
-  padding: 10px;
-  margin: 8px 0;
-  border-radius: 8px;
-  border: 1px solid #818181;
-  background: transparent;
-}
-
-.modal button {
-  width: 100%;
-  padding: 10px;
+  color: #444;
   margin-top: 10px;
-  border: none;
-  background: #D7462D;
-  color: rgb(0, 0, 0);
-  border-radius: 8px;
-  cursor: pointer;
 }
 
-.auth-tabs {
-  display: flex;
-  gap: 5px;
-  margin-bottom: 10px;
-}
-
-.auth-tabs button {
-  flex: 1;
-  background: #40190465;
-  color: #000;
-}
-
-/*  CELULAR CENTRALIZADO */
-.mockup-celular {
-  width: 360px;
-  height: 640px;
-  background: #fff;
-  border: 2px solid #000;
-  border-radius: 20px;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 40px auto;
-  position: relative;
-}
-
-.mockup-celular .conteudo {
-  text-align: center;
-  padding: 20px;
-}
-
-.mockup-celular h2 {
-  font-size: 22px;
-  margin-bottom: 10px;
-}
-
-.mockup-celular p {
-  font-size: 18px;
+/* DESTAQUE */
+.destaque {
+  margin-top: 20px;
   font-weight: bold;
-  color: #333;
+  color: #d84315;
 }

@@ -1,59 +1,78 @@
 <!doctype html>
 <html lang="pt-br">
+  
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="/frontend/versao-mobile/css/style.css" />
   <title>Point Event Mobile</title>
 </head>
 
 <body>
 
-<div class="topo-container">
+    <div class="cabeçalho">
 
-  <div class="menu-wrapper">
-    <button id="btnProgramacao" onclick="mostrarPagina('programacao')">Programação</button>
-    <button id="btnPonto" class="active" onclick="mostrarPagina('ponto')">Point</button>
-    <button id="btnRetrospectiva" onclick="mostrarPagina('retrospectiva')">Retrospectiva</button>
-  </div>
+      <nav class="menu">
+        <button id="btnProgramacao" onclick="mostrarPagina('programacao')">Programação</button>
+        <button id="btnPonto" class="active" onclick="mostrarPagina('ponto')">Point</button>
+        <button id="btnRetrospectiva" onclick="mostrarPagina('retrospectiva')">Retrospectiva</button>
+      </nav>
 
-  <div class="login-wrapper">
-    <div id="btn-login-topo" class="btn-login-topo" data-logged="false">Entrar</div>
-  </div>
+      <div class="area-login">
+        <button id="btnLogin" class="btnLogin" data-logged="false">Entrar</button>
+      </div>
 
-</div>
+    </div>
 
+<!-- páginas base -->
 <div class="paginas">
 
+  <!-- página programação -->
   <div class="pagina" id="programacao">
     <p>Em breve</p>
   </div>
 
+  <!-- página point (calendário) -->
   <div class="pagina active" id="ponto">
+
     <div class="calendario">
+
+      <!-- navegação do mês -->
       <button id="voltarMes" onclick="mesAnterior()">&#8249;</button>
       <button id="proximoMes" onclick="proximoMes()">&#8250;</button>
 
+      <!-- nome do mês -->
       <div class="cabeçalho">
         <div class="Mes" id="Mes"></div>
       </div>
 
+      <!-- dias da semana -->
       <div class="semanas">
-        <div>D</div><div>S</div><div>T</div><div>Q</div><div>Q</div><div>S</div><div>S</div>
+        <div>D</div>
+        <div>S</div>
+        <div>T</div>
+        <div>Q</div>
+        <div>Q</div>
+        <div>S</div>
+        <div>S</div>
       </div>
 
-      <div class="dias" id="dias"></div>
+      <!-- dias do calendário -->
+      <div class="dias" id="dias"> </div>
+
     </div>
   </div>
 
+  <!-- página retrospectiva -->
   <div class="pagina" id="retrospectiva">
     <p>AO FINAL DO EVENTO ESTARÁ AQUI</p>
   </div>
 
 </div>
 
-<div id="janela-login/cadastro" class="fundo-trasparente">
+<!-- Janela Login/Cadastro -->
+<div id="janela-login/cadastro" class="fundo-transparente">
   <div class="janelalogin">
-
     <div class="botoes-logar-registrar">
       <button onclick="mostrarLogin()">Entrar</button>
       <button onclick="mostrarCadastro()">Criar Conta</button>
@@ -64,6 +83,7 @@
       <input type="text" id="loginUsuario" placeholder="Email ou @instagram">
       <input type="password" id="loginSenha" placeholder="Senha">
       <button onclick="fazerLogin()">Entrar</button>
+      <span class="esqueci-senha" onclick="abrirEsqueciSenha()">Esqueci minha senha</span>
     </div>
 
     <div id="registerForm" style="display:none;">
@@ -78,15 +98,27 @@
   </div>
 </div>
 
-<div id="janela-dia-encerrado" class="fundo-trasparente">
-  <div class="janela-encerrado">
-    <span class="fechar" onclick="fecharJanelaEncerrado()">×</span>
-    <h3>Tempo de registro encerrado</h3>
-    <p>O período de registro só fica disponível até 24h após o dia.</p>
+<!-- Janela Redefinir Senha -->
+<div id="janela-esqueci-senha" class="fundo-transparente">
+  <div class="janela-recuperacao">
+    <h2>Redefinir Senha</h2>
+    <input type="email" id="emailRecuperacao" placeholder="Digite seu email">
+    <button onclick="enviarRecuperacao()">Enviar</button>
+    <span class="fecharlogin" onclick="fecharEsqueciSenha()">×</span>
   </div>
 </div>
 
-<div id="janela-dia-Bloqueado" class="fundo-trasparente">
+<!-- janela dia encerrado -->
+<div id="janela-dia-encerrado" class="fundo-transparente">
+  <div class="janela-encerrado">
+    <span class="fechar" onclick="fecharJanelaEncerrado()">×</span>
+    <h3>Tempo de registro encerrado</h3>
+    <p>O período de registro só fica disponível até 24h após o dia que deseja registrar.</p>
+  </div>
+</div>
+
+<!-- janela dia bloqueado -->
+<div id="janela-dia-Bloqueado" class="fundo-transparente">
   <div class="janela-bloqueado">
     <span class="fechar" onclick="fecharJanelaBloqueado()">×</span>
     <h3>Disponível em breve</h3>
@@ -94,7 +126,8 @@
   </div>
 </div>
 
-<div id="janela-registrar-dia" class="fundo-trasparente">
+<!-- janela registrar dia -->
+<div id="janela-registrar-dia" class="fundo-transparente">
   <div class="janela-registrar">
     <span class="fechar" onclick="fecharJanelaRegistrarDia()">×</span>
     <h3>registre o dia passado</h3>
@@ -102,5 +135,7 @@
 </div>
 
 <script src="/frontend/versao-mobile/js/script.js"></script>
+
 </body>
+
 </html>

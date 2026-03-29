@@ -1,0 +1,73 @@
+/* CABEÇALHO */
+.cabeçalho {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin: 20px auto 0 auto;
+  padding: 0 10px;
+  position: relative;
+  background-color: transparent;
+}
+
+/* ÁREA DE LOGIN */
+.area-login {
+  position: absolute; 
+  top: 10px;
+  left: 10px;
+  display: flex;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.btnLogin {
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  background: transparent;
+  color: #2B2525;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btnLogin:hover {
+  background-color: #d84315;
+}
+
+/* MENU */
+.menu {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 60px;
+  padding: 8px;
+  border-radius: 12px;
+  background-color: transparent;
+}
+
+.menu button {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  background: transparent;
+  color: #2B2525;
+  font-weight: 600;
+  font-size: 13px;
+  transition: all 0.2s ease;
+}
+
+.menu button:hover,
+.menu button.active {
+  background-color: #d84315;
+}
+
+.pagina {
+  display: none;
+}
+.pagina.active {
+  display: block;
+}
+

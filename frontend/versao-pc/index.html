@@ -2,135 +2,39 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <link rel="stylesheet" href="/frontend/versao-pc/css/style.css" />
 
-   <!-- REDIRECIONAMENTO PARA A VERSÃO MOBILE -->
+  <!-- REDIRECIONAMENTO PARA MOBILE -->
   <script>
     if (/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-      window.location.href = "../versao-mobile/frontend/index.html";
+      window.location.href = "/frontend/versao-mobile/index.html";
     }
   </script>
 
-  <title>Point Event</title>
-
+  <title> PP Point</title>
 </head>
 
 <body>
 
-<!-- CONTAINER SUPERIOR -->
-<div class="topo-container">
+  <div class="container">
 
-  <!-- DIV MENU -->
-  <div class="menu-wrapper">
-    <button id="btnProgramacao" onclick="showPage('programacao')">Programação</button>
-    <button id="btnPonto" class="active" onclick="showPage('ponto')">Point</button>
-    <button id="btnRetrospectiva" onclick="showPage('retrospectiva')">Retrospectiva</button>
-  </div>
+    <div class="box">
 
-  <!-- DIV BOTÃO ENTRAR -->
-  <div class="login-wrapper">
-    <div id="btn-login-topo" class="btn-login-topo" data-logged="false">Entrar</div>
-  </div>
+      <h2>Versão Desktop em desenvolvimento</h2>
 
-</div>
+      <p>
+        Estamos ajustando  uma versão completa para computadores.
+      </p>
 
-<div class="paginas">
+      <p class="destaque">
+        Acesse pelo celular para usar
+      </p>
 
-  <!-- PROGRAMAÇÃO -->
-  <div class="pagina" id="programacao">
-    <div class="janelalogin aviso programacao">
-      <h3>Progamação em </h3>
-      <p id="tempoProgramacao">Calculando quanto tempo falta para a programação...</p>
-    </div>
-  </div>
-
-  <!-- PONTO -->
-  <div class="pagina active" id="ponto">
-    <div class="calendario">
-      <button id="antes" onclick="prevMonth()">&#8249;</button>
-      <button id="proximo" onclick="nextMonth()">&#8250;</button>
-
-      <div class="cabeçalho">
-        <div class="Mes" id="Mes"></div>
-      </div>
-
-      <div class="semanas">
-        <div>D</div><div>S</div><div>T</div><div>Q</div><div>Q</div><div>S</div><div>S</div>
-      </div>
-
-      <div class="dias" id="dias"></div>
-    </div>
-  </div>
-
-  <!-- RETROSPECTIVA -->
-  <div class="pagina" id="retrospectiva">
-
-    <!-- MOCKUP CELULAR CENTRALIZADO -->
-    <div class="mockup-celular">
-      <div class="conteudo">
-        <h2>Retrospectiva do Usuário</h2>
-        <p id="tempoRestante">Calculando quanto tempo falta para o final do evento...</p>
-      </div>
     </div>
 
   </div>
 
-</div>
-
-<!-- MODAL LOGIN -->
-<div id="authModal" class="modal">
-  <div class="janelalogin login">
-    <div class="auth-tabs">
-      <button onclick="showLogin()">Entrar </button>
-      <button onclick="showRegister()">Criar Conta </button>
-    </div>
-
-    <div id="loginForm">
-      <h2>Entrar</h2>
-      <input type="text" id="loginUsuario" placeholder="Email ou @instagram">
-      <input type="password" id="loginSenha" placeholder="Senha">
-      <button onclick="login()">Entrar</button>
-    </div>
-
-    <div id="registerForm" style="display:none;">
-      <h2>Criar Conta</h2>
-      <input type="email" id="cadastroEmail" placeholder="Email">
-      <input type="password" id="cadastroSenha" placeholder="Senha">
-      <input type="text" id="cadastroInstagram" placeholder="@instagram">
-      <button onclick="register()">Criar</button>
-    </div>
-
-    <span class="close" onclick="closeModal()">×</span>
-  </div>
-</div>
-
-<!-- MODAL AVISO ENCERRADO -->
-<div id="modalAviso" class="modal">
-  <div class="janelalogin aviso encerrado">
-    <span class="close" onclick="closeAviso()">×</span>
-    <h3>Tempo de registro encerrado</h3>
-    <p>O período de registro só fica disponível até 24h após o dia.</p>
-  </div>
-</div>
-
-<!-- MODAL BLOQUEADO -->
-<div id="modalBloqueado" class="modal">
-  <div class="janelalogin aviso bloqueado">
-    <span class="close" onclick="closeBloqueado()">×</span>
-    <h3>Disponível em breve</h3>
-    <p>Calma lá! Você só pode registrar no dia seguinte ao evento.</p>
-  </div>
-</div>
-
-<!-- MODAL DISPONÍVEL -->
-<div id="modalDisponivel" class="modal">
-  <div class="janelalogin aviso disponivel">
-    <span class="close" onclick="closeDisponivel()">×</span>
-    <h3>Dia disponível</h3>
-    <p>Você pode registrar nesse dia!</p>
-  </div>
-</div>
-
-<script src="/frontend/versao-pc/js/script.js"></script>
 </body>
 </html>

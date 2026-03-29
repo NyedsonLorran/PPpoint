@@ -1,0 +1,177 @@
+.janelalogin {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #fff;
+  width: 90%;
+  max-width: 300px;
+  padding: 30px 5% 100px;
+  border-radius: 15px;
+  text-align: center;
+}
+
+.janela-recuperacao {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #fff;
+  width: 90%; 
+  max-width: 350px;     
+  padding: 40px 5% 120px; 
+  border-radius: 15px;
+  text-align: center;
+  z-index: 1000;    
+}
+
+.janela-encerrado,
+.janela-bloqueado {
+  z-index: 10000;
+  width: 90%;
+  max-width: 300px;
+  padding: 30px 5% 70px;
+  text-align: center;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 10px;
+}
+
+.janela-encerrado {
+  background-color: #859371;
+}
+
+.janela-bloqueado {
+  background-color: #D7462D;
+}
+
+.janela-encerrado p,
+.janela-bloqueado p {
+  font-size: 17px;
+  margin-top: 15px; 
+}
+
+.janela-encerrado h3,
+.janela-bloqueado h3 {
+  font-size: 20px;   
+}
+
+.fundo-transparente {
+  display: none;
+  position: fixed;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.6);
+  z-index: 9999;
+}
+
+.janelalogin input,
+.janela-recuperacao input {
+  width: 100%;
+  padding: 8px;
+  margin: 5px 0;
+  border-radius: 6px;
+  outline: none;
+  border: 1px solid #818181;
+}
+
+.janela-recuperacao input {
+  margin: 15px 0;
+}
+
+.janelalogin button,
+.botoes-logar-registrar button {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  border: none;
+  background: #aca8a8;
+  color: #000;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+#loginForm button,
+#registerForm button {
+  width: 100%;
+  padding: 8px;
+  margin-top: 15px;
+  border: none;
+  background: #D7462D;
+  color: #000000;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.janela-recuperacao button {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border: none;
+  background: #d84315;
+  color: #000;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.botoes-logar-registrar{
+  display: flex;
+  flex-direction: row;   
+  gap: 10px;
+  width: 100%;
+}
+
+.botoes-logar-registrar button.active {
+  background: #817f7f;
+}
+
+.btnLogin {
+  transition: all 0.2s ease;
+}
+
+.btnLogin:hover {
+  background-color: #d84315;
+}
+
+#loginForm button:active, 
+#registerForm button:active, 
+.janela-recuperacao button:active {
+  background: #eb4527;
+}
+
+.esqueci-senha {
+  display: block;
+  margin-top: 8px;     
+  font-size: 14px;
+  color: #2B2525;
+  cursor: pointer;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s ease;
+}
+
+.esqueci-senha:hover {
+  text-decoration: underline;  
+}
+
+.fecharlogin, .fechar {
+  position: absolute;
+  bottom: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 10px 16px;
+  border: none;
+  border-radius: 10px;
+  color: #000000;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+#loginForm h2, 
+#registerForm h2, 
+.janela-recuperacao h2 {
+  margin: 15px;
+  white-space: nowrap;
+}

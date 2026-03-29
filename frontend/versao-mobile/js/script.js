@@ -2,12 +2,11 @@ const nomesMeses = ["Jun", "Jul"];
 let mesAtual = 0;
 const ano = 2026;
 const agoraFixo = new Date(2026, 5, 16, 12, 0, 0);
-let paginaAtual = "ponto";
-
+let paginaAtual = "ponto"; // apenas uma vez
 
 renderizarCalendario();
 
-
+//  CALENDÁRIO 
 function dentroDoEvento(mes, dia) {
   if (mes === 0 && dia >= 3) return true;
   if (mes === 1 && dia <= 5) return true;
@@ -77,54 +76,35 @@ function mesAnterior() {
   }
 }
 
+//  MENU 
 function mostrarPagina(alvo) {
   if (alvo === paginaAtual) return;
 
+  // alterna conteúdo
   document.getElementById(paginaAtual).classList.remove("active");
   document.getElementById(alvo).classList.add("active");
 
-  paginaAtual = alvo;
+  // atualiza menu
   atualizarMenu(alvo);
+  paginaAtual = alvo;
 }
 
 function atualizarMenu(ativo) {
-  document.querySelectorAll(".menu-wrapper button")
+  document.querySelectorAll(".menu button")
     .forEach(btn => btn.classList.remove("active"));
 
-  document.getElementById("btn" + ativo.charAt(0).toUpperCase() + ativo.slice(1))
-    .classList.add("active");
+  const btnId = "btn" + ativo.charAt(0).toUpperCase() + ativo.slice(1);
+  const botao = document.getElementById(btnId);
+  if (botao) botao.classList.add("active");
 }
 
+// ----- LOGIN / CADASTRO -----
 function abrirLoginCadastro() {
   document.getElementById("janela-login/cadastro").style.display = "block";
 }
 
 function fecharLoginCadastro() {
   document.getElementById("janela-login/cadastro").style.display = "none";
-}
-
-function abrirJanelaEncerrado() {
-  document.getElementById("janela-dia-encerrado").style.display = "block";
-}
-
-function fecharJanelaEncerrado() {
-  document.getElementById("janela-dia-encerrado").style.display = "none";
-}
-
-function abrirJanelaBloqueado() {
-  document.getElementById("janela-dia-Bloqueado").style.display = "block";
-}
-
-function fecharJanelaBloqueado() {
-  document.getElementById("janela-dia-Bloqueado").style.display = "none";
-}
-
-function abrirJanelaRegistrarDia() {
-  document.getElementById("janela-registrar-dia").style.display = "block";
-}
-
-function fecharJanelaRegistrarDia() {
-  document.getElementById("janela-registrar-dia").style.display = "none";
 }
 
 function mostrarLogin() {
@@ -178,13 +158,58 @@ function fazerLogin() {
 }
 
 function definirLogado(estado) {
-  const botao = document.getElementById("btn-login-topo");
+  const botao = document.getElementById("btnLogin");
   botao.dataset.logged = estado;
   botao.innerText = estado ? "Sair" : "Entrar";
 }
 
+//  JANELAS 
+function abrirJanelaEncerrado() {
+  document.getElementById("janela-dia-encerrado").style.display = "flex";
+}
+
+function fecharJanelaEncerrado() {
+  document.getElementById("janela-dia-encerrado").style.display = "none";
+}
+
+function abrirJanelaBloqueado() {
+  document.getElementById("janela-dia-Bloqueado").style.display = "flex";
+}
+
+function fecharJanelaBloqueado() {
+  document.getElementById("janela-dia-Bloqueado").style.display = "none";
+}
+
+function abrirJanelaRegistrarDia() {
+  document.getElementById("janela-registrar-dia").style.display = "block";
+}
+
+function fecharJanelaRegistrarDia() {
+  document.getElementById("janela-registrar-dia").style.display = "none";
+}
+
+//  ESQUECI SENHA 
+function abrirEsqueciSenha() {
+  document.getElementById('janela-esqueci-senha').style.display = 'flex';
+}
+
+function fecharEsqueciSenha() {
+  document.getElementById('janela-esqueci-senha').style.display = 'none';
+}
+
+function enviarRecuperacao() {
+  const email = document.getElementById('emailRecuperacao').value;
+  if(email) {
+    alert('Um link de redefinição foi enviado para: ' + email);
+    fecharEsqueciSenha();
+  } else {
+    alert('Por favor, digite seu email.');
+  }
+}
+
+//  LOGIN BOTÃO 
 window.addEventListener("DOMContentLoaded", () => {
-  const botao = document.getElementById("btn-login-topo");
+  const botao = document.getElementById("btnLogin");
 
   if (botao) {
     botao.addEventListener("click", () => {
