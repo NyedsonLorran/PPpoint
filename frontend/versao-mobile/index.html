@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="/frontend/versao-mobile/css/style.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <title>Point Event Mobile</title>
+  <title>Point Mobile</title>
 </head>
 
 <body>
@@ -162,7 +162,7 @@
     <div class="artista"><span class="hora">21:30</span><span class="nome">Alceu Valença</span></div>
   </div>
 </div>
-    
+
   </div>
 </div>
 
@@ -281,11 +281,51 @@
   </div>
 </div>
 
-<!-- janela registrar dia -->
-<div id="janela-registrar-dia" class="fundo-transparente">
-  <div class="janela-registrar">
-    <span class="fechar" onclick="fecharJanelaRegistrarDia()">×</span>
-    <h3>registre o dia passado</h3>
+<div id="fundoTransparente" class="fundo-transparente"></div>
+
+<div id="janela-registrar-dia" class="modal">
+  <div class="modal-box">
+    <h2 id="tituloRegistro">Registrar dia</h2>
+
+    <div id="areaCamera">
+      <h3>Tire uma foto dentro do PP</h3>
+      <p class="aviso-foto">Capriche! Ela vai aparecer na sua retrospectiva</p>
+      
+      <div id="videoContainer" style="display:none; margin-bottom: 10px;">
+        <video id="videoPreview" autoplay playsinline style="width: 100%; border-radius: 12px; background: #000;"></video>
+      </div>
+
+      <button type="button" id="btnAtivarCamera" onclick="ativarCamera()">Abrir Câmera</button>
+      <button type="button" id="btnCapturarFoto" onclick="capturarFoto()" style="display:none; background: #677069; margin-top: 10px;">Capturar Foto</button>
+      
+      <input type="file" id="inputGaleria" accept="image/*" capture="camera" style="display:none;">
+    </div>
+
+    <div class="campo">
+      <label>Nota para os shows da noite</label>
+      <div id="notasShows"></div>
+    </div>
+
+    <div class="campo">
+      <label> Melhor show da noite</label>
+      <div id="listaShows" class="lista-opcoes"></div>
+    </div>
+
+
+    <div class="campo">
+      <label for="inputAmigos">Com quem você estava? (@ do Insta)</label>
+      <input type="text" id="inputAmigos" list="sugestoesAmigos" placeholder="@usuario" autocomplete="off">
+      <datalist id="sugestoesAmigos">
+        </datalist>
+    </div>
+
+    <div class="campo">
+      <label> bebeu?</label>
+      <div id="listaBebidas" class="lista-opcoes"></div>
+    </div>
+
+    <button onclick="enviarRegistro()" class="btn-confirmar">Registrar dia</button>
+    <button onclick="fecharJanelaRegistrarDia()" class="fechar">x</button>
   </div>
 </div>
 

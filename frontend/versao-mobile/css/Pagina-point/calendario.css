@@ -63,6 +63,18 @@
   background: #219332;
 }
 
+.flag.disponivel:hover {
+  background: rgba(3, 233, 37, 0.7);
+}
+
+.flag.encerrado:hover {
+  background: rgba(133, 147, 113, 0.7);
+}
+
+.flag.bloqueado:hover {
+  background: rgba(215, 70, 45, 0.7);
+} 
+
 
 #voltarMes,
 #proximoMes {

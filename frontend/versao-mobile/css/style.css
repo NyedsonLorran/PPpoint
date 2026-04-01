@@ -1,22 +1,29 @@
-/*arquivo principal que importa o outro  */
+/* base */
+@import url("/frontend/versao-mobile/css/base.css");
 
-/* Base geral do site */
-@import url("base.css");
 
+
+/* PAGINA POINT */
 /* Layout e estrutura das páginas */
-@import url("layout.css");
+@import url("/frontend/versao-mobile/css/Pagina-point/layout.css");
 
 /* Calendário */
-@import url("calendario.css");
+@import url("/frontend/versao-mobile/css/Pagina-point/calendario.css");
 
 /* Janelas (login, registro, encerrado, bloqueado e etc) */
-@import url("janelas.css");
+@import url("/frontend/versao-mobile/css/Pagina-point/janelas.css");
 
 /* Responsividade da pagina point */
-@import url("responsividade.css");
+@import url("/frontend/versao-mobile/css/Pagina-point/responsividade.css");
 
-/* Fundos das paginas */ 
-@import url("paginas.css");
 
+
+/* PAGINA PROGAMAÇÃO */
 /* Programação do evento da aba progamação */
-@import url("progamação.css");
+@import url("/frontend/versao-mobile/css/Pagina-progamação/progamação.css");
+
+
+
+/* PAGINA RETROSPECTIVA */
+/* Conteúdo da aba retrospectiva */
+

@@ -1,4 +1,5 @@
 /* CABEÇALHO */
+
 .cabeçalho {
   display: flex;
   flex-direction: column;
@@ -71,4 +72,5 @@
 .pagina.active {
   display: block;
 }
+
 
