@@ -289,48 +289,77 @@
 
 <div id="fundoTransparente" class="fundo-transparente"></div>
 
+<!--  MODAL REGISTRO  -->
 <div id="janela-registrar-dia" class="modal">
   <div class="modal-box">
+
     <h2 id="tituloRegistro">Registrar dia</h2>
 
+    <!--  ÁREA DA FOTO  -->
     <div id="areaCamera">
       <h3>Tire sua foto dentro do PP</h3>
       <p class="aviso-foto">Capriche vai aparecer na sua retrospectiva</p>
-      
-      <div id="videoContainer" style="display:none; margin-bottom: 10px;">
-        <video id="videoPreview" autoplay playsinline style="width: 100%; border-radius: 12px; background: #000;"></video>
-      </div>
 
-      <button type="button" id="btnAtivarCamera" onclick="ativarCamera()">Abrir Câmera</button>
-      <button type="button" id="btnCapturarFoto" onclick="capturarFoto()" style="display:none; background: #677069; margin-top: 10px;">Capturar Foto</button>
-      
-      <input type="file" id="inputGaleria" accept="image/*" capture="camera" style="display:none;">
+      <!-- PREVIEW DA FOTO -->
+      <img id="previewFoto"
+           style="display:none; width:100%; border-radius:12px; margin-bottom:10px;" />
+
+      <!-- BOTÕES -->
+      <button type="button" id="btnAtivarCamera" onclick="abrirOuRefazerFoto()"> Tirar Foto </button>
+
+      <!-- INPUT GALERIA -->
+      <input type="file"
+             id="inputGaleria"
+             accept="image/*"
+             style="display:none;">
     </div>
 
+    <!--  NOTAS -->
     <div class="campo">
       <label>Nota para os shows da noite</label>
       <div id="notasShows"></div>
     </div>
 
-
-
-
+    <!--  AMIGOS  -->
     <div class="campo">
       <label for="inputAmigos">Com quem você foi? (@ do Insta)</label>
-      <input type="text" id="inputAmigos" list="sugestoesAmigos" placeholder="@usuario" autocomplete="off">
-      <datalist id="sugestoesAmigos"> </datalist>
+      <input type="text"
+             id="inputAmigos"
+             list="sugestoesAmigos"
+             placeholder="@usuario"
+             autocomplete="off">
+      <datalist id="sugestoesAmigos"></datalist>
     </div>
 
+    <!--  BEBIDAS  -->
     <div class="campo">
-      <label> bebeu?</label>
+      <label>Bebeu?</label>
       <div id="listaBebidas" class="lista-opcoes"></div>
     </div>
 
-    <button onclick="enviarRegistro()" class="btn-confirmar">Registrar dia</button>
-    <button onclick="fecharJanelaRegistrarDia()" class="fechar"> x </button>
+    <!--  BOTÕES  -->
+    <button onclick="enviarRegistro()" class="btn-confirmar">
+      Registrar dia
+    </button>
+
+    <button onclick="fecharJanelaRegistrarDia()" class="fechar">
+      ✖
+    </button>
 
   </div>
 </div>
 
+<!-- CÂMERA FULLSCREEN  -->
+<div id="cameraFullscreen" class="camera-full">
+  <video id="videoFullscreen" autoplay playsinline></video>
+
+  <button id="btnTirarFoto" onclick="capturarFoto()"> </button>
+  <button id="btnFecharCamera" onclick="fecharCamera()">✖</button>
+  <button id="btnTrocarCamera" onclick="trocarCamera()">🔄</button>
+</div>
+
+<div id="flashCamera"></div>
+
 </body>
+
 </html>

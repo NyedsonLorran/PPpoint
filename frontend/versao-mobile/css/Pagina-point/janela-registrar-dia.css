@@ -373,3 +373,89 @@
   border-radius: 8px;
   color: #333;
 }
+
+
+.camera-full {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: black;
+  z-index: 999999;
+  display: none;
+}
+
+.camera-full video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+
+.camera-full button {
+  position: absolute;
+  z-index: 2;
+  padding: 12px;
+  border-radius: 50%;
+  border: none;
+  font-size: 20px;
+}
+
+
+#btnTirarFoto {
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 70px;
+  height: 70px;
+  font-size: 26px;
+}
+
+#btnFecharCamera {
+  top: 20px;
+  right: 20px;
+}
+
+#btnTrocarCamera {
+  bottom: 30px;
+  right: 20px;
+}
+
+#btnTirarFoto:active {
+  transform: scale(0.9);
+  background: #ccc;
+}
+
+video {
+  transform: scaleX(1);
+}
+
+.video-frontal {
+  transform: scaleX(-1);
+}
+
+#flashCamera {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: white;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 9999999;
+}
+
+.flash-ativo {
+  animation: flashAnim 0.25s ease;
+}
+
+@keyframes flashAnim {
+  0%   { opacity: 0; }
+  50%  { opacity: 1; }
+  100% { opacity: 0; }
+}

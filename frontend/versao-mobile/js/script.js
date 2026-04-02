@@ -4,6 +4,7 @@ const ano = 2026;
 const agoraFixo = new Date(2026, 5, 9, 12, 0, 0); // Simulação de data atual
 let diaSelecionado = null;
 let streamRecurso = null;
+let fotoCapturada = null;
 
 function usuarioLogado() {
   const btn = document.getElementById("btnLogin");
@@ -203,7 +204,7 @@ function getProgramacaoPorDia(dia, mes) {
 
 function getEstruturaBebidas() {
   return [
-    { nome: "Beats", sabores: ["Azul", "Vermelha", "Verde",, "Beats 1L"] },
+    { nome: "Beats", sabores: ["Azul", "Vermelha", "Verde", "Beats 1L"] },
     { nome: "Matuta", sabores: ["Mel e Limão", "Canela", "Cristal", "Coco"] },
     { nome: "Cerveja", sabores: ["Brahma", "Heineken", "Skol"] },
     { nome: "Outros", sabores: ["Água", "Refrigerante"] }
@@ -245,7 +246,6 @@ function carregarDadosFormulario() {
           nota = 4.5; // força menos de 5
         }
 
-        // atualiza visual
         cont.querySelectorAll("button").forEach((b, j) => {
           b.classList.remove("active");
           b.classList.remove("meia");
@@ -334,19 +334,101 @@ function fecharJanelaRegistrarDia() {
 
 async function ativarCamera() {
   try {
-    const s = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+    const s = await navigator.mediaDevices.getUserMedia({
+      video: {
+        facingMode: usandoFrontal ? "user" : "environment"
+      }
+    });
+
     streamRecurso = s;
-    document.getElementById('videoPreview').srcObject = s;
-    document.getElementById('videoContainer').style.display = "block";
-    document.getElementById('btnCapturarFoto').style.display = "block";
-  } catch (e) { alert("Erro na câmera."); }
+
+    const video = document.getElementById('videoFullscreen');
+
+    if (video) {
+      video.srcObject = s;
+
+      // 🔥 controla espelho
+      if (usandoFrontal) {
+        video.classList.add("video-frontal");
+      } else {
+        video.classList.remove("video-frontal");
+      }
+    }
+
+    document.getElementById('cameraFullscreen').style.display = "block";
+
+    // esconde modal
+    document.getElementById("janela-registrar-dia").style.display = "none";
+
+  } catch (e) {
+    alert("Erro ao abrir câmera.");
+  }
+}
+
+function abrirOuRefazerFoto() {
+  fotoCapturada = null;
+
+  const preview = document.getElementById("previewFoto");
+  if (preview) preview.style.display = "none";
+
+  ativarCamera();
 }
 
 function capturarFoto() {
-  alert("Foto salva! 📸");
-  if (streamRecurso) { streamRecurso.getTracks().forEach(t => t.stop()); streamRecurso = null; }
-  document.getElementById('videoContainer').style.display = "none";
-  document.getElementById('btnAtivarCamera').innerText = "Foto Capturada";
+  const video = document.getElementById('videoFullscreen');
+  if (!video) return;
+
+  const canvas = document.createElement("canvas");
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+
+  const ctx = canvas.getContext("2d");
+
+  // corrige espelho da frontal
+  if (usandoFrontal) {
+    ctx.translate(canvas.width, 0);
+    ctx.scale(-1, 1);
+  }
+
+  ctx.drawImage(video, 0, 0);
+
+  const imagem = canvas.toDataURL("image/png");
+
+  const flash = document.getElementById("flashCamera");
+if (flash) {
+  flash.classList.add("flash-ativo");
+
+  setTimeout(() => {
+    flash.classList.remove("flash-ativo");
+  }, 250);
+}
+
+  const preview = document.getElementById("previewFoto");
+  if (preview) {
+    preview.src = imagem;
+    preview.style.display = "block";
+  }
+
+  fecharCamera();
+
+  // 🔥 AGORA FUNCIONA
+  const btn = document.getElementById("btnAtivarCamera");
+  if (btn) {
+    btn.innerText = "Tirar outra foto";
+  }
+}
+
+
+function fecharCamera() {
+  if (streamRecurso) {
+    streamRecurso.getTracks().forEach(t => t.stop());
+    streamRecurso = null;
+  }
+
+  const tela = document.getElementById('cameraFullscreen');
+  if (tela) tela.style.display = "none";
+
+  document.getElementById("janela-registrar-dia").style.display = "flex";
 }
 
 function enviarRegistro() {
@@ -361,14 +443,24 @@ function enviarRegistro() {
   fecharJanelaRegistrarDia(); renderizarCalendario();
 }
 
+let usandoFrontal = false;
+
+function trocarCamera() {
+  usandoFrontal = !usandoFrontal;
+
+  if (streamRecurso) {
+    streamRecurso.getTracks().forEach(t => t.stop());
+  }
+
+  ativarCamera();
+}
+
 function fecharEsqueciSenha() {
-  // 1. Fecha o fundo pelo ID
   const container = document.getElementById("janela-esqueci-senha");
   if (container) {
     container.style.setProperty("display", "none", "important");
   }
 
-  // 2. Fecha a janela branca pela CLASSE (garante que suma mesmo se estiver fora do container)
   const janelas = document.querySelectorAll(".janela-recuperacao");
   janelas.forEach(janela => {
     janela.style.setProperty("display", "none", "important");
@@ -386,11 +478,10 @@ function abrirEsqueciSenha() {
     janela.style.setProperty("display", "block", "important");
   }
 }
-// Fecha a janela ao clicar no fundo transparente
 const fundoRecuperacao = document.getElementById("janela-esqueci-senha");
 if(fundoRecuperacao){
   fundoRecuperacao.addEventListener("click", function(e){
-    if(e.target === this){ // só fecha se clicou no fundo, não na janela interna
+    if(e.target === this){ 
       fecharEsqueciSenha();
     }
   });
@@ -401,7 +492,7 @@ if(fundoRecuperacao){
 function enviarRecuperacao() {
   const email = document.getElementById("emailRecuperacao").value;
   if (!email) { alert("Digite um email válido!"); return; }
-  alert(`Instruções de recuperação enviadas para ${email} 📧`);
+  alert(`Instruções de recuperação enviadas para ${email} `);
   fecharEsqueciSenha();
 }
 
@@ -421,20 +512,40 @@ function atualizarProgramacao() {
   });
 }
 
+const inputGaleria = document.getElementById("inputGaleria");
+
+if (inputGaleria) {
+  inputGaleria.addEventListener("change", function(e) {
+    const file = e.target.files[0];
+
+    if (file) {
+      const reader = new FileReader();
+
+      reader.onload = function(ev) {
+        const preview = document.getElementById("previewFoto");
+        if (preview) {
+          preview.src = ev.target.result;
+          preview.style.display = "block";
+        }
+      };
+
+      reader.readAsDataURL(file);
+    }
+  });
+}
 
 window.addEventListener("DOMContentLoaded", () => {
   if (localStorage.getItem("usuarioLogado")) definirLogado(true);
   renderizarCalendario();
   atualizarProgramacao();
   
-// Substitua o bloco antigo por este no final do seu JS
 document.querySelectorAll(".fechar").forEach(b => {
   b.onclick = () => {
     fecharJanelaRegistrarDia(); 
     fecharLoginCadastro();
     fecharJanelaEncerrado(); 
     fecharJanelaBloqueado();
-    fecharEsqueciSenha(); // ADICIONE ESTA LINHA AQUI
+    fecharEsqueciSenha(); 
   };
 });
   const btnL = document.getElementById("btnLogin");
