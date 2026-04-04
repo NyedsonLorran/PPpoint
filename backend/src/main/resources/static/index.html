@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Teste Backend</title>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body>
+
+<h2>Cadastro</h2>
+<input type="text" id="cadNome" placeholder="Nome">
+<input type="email" id="cadEmail" placeholder="Email">
+<input type="password" id="cadSenha" placeholder="Senha">
+<button onclick="cadastrar()">Cadastrar</button>
+
+<h2>Login</h2>
+<input type="email" id="loginEmail" placeholder="Email">
+<input type="password" id="loginSenha" placeholder="Senha">
+<button onclick="login()">Login</button>
+
+<hr>
+
+<h2>Login com Google</h2>
+<div id="g_id_onload"
+     data-client_id="24281345430-ctit3iu4en7otpu2kjfakopamsf9pclf.apps.googleusercontent.com"
+     data-callback="handleCredentialResponse">
+</div>
+<div class="g_id_signin"></div>
+
+<hr>
+
+<h3>Resposta:</h3>
+<pre id="resposta"></pre>
+
+<script>
+    const API = "http://localhost:8080";
+
+    // Token mantido apenas em memória — não persiste entre reloads,
+    // mas está seguro contra XSS diferente do localStorage
+    let authToken = null;
+
+    async function cadastrar() {
+        const name = document.getElementById("cadNome").value;
+        const email = document.getElementById("cadEmail").value;
+        const password = document.getElementById("cadSenha").value;
+
+        try {
+            const response = await fetch(`${API}/auth/register`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ name, email, password })
+            });
+
+            const data = await response.text();
+            document.getElementById("resposta").innerText = "Cadastro:\n" + data;
+
+        } catch (error) {
+            document.getElementById("resposta").innerText = "Erro ao cadastrar: " + error;
+        }
+    }
+
+    async function login() {
+        const email = document.getElementById("loginEmail").value;
+        const password = document.getElementById("loginSenha").value;
+
+        try {
+            const response = await fetch(`${API}/auth/login`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email, password })
+            });
+
+            const data = await response.json();
+            salvarToken(data.token);
+            document.getElementById("resposta").innerText = "Login:\nToken recebido e salvo em memória.";
+
+        } catch (error) {
+            document.getElementById("resposta").innerText = "Erro no login: " + error;
+        }
+    }
+
+    async function handleCredentialResponse(response) {
+        const tokenGoogle = response.credential;
+
+        try {
+            const responseBackend = await fetch(`${API}/auth/login/google`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ token: tokenGoogle })
+            });
+
+            const data = await responseBackend.json();
+            salvarToken(data.token);
+            document.getElementById("resposta").innerText = "Login Google:\nToken recebido e salvo em memória.";
+
+        } catch (error) {
+            document.getElementById("resposta").innerText = "Erro no login Google: " + error;
+        }
+    }
+
+    function salvarToken(token) {
+        if (token) {
+            authToken = token;
+            console.log("Token salvo em memória.");
+        }
+    }
+
+    // Exemplo de uso do token em requisições autenticadas:
+    // async function exemploAutenticado() {
+    //     const response = await fetch(`${API}/alguma-rota`, {
+    //         headers: { "Authorization": `Bearer ${authToken}` }
+    //     });
+    // }
+    // url para teste: http://localhost:8080/index.html
+</script>
+
+</body>
+</html>

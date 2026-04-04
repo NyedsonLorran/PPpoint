@@ -33,7 +33,11 @@ public class AuthService {
         }
 
         User user = new User();
+<<<<<<< HEAD
         user.setInstagramUser(username);
+=======
+        user.setInstagramUser(name);
+>>>>>>> 89d02faa47ea58d9d92b6fd3ec2f5080c49b8064
         user.setEmail(email);
         user.setPassword(crypto.encrypt(password));
         user.setRole("USER");
@@ -64,7 +68,13 @@ public class AuthService {
         }
 
         String email = payload.getEmail();
+<<<<<<< HEAD
         String googleId = payload.getSubject();
+=======
+        String name = (String) payload.get("name");
+        String googleId = payload.getSubject();
+        String picture = (String) payload.get("picture");
+>>>>>>> 89d02faa47ea58d9d92b6fd3ec2f5080c49b8064
 
         User user = repository.findByEmail(email).map(existing -> {
             // Se já existe, opcional vincular conta
@@ -80,6 +90,10 @@ public class AuthService {
             newUser.setEmail(email);
             newUser.setGoogleId(googleId);
             newUser.setProvider("GOOGLE");
+<<<<<<< HEAD
+=======
+            newUser.setPicture(picture);
+>>>>>>> 89d02faa47ea58d9d92b6fd3ec2f5080c49b8064
             newUser.setRole("USER");
 
             return repository.save(newUser);
