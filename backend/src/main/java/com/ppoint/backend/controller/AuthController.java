@@ -47,11 +47,7 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<String> register(@Valid  @RequestBody RegisterDTO dto) {
-<<<<<<< HEAD
         authService.register(dto.username(), dto.email(), dto.password(), dto.confirmPassword());
-=======
-        authService.register(dto.name(), dto.email(), dto.password());
->>>>>>> 89d02faa47ea58d9d92b6fd3ec2f5080c49b8064
         return ResponseEntity.status(HttpStatus.CREATED).body("Usuário criado com sucesso");
     }
 
