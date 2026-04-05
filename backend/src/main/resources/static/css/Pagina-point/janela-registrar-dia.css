@@ -1,0 +1,461 @@
+#janela-registrar-dia {
+  display: none; 
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: transparent; 
+  z-index: 10000;
+  justify-content: center;
+  align-items: center;
+  scroll-behavior: smooth;
+  font-family: 'Arial', sans-serif;
+}
+
+#janela-registrar-dia .modal-box {
+  position: relative; 
+  background: #dbdb00;
+  width: 92%;
+  max-width: 400px;
+  max-height: 88vh; 
+  overflow-y: auto; 
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+  -webkit-overflow-scrolling: touch;
+}
+
+#janela-registrar-dia::-webkit-scrollbar {
+  width: 6px;
+}
+
+#janela-registrar-dia::-webkit-scrollbar-thumb {
+  background-color: rgba(215,70,45,0.6);
+  border-radius: 3px;
+}
+
+#janela-registrar-dia h2 {
+  margin-bottom: 15px;
+  font-size: 22px;
+  color: #2b2525;
+  font-weight: 700;
+}
+
+#janela-registrar-dia .campo {
+  margin-bottom: 15px;
+  text-align: left;
+}
+
+#janela-registrar-dia label {
+  font-weight: 600;
+  color: #2b2525;
+  font-size: 14px;
+  display: block;
+  margin-bottom: 5px;
+}
+
+#inputAmigos,
+#listaBebidas input {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  outline: none;
+  font-size: 16px; 
+  margin-bottom: 5px;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+#areaCamera {
+  display: none; 
+  background: transparent;
+  padding: 15px;
+  border-radius: 18px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+#areaCamera h3 {
+  font-size: 22px;
+  color: #0a0a0a;
+  margin-bottom: 5px;
+}
+
+#areaCamera p {
+  font-size: 14px;
+  color: #0a0a0a;
+  margin-bottom: 5px;
+}
+
+.aviso-foto {
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 10px;
+}
+
+#areaCamera button {
+  width: 100%;
+  padding: 12px;
+  background: #D7462D;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-weight: bold;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+#videoPreview {
+  width: 100%;
+  border-radius: 12px;
+  margin-top: 10px;
+  background: #000;
+  display: none; 
+}
+
+.lista-opcoes label {
+  display: block;
+  background: #fff2e6;
+  padding: 12px;
+  margin-bottom: 8px;
+  border-radius: 10px;
+  cursor: pointer;
+  border: 1px solid #D7462D;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.notaShow-container {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 5px;
+}
+
+.notaShow-container button.meia {
+  position: relative;
+}
+
+.notaShow-container button.meia::before {
+  content: "★";
+  position: absolute;
+  width: 50%;
+  overflow: hidden;
+  color: #cc3434;
+}
+
+.notaShow-container button {
+  background: none;
+  border: none;
+  font-size: 28px; 
+  cursor: pointer;
+  color: #7a7373b9;
+}
+
+.notaShow-container button.active {
+  color: #cc3434;
+}
+
+#listaBebidas {
+  display: flex;
+  flex-direction: column;
+  gap: 8px; 
+  margin-top: 10px;
+}
+
+.card-bebida {
+  display: flex;
+  justify-content: space-between; 
+  align-items: center;
+  background: #fff;
+  padding: 10px 15px;
+  border-radius: 12px;
+  border: 1px solid #eee;
+  transition: all 0.2s ease;
+}
+
+.card-bebida.com-item {
+  border-color: #D7462D;
+  background: #fff9f8;
+}
+
+.nome-bebida {
+  font-size: 15px;
+  font-weight: 600;
+  color: #333;
+}
+
+.controles-qtd {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #f0f0f0; 
+  padding: 4px 8px;
+  border-radius: 20px;
+}
+
+.controles-qtd button {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: none;
+  background: #D7462D;
+  color: #fff;
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.bebidaQtd {
+  width: 25px !important; 
+  border: none !important;
+  background: transparent !important;
+  text-align: center;
+  font-weight: bold;
+  font-size: 15px;
+  color: #2b2525;
+  padding: 0 !important;
+  margin: 0 !important;
+  outline: none;
+}
+
+.bebidaQtd::-webkit-inner-spin-button,
+.bebidaQtd::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+#janela-registrar-dia .btn-confirmar {
+  width: 100%;
+  padding: 15px;
+  margin-top: 10px;
+  border: none;
+  background: #D7462D;
+  color: #fff;
+  font-weight: bold;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 17px;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 10px rgba(215, 70, 45, 0.2);
+}
+
+
+
+#janela-registrar-dia .fechar {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 20px;
+  color: #000000;
+  cursor: pointer;
+  border: none;
+  background-color: transparent;
+}
+
+#listaShows {
+  display: grid;
+  grid-template-columns: 1fr; 
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.card-selecao {
+  position: relative;
+  cursor: pointer;
+}
+
+.conteudo-card {
+  display: flex;
+  align-items: center;
+  background: #ffffff;
+  padding: 15px 20px;
+  border-radius: 15px;
+  border: 2px solid #e0e0e0;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+.nome-show {
+  font-size: 16px;
+  font-weight: 700;
+  color: #444;
+  margin-left: 10px;
+}
+
+.icone-check {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  background: #ddd;
+  color: white;
+  border-radius: 50%;
+  font-size: 12px;
+  transition: all 0.3s ease;
+}
+
+.card-selecao.selecionado .conteudo-card {
+  border-color: #D7462D; 
+  background: #fff5f2; 
+  transform: translateY(-2px); 
+  box-shadow: 0 6px 15px rgba(215, 70, 45, 0.2);
+}
+
+.card-selecao.selecionado .icone-check {
+  background: #D7462D;
+  transform: scale(1.1);
+}
+
+.card-selecao.selecionado .nome-show {
+  color: #D7462D;
+}
+
+.card-selecao:active {
+  transform: scale(0.97);
+}
+
+.categoria-bebida-wrapper {
+  margin-bottom: 10px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.header-categoria {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  background:#ff4e50;
+  color: #000;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.seta-indicadora {
+  display: inline-block;
+  transition: transform 0.3s ease; 
+  font-size: 0.8rem;
+}
+
+.categoria-bebida-wrapper.aberto .seta-indicadora {
+  transform: rotate(180deg);
+}
+
+.lista-sub-bebidas {
+  display: none; 
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.categoria-bebida-wrapper.aberto .lista-sub-bebidas {
+  display: flex;
+}
+
+.card-bebida {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 15px;
+  background: #fff;
+  border-radius: 8px;
+  color: #333;
+}
+
+
+.camera-full {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: black;
+  z-index: 999999;
+  display: none;
+}
+
+.camera-full video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+
+.camera-full button {
+  position: absolute;
+  z-index: 2;
+  padding: 12px;
+  border-radius: 50%;
+  border: none;
+  font-size: 20px;
+}
+
+
+#btnTirarFoto {
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 70px;
+  height: 70px;
+  font-size: 26px;
+}
+
+#btnFecharCamera {
+  top: 20px;
+  right: 20px;
+}
+
+#btnTrocarCamera {
+  bottom: 30px;
+  right: 20px;
+}
+
+#btnTirarFoto:active {
+  transform: scale(0.9);
+  background: #ccc;
+}
+
+video {
+  transform: scaleX(1);
+}
+
+.video-frontal {
+  transform: scaleX(-1);
+}
+
+#flashCamera {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: white;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 9999999;
+}
+
+.flash-ativo {
+  animation: flashAnim 0.25s ease;
+}
+
+@keyframes flashAnim {
+  0%   { opacity: 0; }
+  50%  { opacity: 1; }
+  100% { opacity: 0; }
+}

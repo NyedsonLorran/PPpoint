@@ -17,8 +17,9 @@ import java.util.List;
 public class SecurityConfig {
 
     // Em produção, configurar via variável de ambiente: ALLOWED_ORIGINS=https://siteexemplo.com
-
-    private final List<String> allowedOrigins = List.of("*");
+    @Value("${cors.allowed-origins:http://localhost:8080,http://localhost:3000,http://localhost:5500,http://127.0.0.1:5500}")
+    
+    private List<String> allowedOrigins;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtFilter jwtFilter) throws Exception {
@@ -48,10 +49,10 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("*"));// aqui o domínio do frontend
+        config.setAllowedOrigins(allowedOrigins);
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
-        config.setAllowCredentials(false);
+        config.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
