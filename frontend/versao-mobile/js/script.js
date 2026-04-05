@@ -1,3 +1,6 @@
+// Substituir https://backenddeploy.com pela url real quando em produção
+const API_URL = window.location.hostname === "localhost" ? "http://localhost:8080" : "https://backenddeploy.com";
+
 const nomesMeses = ["Jun", "Jul"];
 let mesAtual = 0; // 0 para Junho, 1 para Julho
 const ano = 2026;
@@ -134,7 +137,7 @@ async function registrar() {
   if(senha !== senhaConf){ alert("As senhas não conferem!"); return; }
 
     try {
-        const res = await fetch("http://localhost:8080/auth/register", {
+        const res = await fetch(`${API_URL}/auth/register`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -164,7 +167,7 @@ async function fazerLogin() {
     if (!emailInput || !senhaInput) { alert("Preencha todos os campos!"); return; }
 
     try {
-        const res = await fetch("http://localhost:8080/auth/login", {
+        const res = await fetch(`${API_URL}/auth/login`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
