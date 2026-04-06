@@ -18,9 +18,16 @@
 .Mes {
   font-size: 25px !important; 
   line-height: 1.2;
-  color: #000000;;
+  color: #ffffff;;
 }
 
+.semanas{
+  color: #ffffff;
+}
+
+.dias{
+color: #ffffff;
+}
 
 .semanas,
 .dias {
@@ -32,7 +39,7 @@
 }
 
 .flag {
-  color: #2B2525;
+  color: #d6cdcd;
   width: 100%;
   max-width: 80px;
   margin: auto;
@@ -47,20 +54,20 @@
 }
 
 .flag.fora {
-  background-color: #ccc;
+  background-color: #0b5c9e8e;
   opacity: 0.6;
 }
 
 .flag.bloqueado {
-  background: #D7462D;
+  background: #912218;
 }
 
 .flag.encerrado {
-  background: #859371;
+  background: #797676cb;
 }
 
 .flag.disponivel {
-  background: #219332;
+  background: #265f31;
 }
 
 .flag.disponivel:hover {
@@ -85,7 +92,7 @@
   z-index: 50;
   background: transparent;
   border: none;
-  color: #000000;
+  color: #ffffff;
   font-size: clamp(20px, 6vw, 26px);
   font-weight: 900;
 }

@@ -13,30 +13,30 @@ body {
   background-position: center;
   min-height: 100vh;
   overflow-x: hidden;
-  background-color: rgba(255, 0, 0, 0.322);
-
-
+  background-image: url('/frontend/versao-mobile/imagens/casaeluzes.png');
 }
 
 body.fundo-ponto {
-  background-color: rgba(255, 0, 0, 0.322);
+  background-image: url('/frontend/versao-mobile/imagens/casaeluzes.png');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
 }
 
 body.fundo-programacao {
+  background-image: none;
+
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
   background-position: top center;
-  background-color: rgba(0, 140, 255, 0.514) ;
+  background-color:#012773;
 
   
 }
 
 body.fundo-retro {
-  background-color: rgba(0, 128, 0, 0.445);
+  background-image: url('/frontend/versao-mobile/imagens/casaeluzes.png');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
