@@ -213,13 +213,17 @@
       <h2>Login</h2>
       <div class="input-com-icone">
         <i class="fa-solid fa-envelope"></i>
-        <input type="text" id="loginUsuario" placeholder="Email ou @instagram">
+        <input type="text" id="loginUsuario" placeholder="Email">
       </div>
       <div class="input-com-icone">
         <i class="fa-solid fa-lock"></i>
         <input type="password" id="loginSenha" placeholder="Senha">
       </div>
       <button onclick="fazerLogin()">Entrar</button>
+      <button class="btn-google" onclick="loginComGoogle()">
+          Entrar com Google
+      </button>
+
       <span class="esqueci-senha" onclick="abrirEsqueciSenha()">Esqueci minha senha</span>
       <p>Não tem uma conta? <span class="link-cadastro" onclick="mostrarCadastro()">Cadastre-se</span></p>
     </div>

@@ -164,35 +164,50 @@ async function fazerLogin() {
   const emailInput = document.getElementById("loginUsuario").value;
   const senhaInput = document.getElementById("loginSenha").value;
 
-    if (!emailInput || !senhaInput) { alert("Preencha todos os campos!"); return; }
+  if (!emailInput || !senhaInput) { 
+    alert("Preencha todos os campos!"); 
+    return; 
+  }
 
-    try {
-        const res = await fetch(`${API_URL}/auth/login`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                email: emailInput,
-                password: senhaInput
-            })
-        });
+  // 🔥 SIMULAÇÃO ADMIN (ANTES DO BACKEND)
+  if (emailInput === "admin" && senhaInput === "123") {
+    localStorage.setItem("isAdmin", "true");
+    window.location.href = "/frontend/versao-mobile/admin/admin.html";
+    return;
+  }
 
-        if (res.ok) {
-            const data = await res.json();
-            sessionStorage.setItem("token", data.token);
-            localStorage.setItem("usuarioLogado", JSON.stringify({
-                usuario: emailInput,
-                email: emailInput
-            }));
-            fecharLoginCadastro();
-            definirLogado(true);
-            renderizarCalendario();
-        } else {
-            const data = await res.json();
-            alert("Erro: " + data.message);
-        }
-    } catch (e) {
-        alert("Erro ao conectar com o servidor.");
+  try {
+    const res = await fetch(`${API_URL}/auth/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email: emailInput,
+        password: senhaInput
+      })
+    });
+
+    if (res.ok) {
+      const data = await res.json();
+
+      sessionStorage.setItem("token", data.token);
+
+      localStorage.setItem("usuarioLogado", JSON.stringify({
+        usuario: emailInput,
+        email: emailInput
+      }));
+
+      fecharLoginCadastro();
+      definirLogado(true);
+      renderizarCalendario();
+
+    } else {
+      const data = await res.json();
+      alert("Erro: " + data.message);
     }
+
+  } catch (e) {
+    alert("Erro ao conectar com o servidor.");
+  }
 }
 
 function definirLogado(estado) {
@@ -595,3 +610,6 @@ document.querySelectorAll(".fechar").forEach(b => {
   const btnL = document.getElementById("btnLogin");
   if(btnL) btnL.onclick = () => { if (btnL.dataset.logged === "true") definirLogado(false); else abrirLoginCadastro(); };
 });
+
+function loginComGoogle() {
+}
