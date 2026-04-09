@@ -29,145 +29,58 @@
 <!-- páginas base -->
 <div class="paginas">
 
+  <!-- página programação -->
 <!-- página programação -->
 <div class="pagina" id="programacao">
-  <div class="programacao-container">
 
- <!-- Dia 03 de Junho -->
-<div class="programacao-dia">
-  <div class="data-dia">
-    <span class="dia-numero">03</span>
-    <span class="mes">Jun</span>
+  <div class="carrossel-programacao">
+
+    <button class="nav" onclick="voltarProgramacao()">&#8249;</button>
+
+    <div class="grid-programacao" id="gridProgramacao">
+
+      <!-- CARD EXEMPLO -->
+      <div class="card-dia">
+
+        <div class="data-dia">
+          <span class="semana"></span>
+          <span class="dia"></span>
+          <span class="mes"></span>
+        </div>
+
+        <div class="conteudo-dia">
+          <div class="show"></div>
+          <div class="show">  </div>
+          <div class="show"> </div>
+        </div>
+
+      </div>
+
+      <!-- OUTRO CARD -->
+      <div class="card-dia">
+
+        <div class="data-dia">
+          <span class="semana"></span>
+          <span class="dia"></span>
+          <span class="mes"></span>
+        </div>
+
+        <div class="conteudo-dia">
+          <div class="show"> </div>
+          <div class="show"> </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <button class="nav" onclick="avancarProgramacao()">&#8250;</button>
+
   </div>
-  <div class="lista-artistas">
-    <div class="artista"><span class="hora">19:00</span><span class="nome">Wesley Safadão</span></div>
-    <div class="artista"><span class="hora">20:30</span><span class="nome">Falamansa</span></div>
-    <div class="artista"><span class="hora">22:00</span><span class="nome">Alceu Valença</span></div>
-  </div>
+
 </div>
 
-<!-- Dia 04 de Junho -->
-<div class="programacao-dia">
-  <div class="data-dia">
-    <span class="dia-numero">04</span>
-    <span class="mes">Jun</span>
-  </div>
-  <div class="lista-artistas">
-    <div class="artista"><span class="hora">18:30</span><span class="nome">Elba Ramalho</span></div>
-    <div class="artista"><span class="hora">20:00</span><span class="nome">Xand Avião</span></div>
-    <div class="artista"><span class="hora">21:30</span><span class="nome">Banda Aviões do Forró</span></div>
-    <div class="artista"><span class="hora">23:00</span><span class="nome">Marília Mendonça</span></div>
-  </div>
-</div>
-
-<!-- Dia 05 de Junho -->
-<div class="programacao-dia">
-  <div class="data-dia">
-    <span class="dia-numero">05</span>
-    <span class="mes">Jun</span>
-  </div>
-  <div class="lista-artistas">
-    <div class="artista"><span class="hora">19:00</span><span class="nome">Padre Fábio de Melo</span></div>
-    <div class="artista"><span class="hora">21:00</span><span class="nome">Luan Santana</span></div>
-  </div>
-</div>
-
-<!-- Dia 06 de Junho -->
-<div class="programacao-dia">
-  <div class="data-dia">
-    <span class="dia-numero">06</span>
-    <span class="mes">Jun</span>
-  </div>
-  <div class="lista-artistas">
-    <div class="artista"><span class="hora">18:00</span><span class="nome">Mastruz com Leite</span></div>
-    <div class="artista"><span class="hora">19:30</span><span class="nome">Banda Magníficos</span></div>
-    <div class="artista"><span class="hora">21:00</span><span class="nome">Solange Almeida</span></div>
-    <div class="artista"><span class="hora">22:30</span><span class="nome">Chico Pessoa</span></div>
-  </div>
-</div>
-
-<!-- Dia 07 de Junho -->
-<div class="programacao-dia">
-  <div class="data-dia">
-    <span class="dia-numero">07</span>
-    <span class="mes">Jun</span>
-  </div>
-  <div class="lista-artistas">
-    <div class="artista"><span class="hora">18:30</span><span class="nome">Cavaleiros do Forró</span></div>
-    <div class="artista"><span class="hora">20:00</span><span class="nome">Régis e Rapaziada</span></div>
-    <div class="artista"><span class="hora">21:30</span><span class="nome">Flávio José</span></div>
-  </div>
-</div>
-
-<!-- Dia 08 de Junho -->
-<div class="programacao-dia">
-  <div class="data-dia">
-    <span class="dia-numero">08</span>
-    <span class="mes">Jun</span>
-  </div>
-  <div class="lista-artistas">
-    <div class="artista"><span class="hora">19:00</span><span class="nome">Calcinha Preta</span></div>
-    <div class="artista"><span class="hora">20:30</span><span class="nome">Garota Safada</span></div>
-    <div class="artista"><span class="hora">22:00</span><span class="nome">Zé Cantor</span></div>
-  </div>
-</div>
-
-<!-- Dia 09 de Junho -->
-<div class="programacao-dia">
-  <div class="data-dia">
-    <span class="dia-numero">09</span>
-    <span class="mes">Jun</span>
-  </div>
-  <div class="lista-artistas">
-    <div class="artista"><span class="hora">18:00</span><span class="nome">Aviões do Forró</span></div>
-    <div class="artista"><span class="hora">19:30</span><span class="nome">Limão com Mel</span></div>
-    <div class="artista"><span class="hora">21:00</span><span class="nome">Forró do Muído</span></div>
-  </div>
-</div>
-
-<!-- Dia 10 de Junho -->
-<div class="programacao-dia">
-  <div class="data-dia">
-    <span class="dia-numero">10</span>
-    <span class="mes">Jun</span>
-  </div>
-  <div class="lista-artistas">
-    <div class="artista"><span class="hora">18:30</span><span class="nome">Banda Magníficos</span></div>
-    <div class="artista"><span class="hora">20:00</span><span class="nome">Taty Girl</span></div>
-    <div class="artista"><span class="hora">21:30</span><span class="nome">Xand Avião</span></div>
-  </div>
-</div>
-
-<!-- Dia 11 de Junho -->
-<div class="programacao-dia">
-  <div class="data-dia">
-    <span class="dia-numero">11</span>
-    <span class="mes">Jun</span>
-  </div>
-  <div class="lista-artistas">
-    <div class="artista"><span class="hora">19:00</span><span class="nome">Solange Almeida</span></div>
-    <div class="artista"><span class="hora">20:30</span><span class="nome">Padre Fábio de Melo</span></div>
-    <div class="artista"><span class="hora">22:00</span><span class="nome">Flávio José</span></div>
-  </div>
-</div>
-
-<!-- Dia 12 de Junho -->
-<div class="programacao-dia">
-  <div class="data-dia">
-    <span class="dia-numero">12</span>
-    <span class="mes">Jun</span>
-  </div>
-  <div class="lista-artistas">
-    <div class="artista"><span class="hora">18:30</span><span class="nome">Wesley Safadão</span></div>
-    <div class="artista"><span class="hora">20:00</span><span class="nome">Falamansa</span></div>
-    <div class="artista"><span class="hora">21:30</span><span class="nome">Alceu Valença</span></div>
-  </div>
-</div>
-
-  </div>
-</div>
-
-  <!-- página point (calendário) -->
+  <!-- página point -->
   <div class="pagina active" id="ponto">
 
     <div class="calendario">
@@ -292,6 +205,8 @@
 </div>
 
 <div id="fundoTransparente" class="fundo-transparente"></div>
+
+
 
 <!--  MODAL REGISTRO  -->
 <div id="janela-registrar-dia" class="modal">

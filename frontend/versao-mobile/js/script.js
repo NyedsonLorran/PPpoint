@@ -169,7 +169,7 @@ async function fazerLogin() {
     return; 
   }
 
-  // 🔥 SIMULAÇÃO ADMIN (ANTES DO BACKEND)
+  //  SIMULAÇÃO ADMIN (ANTES DO BACKEND)
   if (emailInput === "admin" && senhaInput === "123") {
     localStorage.setItem("isAdmin", "true");
     window.location.href = "/frontend/versao-mobile/admin/admin.html";
@@ -279,7 +279,7 @@ function carregarDadosFormulario() {
   containerNotas.innerHTML = "";
   containerBebidas.innerHTML = "";
 
-  // --- RENDER NOTAS (5 ESTRELAS COM MEIA, SÓ UM 5 POR NOITE) ---
+  //  RENDER NOTAS (5 ESTRELAS COM MEIA, SÓ UM 5 POR NOITE)
   let notaMaximaDada = false; // controla se algum show já tem nota 5
   shows.forEach(show => {
     const div = document.createElement("div");
@@ -329,7 +329,7 @@ function carregarDadosFormulario() {
     containerNotas.appendChild(div);
   });
 
-  // --- RENDER BEBIDAS COM ACORDEÃO ---
+  // RENDER BEBIDAS COM ACORDEÃO 
   estrutura.forEach(cat => {
     const catDiv = document.createElement("div");
     catDiv.classList.add("categoria-bebida-wrapper");
@@ -406,7 +406,7 @@ async function ativarCamera() {
     if (video) {
       video.srcObject = s;
 
-      // 🔥 controla espelho
+      // controla espelho
       if (usandoFrontal) {
         video.classList.add("video-frontal");
       } else {
@@ -470,7 +470,6 @@ if (flash) {
 
   fecharCamera();
 
-  // 🔥 AGORA FUNCIONA
   const btn = document.getElementById("btnAtivarCamera");
   if (btn) {
     btn.innerText = "Tirar outra foto";
@@ -547,7 +546,6 @@ if(fundoRecuperacao){
 }
 
 
-
 function enviarRecuperacao() {
   const email = document.getElementById("emailRecuperacao").value;
   if (!email) { alert("Digite um email válido!"); return; }
@@ -613,3 +611,157 @@ document.querySelectorAll(".fechar").forEach(b => {
 
 function loginComGoogle() {
 }
+
+const programacao = [
+  { dia: "03 Jun", shows: ["19:00 - Wesley Safadão", "20:30 - Falamansa", "22:00 - Alceu Valença"] },
+  { dia: "04 Jun", shows: ["18:30 - Elba Ramalho", "20:00 - Xand Avião", "21:30 - Banda Aviões", "23:00 - Marília Mendonça"] },
+  { dia: "05 Jun", shows: ["19:00 - Padre Fábio", "21:00 - Luan Santana"] },
+  { dia: "06 Jun", shows: ["18:00 - Mastruz", "19:30 - Magníficos", "21:00 - Solange", "22:30 - Chico Pessoa"] },
+  { dia: "07 Jun", shows: ["18:30 - Cavaleiros", "20:00 - Régis", "21:30 - Flávio José"] },
+  { dia: "08 Jun", shows: ["19:00 - Calcinha Preta", "20:30 - Garota Safada", "22:00 - Zé Cantor"] },
+  { dia: "09 Jun", shows: ["18:00 - Aviões", "19:30 - Limão com Mel", "21:00 - Forró do Muído"] },
+  { dia: "10 Jun", shows: ["18:30 - Magníficos", "20:00 - Taty Girl", "21:30 - Xand Avião"] }
+];
+
+let indiceAtual = 0;
+
+function renderizarProgramacao() {
+  const grid = document.getElementById("gridProgramacao");
+  if (!grid) return;
+
+  grid.innerHTML = "";
+
+  // pega grupos de 3 dias (paginação)
+  const grupo = programacao.slice(indiceAtual, indiceAtual + 3);
+
+  grupo.forEach(dia => {
+
+    // separa "03 Jun" → [03, Jun]
+    const partes = dia.dia.split(" ");
+    const diaNumero = parseInt(partes[0]);
+    const mesTexto = partes[1];
+
+    // converte mês texto → número 
+    let mesNumero = mesTexto === "Jul" ? 6 : 5;
+
+    // cria data do evento
+    const dataEvento = new Date(ano, mesNumero, diaNumero);
+
+    // pega "hoje" fixo (simulação)
+    const hoje = new Date(
+      agoraFixo.getFullYear(),
+      agoraFixo.getMonth(),
+      agoraFixo.getDate()
+    );
+
+    let classeStatus = "";
+
+    // define status visual
+    if (dataEvento.getTime() === hoje.getTime()) {
+      classeStatus = "hoje";
+    } else if (dataEvento < hoje) {
+      classeStatus = "passado";
+    } else {
+      classeStatus = "futuro";
+    }
+
+    // calcular dia da semana
+    const diasSemana = ["DOM", "SEG", "TER", "QUA", "QUI", "SEX", "SÁB"];
+    const diaSemana = diasSemana[dataEvento.getDay()];
+
+    // formatação (02/06)
+    const diaFormatado = String(diaNumero).padStart(2, '0');
+    const mesFormatado = String(mesNumero + 1).padStart(2, '0');
+
+    // cria card
+    const div = document.createElement("div");
+    div.classList.add("card-dia", classeStatus);
+
+    div.innerHTML = `
+
+      <div class="data-dia">
+        <span class="semana">${diaSemana}</span>
+        <span class="dia">${diaFormatado}</span>
+        <span class="mes">${mesTexto.toUpperCase()}</span>
+      </div>
+
+      <div class="conteudo-dia">
+        ${dia.shows.map(s => {
+          const [hora, artista] = s.split(" - ");
+          return `
+            <div class="show">
+              <span class="hora">${hora}</span>
+              <span class="artista">${artista}</span>
+            </div>
+          `;
+        }).join("")}
+      </div>
+
+    `;
+
+    grid.appendChild(div);
+  });
+}
+function avancarProgramacao() {
+  if (indiceAtual + 3 < programacao.length) {
+    indiceAtual += 3;
+    renderizarProgramacao();
+  }
+}
+
+function voltarProgramacao() {
+  if (indiceAtual - 3>= 0) {
+    indiceAtual -= 3;
+    renderizarProgramacao();
+  }
+}
+
+function irParaDiaAtual() {
+  const hoje = agoraFixo; 
+
+  const diaHoje = hoje.getDate();
+  const mesHoje = hoje.getMonth();
+
+  const index = programacao.findIndex(d => {
+    const partes = d.dia.split(" ");
+
+    const diaNumero = parseInt(partes[0]);
+    const mesTexto = partes[1];
+
+    let mesNumero = mesTexto === "Jul" ? 6 : 5;
+
+    return diaNumero === diaHoje && mesNumero === mesHoje;
+  });
+
+  if (index !== -1) {
+    indiceAtual = Math.floor(index / 3) * 3;
+  }
+}
+
+window.addEventListener("DOMContentLoaded", () => {
+  if (localStorage.getItem("usuarioLogado")) definirLogado(true);
+
+  renderizarCalendario();
+  atualizarProgramacao();
+
+  irParaDiaAtual();          
+  renderizarProgramacao();  
+
+  document.querySelectorAll(".fechar").forEach(b => {
+    b.onclick = () => {
+      fecharJanelaRegistrarDia(); 
+      fecharLoginCadastro();
+      fecharJanelaEncerrado(); 
+      fecharJanelaBloqueado();
+      fecharEsqueciSenha(); 
+    };
+  });
+
+  const btnL = document.getElementById("btnLogin");
+  if(btnL) {
+    btnL.onclick = () => {
+      if (btnL.dataset.logged === "true") definirLogado(false);
+      else abrirLoginCadastro();
+    };
+  }
+});

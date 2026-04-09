@@ -25,7 +25,6 @@ body.fundo-ponto {
 
 body.fundo-programacao {
   background-image: none;
-
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
@@ -41,3 +40,4 @@ body.fundo-retro {
   background-position: center;
   background-repeat: no-repeat;
 }
+
