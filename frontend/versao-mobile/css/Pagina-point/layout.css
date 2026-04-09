@@ -27,7 +27,7 @@
   font-size: 12px;
   font-weight: 600;
   background: transparent;
-  color: #000000;
+  color: #ffffff;
   border: none;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -53,15 +53,14 @@
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  color: #000000;
+  color: #ffffff;
   font-weight: 600;
   background-color: transparent;
   font-size: 13px;
-  transition: all 0.2s ease;
 }
 
 .menu button.active {
-  background-color: #D7462D;
+  background-color: #ac2a13;
 }
 
 .pagina {
