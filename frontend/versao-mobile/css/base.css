@@ -24,14 +24,11 @@ body.fundo-ponto {
 }
 
 body.fundo-programacao {
-  background-image: none;
   background-size: contain;
-  background-position: center;
   background-repeat: no-repeat;
-  background-position: top center;
-  background-color:#012773;
+  background-position: center;
+  background-image: url('/frontend/versao-mobile/css/imagens/casaeluzes.png');
 
-  
 }
 
 body.fundo-retro {

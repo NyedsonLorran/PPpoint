@@ -1,15 +1,21 @@
 .janela-encerrado,
-.janela-bloqueado {
-  z-index: 10000;
-  width: 90%;
-  max-width: 300px;
-  padding: 30px 5% 70px;
-  text-align: center;
+.janela-bloqueado{
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  border-radius: 10px;
+  z-index: 10001;
+  width: 88%;
+  max-width: 300px;
+  padding: 44px 24px 36px;
+  text-align: center;
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  box-shadow: var(--shadow);
+  animation: popIn 0.2s ease both;
 }
 
 .janela-encerrado {

@@ -12,19 +12,41 @@
 
 <body>
 
+<div class="fundo"></div>
+
 <div class="cabeçalho">
 
-  <nav class="menu">
-    <button id="btnProgramacao" onclick="mostrarPagina('programacao')">Programação</button>
-    <button id="btnPonto" class="active" onclick="mostrarPagina('ponto')">Point</button>
-    <button id="btnRetrospectiva" onclick="mostrarPagina('retrospectiva')">Retrospectiva</button>
-  </nav>
+  <span id="titulo-topo"></span>
+
+  <div class="logo">
+    <span class="logo-pp">LOGO</span>
+  </div>
 
   <div class="area-login">
-    <button id="btnLogin" class="btnLogin" data-logged="false">Entrar</button>
+    <button id="btnLogin" class="btnLogin">Entrar</button>
   </div>
 
 </div>
+
+<!-- MENU  -->
+<nav class="nav-bottom">
+
+  <button id="btnProgramacao" onclick="mostrarPagina('programacao')">
+    <i class="fa-solid fa-music"></i>
+    <span>Programação</span>
+  </button>
+
+  <button id="btnPonto" class="active" onclick="mostrarPagina('ponto')">
+    <i class="fa-solid fa-calendar-check"></i>
+    <span>Point</span>
+  </button>
+
+  <button id="btnRetrospectiva" onclick="mostrarPagina('retrospectiva')">
+    <i class="fa-solid fa-star"></i>
+    <span>Retrospectiva</span>
+  </button>
+
+</nav>
 
 <!-- páginas base -->
 <div class="paginas">
@@ -134,8 +156,9 @@
       </div>
       <button onclick="fazerLogin()">Entrar</button>
       <button class="btn-google" onclick="loginComGoogle()">
-          Entrar com Google
+          <i class="fa-brands fa-google"></i> Entrar com Google
       </button>
+      
 
       <span class="esqueci-senha" onclick="abrirEsqueciSenha()">Esqueci minha senha</span>
       <p>Não tem uma conta? <span class="link-cadastro" onclick="mostrarCadastro()">Cadastre-se</span></p>
@@ -189,7 +212,8 @@
   <div class="janela-encerrado">
     <span class="fechar
     " onclick="fecharJanelaEncerrado()">×</span>
-    <h3>Tempo de registro encerrado</h3>
+        <i class="fa-solid fa-lock"></i>
+     <h3>Tempo de registro encerrado</h3>
     <p>O período de registro só fica disponível até 24h após o dia que deseja registrar.</p>
   </div>
 </div>
@@ -199,6 +223,7 @@
   <div class="janela-bloqueado">
     <span class="fechar
     " onclick="fecharJanelaBloqueado()">×</span>
+    <i class="fa-solid fa-hourglass-end"></i>
     <h3>Disponível em breve</h3>
     <p>Calma lá! Você só pode registrar no dia seguinte ao evento.</p>
   </div>

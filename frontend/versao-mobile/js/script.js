@@ -113,18 +113,38 @@ function proximoMes() { if (mesAtual < nomesMeses.length - 1) { mesAtual++; rend
 function mesAnterior() { if (mesAtual > 0) { mesAtual--; renderizarCalendario(); } }
 
 function mostrarPagina(pagina) {
+  
+  // troca de página
   document.querySelectorAll(".pagina").forEach(p => p.classList.remove("active"));
   document.getElementById(pagina).classList.add("active");
 
-  document.querySelectorAll(".menu button").forEach(btn => btn.classList.remove("active"));
-  if (pagina === "programacao") document.getElementById("btnProgramacao").classList.add("active");
-  if (pagina === "ponto") document.getElementById("btnPonto").classList.add("active");
-  if (pagina === "retrospectiva") document.getElementById("btnRetrospectiva").classList.add("active");
+  // botão ativo
+  document.querySelectorAll(".nav-bottom button").forEach(btn => btn.classList.remove("active"));
 
+  let botao;
+  if (pagina === "programacao") {
+    botao = document.getElementById("btnProgramacao");
+  } 
+  else if (pagina === "ponto") {
+    botao = document.getElementById("btnPonto");
+  } 
+  else if (pagina === "retrospectiva") {
+    botao = document.getElementById("btnRetrospectiva");
+  }
+
+  if (botao) botao.classList.add("active");
+
+  // fundo
   document.body.classList.remove("fundo-programacao","fundo-ponto","fundo-retro");
   if (pagina === "programacao") document.body.classList.add("fundo-programacao");
   if (pagina === "ponto") document.body.classList.add("fundo-ponto");
   if (pagina === "retrospectiva") document.body.classList.add("fundo-retro");
+
+  // 🔥 TÍTULO NO TOPO
+  const titulo = document.getElementById("titulo-topo");
+  if (botao && titulo) {
+    titulo.innerText = botao.querySelector("span").innerText;
+  }
 }
 
 function abrirLoginCadastro() { document.getElementById("janela-login").style.display = "flex"; }
@@ -742,6 +762,9 @@ function irParaDiaAtual() {
     indiceAtual = Math.floor(index / 3) * 3;
   }
 }
+window.onload = function() {
+  mostrarPagina("ponto");
+};
 
 window.addEventListener("DOMContentLoaded", () => {
   if (localStorage.getItem("usuarioLogado")) definirLogado(true);
