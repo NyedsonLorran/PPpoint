@@ -235,6 +235,59 @@ async function fazerLogin() {
   }
 }
 
+function loginComGoogle() {
+    google.accounts.id.initialize({
+        client_id: "24281345430-ctit3iu4en7otpu2kjfakopamsf9pclf.apps.googleusercontent.com",
+        callback: handleGoogleCredential,
+        use_fedcm_for_prompt: true
+    });
+
+    google.accounts.id.prompt((notification) => {
+        if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+            // Fallback abre popup manual
+            google.accounts.client_id.renderButton(
+                document.getElementById("google-btn-container"),
+                {theme: "outline", size: large, width: 260}
+            );
+        }
+    });
+}
+
+async function handleGoogleCredential(response) {
+    const idToken = response.credential;
+
+    try {
+        const res = await fetch(`${API_URL}/auth/login/google`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({token: idToken})
+        });
+
+        if (res.ok) {
+            const data = await res.json();
+
+            sessionStorage.setItem("token", data.token);
+
+            const payload = JSON.parse(atob(idToken.split('.')[1]));
+            localStorage.setItem("usuarioLogado", JSON.stringify({
+                usuario: payload.email,
+                email: payload.email,
+                nome: payload.name || payload.email
+            }));
+
+            fecharLoginCadastro();
+            definirLogado(true);
+            renderizarCalendario();
+        } else {
+            const data = await res.json();
+            alert("Erro no login com Google: " + (data.message || "Tente novamente"));
+        }
+
+    } catch (e) {
+        alert("Erro ao conectar com o servidor");
+    }
+}
+
 function definirLogado(estado) {
   const botao = document.getElementById("btnLogin");
   botao.dataset.logged = estado;
@@ -633,9 +686,6 @@ document.querySelectorAll(".fechar").forEach(b => {
   const btnL = document.getElementById("btnLogin");
   if(btnL) btnL.onclick = () => { if (btnL.dataset.logged === "true") definirLogado(false); else abrirLoginCadastro(); };
 });
-
-function loginComGoogle() {
-}
 
 const programacao = [
   { dia: "03 Jun", shows: ["19:00 - Wesley Safadão", "20:30 - Falamansa", "22:00 - Alceu Valença"] },
