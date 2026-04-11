@@ -3,7 +3,7 @@
   margin: 80px auto 20px auto;
   padding: 15px 5%;
   max-width: 90%;
-  margin-top: 40px;
+  margin-top: 50px;
   width: 350px;
   background-color: transparent;
   border-radius: 10px;
@@ -19,16 +19,21 @@
 .Mes {
   font-size: 25px !important; 
   line-height: 1.2;
-  color: #ffffff;;
+  color: #ffffff;
+  margin-bottom: 20px; 
+
 }
 
 .semanas{
   color: #ffffff;
+  margin-bottom: 20px; 
+
 }
 
 .dias{
   letter-spacing: 1px;
   color: #ffffff;
+
 }
 
 .semanas,
@@ -36,7 +41,7 @@
 
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 8px;
+  gap: 10px;
   margin-top: 10px;
   font-size: 18px;
 }

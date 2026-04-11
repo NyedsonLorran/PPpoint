@@ -4,7 +4,7 @@
   align-items: center;
   justify-content: space-between; 
   padding: 10px 16px;
-  min-height: 70px; /* ajustado */
+  min-height: 70px;
   background: rgba(8, 3, 0, 0);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -12,19 +12,6 @@
   top: 0;
   z-index: 500;
   position: relative;
-}
-
-.fundo {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: calc(100vh - 60px); /* 🔥 até antes do menu */
-  background-image: url("/frontend/versao-mobile/css/imagens/casaeluzes.png");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  z-index: -1;
 }
 
 /* ENTRAR */
@@ -45,7 +32,7 @@
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  bottom: 8px;
+  bottom: -10px;
   color: white;
   font-size: 16px;
   font-weight: bold;
@@ -54,9 +41,8 @@
 
 /* BOTÃO LOGIN */
 .btnLogin {
-  padding: 6px 10px;
+  font-size: 15px !important;
   border-radius: 8px;
-  font-size: 12px;
   font-weight: 600;
   background: transparent;
   color: #ffffff;
@@ -75,7 +61,7 @@
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 60px;
+  height: 70px;
   background: rgba(8, 3, 0, 0.801);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
@@ -85,31 +71,45 @@
   z-index: 500;
 }
 
+/* BOTÕES */
 .nav-bottom button {
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 3px;
-  padding: 8px 22px;
+  width: 90px;
+  height: 50px;
   border: none;
-  background: transparent;
-  color: rgba(255, 255, 255, 0.849);
   cursor: pointer;
-  border-radius: var(--radius-md);
-  transition: color 0.2s ease;
-  font-size: 11.5px;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
+  background: rgba(78, 100, 55, 0);
+  color: rgba(255, 255, 255, 0.85);
+  transition: all 0.3s ease;
 }
 
+/* GARANTE ÍCONE NA FRENTE */
+.nav-bottom button i,
+.nav-bottom button span {
+  position: relative;
+  z-index: 2;
+}
+
+/* ÍCONE */
 .nav-bottom button i {
   font-size: 20px;
 }
 
+/* TEXTO */
 .nav-bottom button span {
   display: none;
+}
+
+/* BOTÃO ATIVO */
+.nav-bottom button.active {
+  color: #d36d1a;
+  transform: translateY(-3px);
 }
 
 /* PÁGINAS */

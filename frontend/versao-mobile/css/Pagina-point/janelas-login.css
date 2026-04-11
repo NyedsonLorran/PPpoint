@@ -12,11 +12,12 @@
 }
 
 .link-cadastro, .link-login {
-  color: #2b2525;
+  color: #D7462D;
   cursor: pointer;
-  font-weight: 600;
+  font-weight: 700;
   text-decoration: underline;
 }
+
 
 .janelalogin p{
   font-size: 16px;
@@ -29,7 +30,6 @@
   margin: 5px 0;
   border-radius: 6px;
   outline: none;
-  border: 1px solid #818181;
 }
 
 .btn-google {
@@ -43,7 +43,7 @@
 }
 
 .btn-google:hover {
-  background: #f7f7f7 !important;
+  background: #f7f7f7bb !important;
 }
 
 .janelalogin button,
@@ -60,14 +60,16 @@
 
 #loginForm button,
 #registerForm button {
+  font-weight: 600;
   width: 100%;
   padding: 8px;
   margin-top: 15px;
   border: none;
   background: #D7462D;
-  color: #000000;
+  color: #f8f8f8;
   border-radius: 6px;
   cursor: pointer;
+  
 }
 
 .botoes-logar-registrar{
@@ -113,7 +115,7 @@
   width: 100%;
   padding: 10px 10px 10px 35px; 
   border-radius: 6px;
-  border: 1px solid #818181;
+  border: 1px solid #a399999c !important;
   outline: none;
 }
 
@@ -135,6 +137,7 @@
 
 .esqueci-senha:hover {
   text-decoration: underline;  
+  color: #D7462D;
 }
 
 .janela-recuperacao {
@@ -166,7 +169,8 @@
   margin-top: 5px;
   border: none;
   background: #d84315;
-  color: #000;
+  color: #ffffff;
+  font-weight: 600;
   border-radius: 6px;
   cursor: pointer;
 }

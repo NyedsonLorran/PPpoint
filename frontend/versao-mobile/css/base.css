@@ -7,32 +7,32 @@
 }
 
 body {
+  background-color: #040f36;
   font-family: Arial, sans-serif;
   text-align: center;
   background-size: cover;
   background-position: center;
   min-height: 100vh;
   overflow-x: hidden;
-  background-image: url('/frontend/versao-mobile/css/imagens/casaeluzes.png');
 }
 
 body.fundo-ponto {
-  background-image: url('/frontend/versao-mobile/css/imagens/casaeluzes.png');
+  background-color: #040f36;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
 }
 
 body.fundo-programacao {
+  background-color: #040f36;
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
-  background-image: url('/frontend/versao-mobile/css/imagens/casaeluzes.png');
 
 }
 
 body.fundo-retro {
-  background-image: url('/frontend/versao-mobile/css/imagens/casaeluzes.png');
+  background-color: #040f36;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;

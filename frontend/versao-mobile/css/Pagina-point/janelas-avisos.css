@@ -19,7 +19,13 @@
 }
 
 .janela-encerrado {
-  background-color: #a09e9e;
+  background-color: #575454;
+}
+
+.janela-encerrado i, .janela-bloqueado i {
+  font-size: 38px;
+  margin-bottom: 2px;
+  color: white;
 }
 
 .janela-bloqueado {
@@ -30,10 +36,12 @@
 .janela-bloqueado p {
   font-size: 17px;
   margin-top: 15px; 
+  color: white;
 }
 
 .janela-encerrado h3,
 .janela-bloqueado h3 {
+  color: white;
   font-size: 20px;   
 }
 
@@ -55,6 +63,6 @@
   top: 10px;
   right: 10px;
   font-size: 20px;
-  color: #000000;
+  color: #ffffff;
   cursor: pointer;
 }
