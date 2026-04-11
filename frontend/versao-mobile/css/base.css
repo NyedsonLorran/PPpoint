@@ -6,8 +6,9 @@
   box-sizing: border-box;
 }
 
+
 body {
-  background-color: #040f36;
+  background-color: #000327;
   font-family: Arial, sans-serif;
   text-align: center;
   background-size: cover;
@@ -17,14 +18,14 @@ body {
 }
 
 body.fundo-ponto {
-  background-color: #040f36;
+  background-color: #000327;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
 }
 
 body.fundo-programacao {
-  background-color: #040f36;
+  background-color: #000327;
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
@@ -32,7 +33,7 @@ body.fundo-programacao {
 }
 
 body.fundo-retro {
-  background-color: #040f36;
+  background-color: #000327;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;

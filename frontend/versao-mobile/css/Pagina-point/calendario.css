@@ -1,3 +1,7 @@
+@font-face {
+  font-family: 'Averia';
+  src: url('/frontend/versao-mobile/css/fonts/Averia-Regular.ttf') format('truetype');
+}
 
 .calendario {
   margin: 80px auto 20px auto;
@@ -16,23 +20,22 @@
   font-family: 'Montserrat', sans-serif;
 }
 
-.Mes {
+.Mes {              
   font-size: 25px !important; 
   line-height: 1.2;
   color: #ffffff;
   margin-bottom: 20px; 
-
 }
 
 .semanas{
   color: #ffffff;
-  margin-bottom: 20px; 
+  margin-bottom: 20px;
+  
 
 }
 
 .dias{
   letter-spacing: 1px;
-  color: #ffffff;
 
 }
 
@@ -47,8 +50,10 @@
 }
 
 .flag {
-  color: #d6cdcd;
+  font-family: 'Averia', sans-serif;
+  color: #eeeeee;
   width: 100%;
+  border-top-left-radius: 30%;
   max-width: 80px;
   margin: auto;
   aspect-ratio: 1 / 1.1;
@@ -56,38 +61,38 @@
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  font-size: clamp(12px, 2.5vw, 20px);
+  font-size: clamp(16px, 2.5vw, 20px);
   font-weight: 800;
   clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 50% 70%, 0% 100%);
 }
 
 .flag.fora {
   background-color: #0b5c9e8e;
-  opacity: 0.6;
+  opacity: 0.5;
 }
 
 .flag.bloqueado {
-  background: #912218;
+  background: #DC293E;
 }
 
 .flag.encerrado {
-  background: #797676cb;
+  background: #8f8282;
 }
 
 .flag.disponivel {
-  background: #265f31;
+  background: #26963d;
 }
 
 .flag.disponivel:hover {
-  background: rgba(3, 233, 37, 0.7);
+  background: rgba(13, 209, 42, 0.911);
 }
 
 .flag.encerrado:hover {
-  background: rgba(133, 147, 113, 0.7);
+  background: rgb(157, 163, 148);
 }
 
 .flag.bloqueado:hover {
-  background: rgba(215, 70, 45, 0.7);
+  background: rgb(255, 0, 30);
 } 
 
 

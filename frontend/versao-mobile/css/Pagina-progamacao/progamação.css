@@ -3,6 +3,11 @@
   src: url('/frontend/versao-mobile/css/fonts/Antone\ DEMO.ttf') format('truetype');
 }
 
+@font-face {
+  font-family: 'Geometos';
+  src: url('/frontend/versao-mobile/css/fonts/Geometos\ Rounded.ttf') format('truetype');
+}
+
 .carrossel-programacao {
   position: relative;
   display: flex;
@@ -11,7 +16,7 @@
   width: 100%;
   max-width: 100%;
   margin: 50px auto;
-  padding: 0 10px; 
+  padding: 0 5px; 
   box-sizing: border-box;
 }
 
@@ -20,18 +25,18 @@
   flex-direction: column; 
   gap: 15px; 
   width: 100%;
-  max-width: 400px; 
+  max-width: 450px; 
   align-items: center; 
 }
 
 .card-dia {
-  padding: 15px 6px;
+  padding: 15px 5px;
   border-radius: 12px;
   width: 100%; 
-  display: flex;               
+  display: flex;              
   align-items: center;
-  justify-content: center; 
-  gap: 15px;
+  justify-content: flex-start; 
+  gap: 10px;
   box-sizing: border-box;
 }
 
@@ -41,73 +46,69 @@
   align-items: center;      
   justify-content: center;
   text-align: center;
-  min-width: 80px; 
+  min-width: 75px; 
   flex-shrink: 0;
-  gap: 7px;
+  gap: 5px;
 }
 
 .data-dia .semana {
   color: #18bb13;
-  font-size: 18px; 
-  letter-spacing: 3px;
-  display: block;
-  width: 100%;
+  font-size: 14px; 
+  letter-spacing: 1px;
+  text-transform: uppercase;
 }
 
 .data-dia .dia {
   font-family: 'Antone', Arial, sans-serif;
   color: #b5b807;
   font-size: 38px; 
-  line-height: 1;
-  display: block;
-  width: 100%;
+  line-height: 0.9;
 }
 
 .data-dia .mes {
   color: white;
-  font-size: 18px;
-  letter-spacing: 3px;
-  display: block;
-  width: 100%;
+  font-size: 16px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
 }
 
 .conteudo-dia {
   display: flex;
   flex-direction: column;
   flex: 1;
-  max-width: 70%; 
+  gap: 8px;
+  overflow: hidden;
 }
 
 .show {
+  font-family: 'Geometos', Arial, sans-serif;
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: flex-start;
-  gap: 8px;
-  margin: 3px 0;
   width: 100%;
 }
 
+
 .hora {
-  background-color: #ffd24d;
+  background-color: #DC293E;
   font-weight: bold;
-  color: #000000;
-  font-size: 15px; 
-  padding: 5px 12px; 
-  white-space: nowrap;
-  min-width: 50px;
+  color: #ffffff;
+  font-size: 13px; 
+  padding: 4px 0; 
+  width: 60px; 
   text-align: center;
+  flex-shrink: 0;
+  margin-right: 10px;
 }
 
 .artista {
   flex: 1;
   font-weight: bold;
-  font-size: 18px; 
+  font-size: clamp(12px, 4vw, 17px); 
   color: #ffffff;
   text-align: left;
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: unset;
+  letter-spacing: -0.5px;
 }
 
 .nav {
@@ -116,16 +117,16 @@
   background: none;
   border: none;
   color: white;
-  font-size: 26px;
-  padding: 10px;
+  padding: 5px;
   cursor: pointer;
   z-index: 10;
-  font-size: clamp(20px, 6vw, 26px);
+  font-size: 24px;
   font-weight: 900;
+  transform: translateY(-50%);
 }
 
 .nav:active {
-  transform: scale(0.9);
+  transform: translateY(-50%) scale(0.9);
 }
 
 .nav:nth-child(1) { left: 0; }
@@ -133,6 +134,5 @@
 
 .card-dia.passado {
   opacity: 0.5;
-  filter: grayscale(60%);
+  filter: grayscale(80%);
 }
-
