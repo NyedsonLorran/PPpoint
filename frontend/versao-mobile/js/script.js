@@ -215,11 +215,17 @@ async function fazerLogin() {
       const data = await res.json();
 
       sessionStorage.setItem("token", data.token);
+      sessionStorage.setItem("role", data.role);
 
       localStorage.setItem("usuarioLogado", JSON.stringify({
         usuario: emailInput,
         email: emailInput
       }));
+
+      if (data.role === "ADMIN") {
+          window.location.href = "/frontend/versao-mobile/admin/admin.html";
+          return;
+      }
 
       fecharLoginCadastro();
       definirLogado(true);
@@ -267,6 +273,7 @@ async function handleGoogleCredential(response) {
             const data = await res.json();
 
             sessionStorage.setItem("token", data.token);
+            sessionStorage.setItem("role", data.role);
 
             const payload = JSON.parse(atob(idToken.split('.')[1]));
             localStorage.setItem("usuarioLogado", JSON.stringify({
@@ -274,6 +281,11 @@ async function handleGoogleCredential(response) {
                 email: payload.email,
                 nome: payload.name || payload.email
             }));
+
+            if (data.role === "ADMIN") {
+                window.location.href = "/frontend/versao-mobile/admin/admin.html";
+                return;
+            }
 
             fecharLoginCadastro();
             definirLogado(true);

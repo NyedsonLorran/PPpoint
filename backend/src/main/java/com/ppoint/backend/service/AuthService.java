@@ -5,6 +5,7 @@ import com.ppoint.backend.exception.EmailAlreadyRegisteredException;
 import com.ppoint.backend.exception.InvalidCredentialsException;
 import com.ppoint.backend.exception.ResourceNotFoundException;
 import com.ppoint.backend.repository.UserRepository;
+import lombok.extern.java.Log;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -14,6 +15,8 @@ public class AuthService {
     private final EncryptionService crypto;
     private final JwtService jwtService;
     private final GoogleAuthService googleAuthService;
+
+    public record LoginResult(String token, String role) {}
 
     public AuthService(UserRepository repository, EncryptionService crypto, JwtService jwtService, GoogleAuthService googleAuthService) {
         this.repository = repository;
@@ -42,17 +45,18 @@ public class AuthService {
         repository.save(user);
     }
 
-    public String login(String email, String password) {
+    public LoginResult login(String email, String password) {
         User user = repository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado"));
 
         if (!crypto.compare(password, user.getPassword())) {
             throw new InvalidCredentialsException("Senha inválida");
         }
 
-        return jwtService.generateToken(user.getEmail());
+        String token = jwtService.generateToken(user.getEmail());
+        return new LoginResult(token, user.getRole());
     }
 
-    public String googleAuth(String token) {
+    public LoginResult googleAuth(String token) {
         var payload = googleAuthService.verify(token);
 
         if (payload == null) {
@@ -85,6 +89,7 @@ public class AuthService {
             return repository.save(newUser);
         });
 
-        return jwtService.generateToken(user.getEmail());
+        String jwtToken = jwtService.generateToken(user.getEmail());
+        return new LoginResult(jwtToken, user.getRole());
     }
 }

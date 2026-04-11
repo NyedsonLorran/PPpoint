@@ -28,13 +28,13 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<AuthResponseDTO> login(@Valid @RequestBody LoginDTO dto) {
-        String token = authService.login(dto.email(), dto.password());
-        return ResponseEntity.ok(new AuthResponseDTO(token));
+        AuthService.LoginResult result = authService.login(dto.email(), dto.password());
+        return ResponseEntity.ok(new AuthResponseDTO(result.token(), result.role()));
     }
 
     @PostMapping("/login/google")
     public ResponseEntity<AuthResponseDTO> googleLogin(@RequestBody GoogleTokenDTO dto) {
-        String token = authService.googleAuth(dto.token());
-        return ResponseEntity.ok(new AuthResponseDTO(token));
+        AuthService.LoginResult result = authService.googleAuth(dto.token());
+        return ResponseEntity.ok(new AuthResponseDTO(result.token(), result.role()));
     }
 }
