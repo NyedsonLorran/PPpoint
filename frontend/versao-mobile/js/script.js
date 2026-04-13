@@ -194,12 +194,6 @@ async function fazerLogin() {
     return; 
   }
 
-  //  SIMULAÇÃO ADMIN (ANTES DO BACKEND)
-  if (emailInput === "admin" && senhaInput === "123") {
-    localStorage.setItem("isAdmin", "true");
-    window.location.href = "/frontend/versao-mobile/admin/admin.html";
-    return;
-  }
 
   try {
     const res = await fetch(`${API_URL}/auth/login`, {
@@ -222,10 +216,7 @@ async function fazerLogin() {
         email: emailInput
       }));
 
-      if (data.role === "ADMIN") {
-          window.location.href = "/frontend/versao-mobile/admin/admin.html";
-          return;
-      }
+      
 
       fecharLoginCadastro();
       definirLogado(true);
