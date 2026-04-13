@@ -2,5 +2,6 @@
     "java.compile.nullAnalysis.mode": "automatic",
     "java.configuration.detectJdksAtStart": true,
     "java.configuration.runtimes": [],
-    "liveServer.settings.host": "localhost"
+    "liveServer.settings.host": "localhost",
+    "java.configuration.updateBuildConfiguration": "interactive"
 }
