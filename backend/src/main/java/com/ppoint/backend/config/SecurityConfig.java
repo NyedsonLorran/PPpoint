@@ -31,14 +31,17 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/auth/login",
-                                "/auth/register",
-                                "/auth/login/google",
-                                "/",
-                                "/static/**",
-                                "/**.html",
-                                "/**.js",
-                                "/**.css").permitAll()
+                                
+        "/auth/login",
+        "/auth/register",
+        "/auth/login/google",
+        "/programacao",      
+        "/programacao/dias",  
+        "/",
+        "/static/**",
+        "/**.html",
+        "/**.js",
+        "/**.css").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
