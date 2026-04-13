@@ -17,7 +17,9 @@
     <version>0.0.1-SNAPSHOT</version>
 
     <properties>
+        <!-- 🔥 Força compatibilidade mesmo usando Java 25 -->
         <java.version>17</java.version>
+        <maven.compiler.release>17</maven.compiler.release>
     </properties>
 
     <dependencies>
@@ -64,7 +66,7 @@
             <version>2.2.0</version>
         </dependency>
 
-        <!-- Lombok (IMPORTANTE) -->
+        <!-- Lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -90,18 +92,26 @@
     <build>
         <plugins>
 
-            <!-- Plugin do Spring -->
+            <!-- Spring Boot -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
 
-            <!-- 🔥 CORREÇÃO DO LOMBOK -->
+            <!-- 🔥 Compiler corrigido pra Java 25 + Lombok -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.14.1</version>
                 <configuration>
+
+                    <!-- força Java 17 -->
+                    <release>17</release>
+
+                    <!-- evita bug com Java 25 -->
+                    <fork>true</fork>
+
+                    <!-- Lombok -->
                     <annotationProcessorPaths>
                         <path>
                             <groupId>org.projectlombok</groupId>
@@ -109,6 +119,22 @@
                             <version>1.18.32</version>
                         </path>
                     </annotationProcessorPaths>
+
+                    <!-- Lombok nos testes -->
+                    <testAnnotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>1.18.32</version>
+                        </path>
+                    </testAnnotationProcessorPaths>
+
+                    <!-- hack necessário pro Java 25 -->
+                    <compilerArgs>
+                        <arg>--add-opens</arg>
+                        <arg>jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED</arg>
+                    </compilerArgs>
+
                 </configuration>
             </plugin>
 
