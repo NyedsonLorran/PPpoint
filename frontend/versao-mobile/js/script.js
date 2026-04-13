@@ -337,12 +337,12 @@ function carregarSugestoesAmigos() {
   });
 }
 
-function getProgramacaoPorDia(dia, mes) {
-  const programacao = { 
-    "0-8": ["Calcinha Preta", "Zé Cantor", "Garota Safada"], 
-    "0-9": ["Wesley Safadão", "Taty Girl", "Limão com Mel"] 
-  };
-  return programacao[`${mes}-${dia}`] || ["Show Geral"];
+// Busca os nomes dos cantores do dia selecionado para o formulário de registro
+async function getProgramacaoPorDia(dia, mes) {
+  const mesReal = mes === 0 ? 5 : 6; // mesAtual 0=Jun(5), 1=Jul(6)
+  const dataIso = `${ano}-${String(mesReal + 1).padStart(2,'0')}-${String(dia).padStart(2,'0')}`;
+  const dados = await buscarProgramacaoDoDia(dataIso);
+  return dados.map(s => s.nome || "Artista");
 }
 
 function getEstruturaBebidas() {
@@ -354,8 +354,8 @@ function getEstruturaBebidas() {
   ];
 }
 
-function carregarDadosFormulario() {
-  let shows = getProgramacaoPorDia(diaSelecionado, mesAtual);
+async function carregarDadosFormulario() {
+  let shows = await getProgramacaoPorDia(diaSelecionado, mesAtual);
   let estrutura = getEstruturaBebidas();
   const containerNotas = document.getElementById("notasShows");
   const containerBebidas = document.getElementById("listaBebidas");
@@ -453,7 +453,7 @@ function ajustarQtd(id, mudanca) {
   v > 0 ? card.classList.add('com-item') : card.classList.remove('com-item');
 }
 
-function abrirJanelaRegistrarDia() {
+async function abrirJanelaRegistrarDia() {
   document.getElementById("fundoTransparente").style.display = "block";
   document.getElementById("janela-registrar-dia").style.display = "flex";
   const usuario = getUsuarioLogado();
@@ -462,7 +462,7 @@ function abrirJanelaRegistrarDia() {
     const registros = JSON.parse(localStorage.getItem("registros_" + usuario.usuario)) || [];
     areaCam.style.display = (registros.length === 0) ? "block" : "none";
   }
-  carregarDadosFormulario(); 
+  await carregarDadosFormulario(); 
   carregarSugestoesAmigos();
   let mesReal = mesAtual === 0 ? 5 : 6;
   let d = new Date(ano, mesReal, diaSelecionado);
@@ -693,126 +693,145 @@ document.querySelectorAll(".fechar").forEach(b => {
   if(btnL) btnL.onclick = () => { if (btnL.dataset.logged === "true") definirLogado(false); else abrirLoginCadastro(); };
 });
 
-const programacao = [
-  { dia: "03 Jun", shows: ["19:00 - Wesley Safadão", "20:30 - Falamansa", "22:00 - Alceu Valença"] },
-  { dia: "04 Jun", shows: ["18:30 - Elba Ramalho", "20:00 - Xand Avião", "21:30 - Banda Aviões", "23:00 - Marília Mendonça"] },
-  { dia: "05 Jun", shows: ["19:00 - Padre Fábio", "21:00 - Luan Santana"] },
-  { dia: "06 Jun", shows: ["18:00 - Mastruz", "19:30 - Magníficos", "21:00 - Solange", "22:30 - Chico Pessoa"] },
-  { dia: "07 Jun", shows: ["18:30 - Cavaleiros do Forró", "20:00 - Régis", "21:30 - Flávio José"] },
-  { dia: "08 Jun", shows: ["19:00 - Calcinha Preta", "20:30 - Garota Safada", "22:00 - Zé Cantor"] },
-  { dia: "09 Jun", shows: ["18:00 - Aviões", "19:30 - Limão com Mel", "21:00 - Forró do Muído"] },
-  { dia: "10 Jun", shows: ["18:30 - Magníficos", "20:00 - Taty Girl", "21:30 - Domiguinhos"] }
-];
+// ─── PROGRAMAÇÃO DINÂMICA (busca do backend) ───────────────────────────────
 
+let diasDisponiveis = [];   // lista de datas retornadas pelo backend ex: ["2026-06-03", ...]
+let programacaoCache = {};  // cache: { "2026-06-03": [{cantorId, nome, foto, horario}, ...] }
 let indiceAtual = 0;
 
-function renderizarProgramacao() {
+const nomesMesesProg = ["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"];
+const diasSemana = ["DOM","SEG","TER","QUA","QUI","SEX","SÁB"];
+
+// Busca do backend todos os dias com programação cadastrada
+async function carregarDiasDisponiveis() {
+  try {
+    const res = await fetch(`${API_URL}/programacao/dias`);
+    if (!res.ok) throw new Error("Erro ao buscar dias");
+    diasDisponiveis = await res.json(); // ["2026-06-03", "2026-06-04", ...]
+  } catch (e) {
+    console.error("Erro ao carregar dias:", e);
+    diasDisponiveis = [];
+  }
+}
+
+// Busca do backend a programação de uma data específica (com cache)
+async function buscarProgramacaoDoDia(dataIso) {
+  if (programacaoCache[dataIso]) return programacaoCache[dataIso];
+
+  try {
+    const res = await fetch(`${API_URL}/programacao?data=${dataIso}`);
+    if (!res.ok) throw new Error("Erro ao buscar programação");
+    const dados = await res.json();
+    programacaoCache[dataIso] = dados;
+    return dados;
+  } catch (e) {
+    console.error("Erro ao buscar programação do dia:", e);
+    return [];
+  }
+}
+
+// Renderiza os cards do carrossel com dados do backend
+async function renderizarProgramacao() {
   const grid = document.getElementById("gridProgramacao");
   if (!grid) return;
 
+  // Carrega dias se ainda não carregou
+  if (diasDisponiveis.length === 0) {
+    grid.innerHTML = `<div class="card-dia"><div class="conteudo-dia"><div class="show">Carregando...</div></div></div>`;
+    await carregarDiasDisponiveis();
+  }
+
+  if (diasDisponiveis.length === 0) {
+    grid.innerHTML = `<div class="card-dia"><div class="conteudo-dia"><div class="show">Sem programação cadastrada.</div></div></div>`;
+    return;
+  }
+
+  // Pega grupo de 3 dias a partir do índice atual
+  const grupo = diasDisponiveis.slice(indiceAtual, indiceAtual + 3);
+
+  // Busca programação dos 3 dias em paralelo
+  const programacoes = await Promise.all(grupo.map(d => buscarProgramacaoDoDia(d)));
+
   grid.innerHTML = "";
 
-  // pega grupos de 3 dias (paginação)
-  const grupo = programacao.slice(indiceAtual, indiceAtual + 3);
+  const hoje = new Date(agoraFixo.getFullYear(), agoraFixo.getMonth(), agoraFixo.getDate());
 
-  grupo.forEach(dia => {
+  grupo.forEach((dataIso, i) => {
+    const shows = programacoes[i]; // [{cantorId, nome, foto, horario}, ...]
 
-    // separa "03 Jun" → [03, Jun]
-    const partes = dia.dia.split(" ");
-    const diaNumero = parseInt(partes[0]);
-    const mesTexto = partes[1];
+    // Monta Date a partir da string "2026-06-03"
+    const [anoD, mesD, diaD] = dataIso.split("-").map(Number);
+    const dataEvento = new Date(anoD, mesD - 1, diaD);
 
-    // converte mês texto → número 
-    let mesNumero = mesTexto === "Jul" ? 6 : 5;
+    // Status visual
+    let classeStatus = "futuro";
+    if (dataEvento.getTime() === hoje.getTime()) classeStatus = "hoje";
+    else if (dataEvento < hoje) classeStatus = "passado";
 
-    // cria data do evento
-    const dataEvento = new Date(ano, mesNumero, diaNumero);
+    const diaSemanaTexto = diasSemana[dataEvento.getDay()];
+    const diaFormatado = String(diaD).padStart(2, '0');
+    const mesTexto = nomesMesesProg[mesD - 1].toUpperCase();
 
-    // pega "hoje" fixo (simulação)
-    const hoje = new Date(
-      agoraFixo.getFullYear(),
-      agoraFixo.getMonth(),
-      agoraFixo.getDate()
-    );
-
-    let classeStatus = "";
-
-    // define status visual
-    if (dataEvento.getTime() === hoje.getTime()) {
-      classeStatus = "hoje";
-    } else if (dataEvento < hoje) {
-      classeStatus = "passado";
-    } else {
-      classeStatus = "futuro";
-    }
-
-    // calcular dia da semana
-    const diasSemana = ["DOM", "SEG", "TER", "QUA", "QUI", "SEX", "SÁB"];
-    const diaSemana = diasSemana[dataEvento.getDay()];
-
-    // formatação (02/06)
-    const diaFormatado = String(diaNumero).padStart(2, '0');
-    const mesFormatado = String(mesNumero + 1).padStart(2, '0');
-
-    // cria card
     const div = document.createElement("div");
     div.classList.add("card-dia", classeStatus);
 
-    div.innerHTML = `
-
-      <div class="data-dia">
-        <span class="semana">${diaSemana}</span>
-        <span class="dia">${diaFormatado}</span>
-        <span class="mes">${mesTexto.toUpperCase()}</span>
-      </div>
-
-      <div class="conteudo-dia">
-        ${dia.shows.map(s => {
-          const [hora, artista] = s.split(" - ");
+    const showsHtml = shows.length > 0
+      ? shows.map(s => {
+          const hora = s.horario ? s.horario.substring(0, 5) : "--:--"; // "20:00:00" → "20:00"
+          const artista = s.nome || "Artista";
+          const fotoHtml = s.foto
+            ? `<img src="${s.foto}" alt="${artista}" class="foto-cantor" onerror="this.style.display='none'">`
+            : "";
           return `
             <div class="show">
+              ${fotoHtml}
               <span class="hora">${hora}</span>
               <span class="artista">${artista}</span>
             </div>
           `;
-        }).join("")}
-      </div>
+        }).join("")
+      : `<div class="show"><span class="artista">A confirmar</span></div>`;
 
+    div.innerHTML = `
+      <div class="data-dia">
+        <span class="semana">${diaSemanaTexto}</span>
+        <span class="dia">${diaFormatado}</span>
+        <span class="mes">${mesTexto}</span>
+      </div>
+      <div class="conteudo-dia">
+        ${showsHtml}
+      </div>
     `;
 
     grid.appendChild(div);
   });
 }
+
 function avancarProgramacao() {
-  if (indiceAtual + 3 < programacao.length) {
+  if (indiceAtual + 3 < diasDisponiveis.length) {
     indiceAtual += 3;
     renderizarProgramacao();
   }
 }
 
 function voltarProgramacao() {
-  if (indiceAtual - 3>= 0) {
+  if (indiceAtual - 3 >= 0) {
     indiceAtual -= 3;
     renderizarProgramacao();
   }
 }
 
+// Posiciona o carrossel no dia atual (ou no mais próximo)
 function irParaDiaAtual() {
-  const hoje = agoraFixo; 
+  const hoje = new Date(agoraFixo.getFullYear(), agoraFixo.getMonth(), agoraFixo.getDate());
+  const hojeIso = hoje.toISOString().split("T")[0]; // "2026-06-08"
 
-  const diaHoje = hoje.getDate();
-  const mesHoje = hoje.getMonth();
+  let index = diasDisponiveis.indexOf(hojeIso);
 
-  const index = programacao.findIndex(d => {
-    const partes = d.dia.split(" ");
-
-    const diaNumero = parseInt(partes[0]);
-    const mesTexto = partes[1];
-
-    let mesNumero = mesTexto === "Jul" ? 6 : 5;
-
-    return diaNumero === diaHoje && mesNumero === mesHoje;
-  });
+  // Se não achar hoje exato, vai pro próximo futuro
+  if (index === -1) {
+    index = diasDisponiveis.findIndex(d => d >= hojeIso);
+  }
 
   if (index !== -1) {
     indiceAtual = Math.floor(index / 3) * 3;
@@ -822,14 +841,16 @@ window.onload = function() {
   mostrarPagina("ponto");
 };
 
-window.addEventListener("DOMContentLoaded", () => {
+window.addEventListener("DOMContentLoaded", async () => {
   if (localStorage.getItem("usuarioLogado")) definirLogado(true);
 
   renderizarCalendario();
   atualizarProgramacao();
 
-  irParaDiaAtual();          
-  renderizarProgramacao();  
+  // Carrega dias do backend, posiciona no dia atual e renderiza
+  await carregarDiasDisponiveis();
+  irParaDiaAtual();
+  renderizarProgramacao();
 
   document.querySelectorAll(".fechar").forEach(b => {
     b.onclick = () => {
