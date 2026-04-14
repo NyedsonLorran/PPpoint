@@ -5,7 +5,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="css/style.css">
-  <script src="js/script.js"></script>
+  <link rel="stylesheet" href="css/Pagina-progamacao/edicao.css">
+  <script src="js/script.js" defer></script>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
   <title>Point Mobile</title>
@@ -53,53 +54,13 @@
 <div class="paginas">
   
 
-  <!-- página programação -->
 <!-- página programação -->
 <div class="pagina" id="programacao">
 
   <div class="carrossel-programacao">
-
     <button class="nav" onclick="voltarProgramacao()">&#8249;</button>
-
-    <div class="grid-programacao" id="gridProgramacao">
-
-      <!-- CARD EXEMPLO -->
-      <div class="card-dia">
-
-        <div class="data-dia">
-          <span class="semana"></span>
-          <span class="dia"></span>
-          <span class="mes"></span>
-        </div>
-
-        <div class="conteudo-dia">
-          <div class="show"></div>
-          <div class="show">  </div>
-          <div class="show"> </div>
-        </div>
-
-      </div>
-
-      <!-- OUTRO CARD -->
-      <div class="card-dia">
-
-        <div class="data-dia">
-          <span class="semana"></span>
-          <span class="dia"></span>
-          <span class="mes"></span>
-        </div>
-
-        <div class="conteudo-dia">
-          <div class="show"> </div>
-          <div class="show"> </div>
-        </div>
-
-      </div>
-
-    </div>
-
+    <div class="grid-programacao" id="gridProgramacao"></div>
     <button class="nav" onclick="avancarProgramacao()">&#8250;</button>
-
   </div>
 
 </div>
@@ -145,51 +106,76 @@
 <!-- Janela Login/Cadastro -->
 <div id="janela-login" class="fundo-transparente">
   <div class="janelalogin">
-    <!-- Login -->
+
+    <!-- LOGIN -->
     <div id="loginForm">
       <h2>Login</h2>
+
       <div class="input-com-icone">
         <i class="fa-solid fa-envelope"></i>
         <input type="text" id="loginUsuario" placeholder="Email">
       </div>
-      <div class="input-com-icone">
-        <i class="fa-solid fa-lock"></i>
-        <input type="password" id="loginSenha" placeholder="Senha">
-      </div>
-      <button onclick="fazerLogin()">Entrar</button>
-      <button class="btn-google" onclick="loginComGoogle()">
-          <i class="fa-brands fa-google"></i> Entrar com Google
-      </button>
-      
 
-      <span class="esqueci-senha" onclick="abrirEsqueciSenha()">Esqueci minha senha</span>
-      <p>Não tem uma conta? <span class="link-cadastro" onclick="mostrarCadastro()">Cadastre-se</span></p>
+      <div class="input-com-icone senha-box">
+        <i class="fa-solid fa-lock"></i>
+
+        <input type="password" id="loginSenha" placeholder="Senha">
+
+        <button type="button" class="btn-olho" onclick="toggleSenha()">
+          <i id="iconSenha" class="fa-solid fa-eye"></i>
+        </button>
+      </div>
+
+      <button onclick="fazerLogin()">Entrar</button>
+
+      <button class="btn-google" onclick="loginComGoogle()">
+        <i class="fa-brands fa-google"></i> Entrar com Google
+      </button>
+
+      <span class="esqueci-senha" onclick="abrirEsqueciSenha()">
+        Esqueci minha senha
+      </span>
+
+      <p>
+        Não tem uma conta?
+        <span class="link-cadastro" onclick="mostrarCadastro()">Cadastre-se</span>
+      </p>
     </div>
 
-    <!-- Registro -->
+    <!-- REGISTRO -->
     <div id="registerForm" style="display:none;">
       <h2>Crie uma conta</h2>
+
       <div class="input-com-icone">
         <i class="fa-solid fa-envelope"></i>
         <input type="email" id="cadastroEmail" placeholder="Email">
       </div>
+
       <div class="input-com-icone">
         <i class="fa-solid fa-user"></i>
         <input type="text" id="cadastroUsuario" placeholder="Username">
       </div>
+
       <div class="input-com-icone">
         <i class="fa-solid fa-lock"></i>
         <input type="password" id="cadastroSenha" placeholder="Senha">
       </div>
+
       <div class="input-com-icone">
         <i class="fa-solid fa-lock"></i>
         <input type="password" id="cadastroSenhaConfirm" placeholder="Confirmar senha">
       </div>
+
       <button onclick="registrar()">Criar</button>
-      <p>Já tem uma conta? <span class="link-login" onclick="mostrarLogin()">Entrar</span></p>
+
+      <p>
+        Já tem uma conta?
+        <span class="link-login" onclick="mostrarLogin()">Entrar</span>
+      </p>
     </div>
 
     <span class="fechar" onclick="fecharLoginCadastro()">×</span>
+
   </div>
 </div>
 
@@ -305,6 +291,18 @@
 </div>
 
 <div id="flashCamera"></div>
+
+
+
+<div id="modalEditar" class="modal-editar">
+  <div class="conteudo-modal">
+    <h2 id="tituloEdicao"> </h2>
+    <div id="listaEdicao"></div>
+    <button onclick="salvarEdicao()">Salvar</button>
+    <button onclick="fecharEdicao()"> x </button>
+
+  </div>
+</div>
 
 </body>
 
