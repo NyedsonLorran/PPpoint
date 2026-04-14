@@ -42,6 +42,7 @@
   display: flex;
   gap: 8px;
   margin-bottom: 10px;
+  align-items: center;
 }
 
 .item-edicao input {
@@ -51,7 +52,8 @@
   border: 1px solid #ccc;
 }
 
-.conteudo-modal button {
+/* Apenas os botões diretos do modal (Salvar e Fechar), não os de dentro do item-edicao */
+.conteudo-modal > button {
   width: 100%;
   padding: 8px;
   margin-top: 8px;
@@ -61,17 +63,56 @@
   cursor: pointer;
 }
 
-.conteudo-modal button:first-of-type {
+.conteudo-modal > button:first-of-type {
   background: #ffcc00;
   color: rgb(0, 0, 0);
 }
 
-.conteudo-modal button:first-of-type:hover {
-  background: #ffcc00; /* mais claro */
+.conteudo-modal > button:first-of-type:hover {
+  background: #ffcc00;
   transform: scale(1.03);
   transition: 0.2s;
 }
 
-.conteudo-modal button:last-of-type {
+.conteudo-modal > button:last-of-type {
   color: rgb(0, 0, 0);
+}
+
+/* Botões inline dentro das linhas de edição */
+.conteudo-modal .item-edicao button {
+  width: auto;
+  padding: 5px 10px;
+  margin-top: 0;
+  flex-shrink: 0;
+  font-size: 14px;
+  line-height: 1;
+  font-weight: normal;
+}
+
+/* Botão Editar nos cards do carrossel */
+.btn-editar-dia {
+  display: block;
+  width: 100%;
+  margin-top: 8px;
+  padding: 5px 0;
+  background: #c8f000;
+  color: #0a0f1e;
+  border: none;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.15s;
+}
+
+.btn-editar-dia:hover {
+  background: #b0d400;
+  transform: scale(1.05);
+}
+
+@keyframes subirModal {
+  from { transform: translateY(30px); opacity: 0; }
+  to   { transform: translateY(0); opacity: 1; }
 }

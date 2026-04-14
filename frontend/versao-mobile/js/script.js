@@ -588,6 +588,7 @@ function toggleSenha() {
   icon.classList.toggle("fa-eye");
   icon.classList.toggle("fa-eye-slash");
 }
+
 function fecharCamera() {
   if (streamRecurso) {
     streamRecurso.getTracks().forEach(t => t.stop());
@@ -862,97 +863,156 @@ function fecharEdicao() {
   }
 }
 
-function abrirEdicao(dataIso) {
+async function abrirEdicao(dataIso) {
+  if (!usuarioEAdmin()) return;
+
   const modal = document.getElementById("modalEditar");
   const lista = document.getElementById("listaEdicao");
   const titulo = document.getElementById("tituloEdicao");
-
   if (!modal || !lista || !titulo) return;
 
-  modal.style.display = "flex";
-  lista.innerHTML = "";
-
   const [anoD, mesD, diaD] = dataIso.split("-").map(Number);
-
-  const diaFormatado = String(diaD).padStart(2, "0");
-  const mesTexto = nomesMesesProg[mesD - 1].toUpperCase();
-
-  titulo.innerText = `Editar Dia - ${diaFormatado} ${mesTexto}`;
-
-  const shows = programacaoCache[dataIso] || [];
-
-  if (shows.length === 0) {
-    lista.innerHTML = "<p>Sem programação cadastrada.</p>";
-    return;
-  }
-
-  shows.forEach(show => {
-    const div = document.createElement("div");
-    div.classList.add("item-edicao");
-
-    div.innerHTML = `
-      <input type="text" value="${show.nome || ""}">
-      <input type="time" value="${show.horario ? show.horario.substring(0,5) : ""}">
-    `;
-
-    lista.appendChild(div);
-  });
-
+  titulo.innerText = `Editar Dia - ${String(diaD).padStart(2,"0")} ${nomesMesesProg[mesD-1].toUpperCase()}`;
   modal.dataset.data = dataIso;
+  modal.style.display = "flex";
+  lista.innerHTML = `<p style="text-align:center;color:#888">Carregando...</p>`;
+
+  try {
+    const token = sessionStorage.getItem("token");
+    const res = await fetch(`${API_URL}/programacao/admin?data=${dataIso}`, {
+      headers: { "Authorization": `Bearer ${token}` }
+    });
+    if (!res.ok) throw new Error();
+    const shows = await res.json(); // [{programacaoId, nome, horario, ...}]
+
+    lista.innerHTML = "";
+
+    if (shows.length === 0) {
+      lista.innerHTML = `<p style="text-align:center;color:#888">Sem shows cadastrados.</p>`;
+    }
+
+    shows.forEach(show => {
+      const div = document.createElement("div");
+      div.classList.add("item-edicao");
+      div.dataset.id = show.programacaoId;
+      div.innerHTML = `
+        <input type="text" value="${show.nome || ""}" placeholder="Cantor">
+        <input type="time" value="${show.horario ? show.horario.substring(0,5) : ""}">
+        <button onclick="deletarItemEdicao('${show.programacaoId}', this, '${dataIso}')"
+                style="background:#e74c3c;color:#fff;border:none;border-radius:8px;padding:4px 8px;cursor:pointer;flex-shrink:0"
+                title="Remover">🗑️</button>`;
+      lista.appendChild(div);
+    });
+
+    // Bloco adicionar novo show
+    const divNovo = document.createElement("div");
+    divNovo.style.marginTop = "10px";
+    divNovo.innerHTML = `
+      <hr style="border-color:#ddd;margin-bottom:8px">
+      <p style="font-size:12px;color:#888;margin-bottom:6px">➕ Novo show</p>
+      <div class="item-edicao">
+        <input type="text" id="novoCantor" placeholder="Cantor">
+        <input type="time" id="novoHorario">
+        <button onclick="adicionarItemEdicao('${dataIso}')"
+                style="background:#18bb13;color:#fff;border:none;border-radius:8px;padding:4px 8px;cursor:pointer;flex-shrink:0">✓</button>
+      </div>`;
+    lista.appendChild(divNovo);
+
+  } catch(e) {
+    lista.innerHTML = `<p style="color:red;text-align:center">Erro ao carregar shows.</p>`;
+  }
 }
 
-function salvarEdicao() {
+async function salvarEdicao() {
   const modal = document.getElementById("modalEditar");
   const dataIso = modal.dataset.data;
+  const token = sessionStorage.getItem("token");
 
-  const itens = document.querySelectorAll("#listaEdicao .item-edicao");
-
-  const novaProgramacao = [];
+  const itens = document.querySelectorAll("#listaEdicao .item-edicao[data-id]");
 
   for (let item of itens) {
     const inputs = item.querySelectorAll("input");
-
     const nome = inputs[0].value.trim();
     const hora = inputs[1].value;
+    if (!nome || !hora) { alert("Preencha nome e horário de todos os shows!"); return; }
 
-    if (!nome || !hora) {
-      alert("Preencha nome e horário!");
-      return;
-    }
-
-    const [h, m] = hora.split(":").map(Number);
-
-    // 🔥 VALIDAÇÃO FINAL (segurança)
+    const [h] = hora.split(":").map(Number);
     const valido = (h >= 17 && h <= 23) || (h >= 0 && h <= 4);
-
-    if (!valido) {
-      alert("Horário inválido! Use entre 17:00 e 04:00");
-      return;
-    }
-
-    novaProgramacao.push({
-      nome,
-      horario: hora
-    });
+    if (!valido) { alert("Horário inválido! Use entre 17:00 e 04:00"); return; }
   }
 
-  // 🔥 ORDENAÇÃO (NOITE → MADRUGADA)
-  novaProgramacao.sort((a, b) => {
-    const getPeso = (hora) => {
-      const h = parseInt(hora.split(":")[0]);
-      return h < 12 ? h + 24 : h;
-    };
-
-    return getPeso(a.horario) - getPeso(b.horario);
+  const promessas = Array.from(itens).map(item => {
+    const programacaoId = item.dataset.id;
+    const inputs = item.querySelectorAll("input");
+    const nomeCantor = inputs[0].value.trim();
+    const horario = inputs[1].value + ":00";
+    return fetch(`${API_URL}/programacao/admin/${programacaoId}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
+      body: JSON.stringify({ nomeCantor, horario })
+    });
   });
 
-  console.log("EDITADO ORDENADO:", dataIso, novaProgramacao);
-
-  fecharEdicao();
+  try {
+    const resultados = await Promise.all(promessas);
+    if (resultados.some(r => !r.ok)) { alert("Erro ao salvar alguns shows."); return; }
+    delete programacaoCache[dataIso];
+    fecharEdicao();
+    await renderizarProgramacao();
+    alert("Programação salva!");
+  } catch(e) {
+    alert("Erro ao conectar ao servidor.");
+  }
 }
 
 
-// Posiciona o carrossel no dia atual (ou no mais próximo)
+async function deletarItemEdicao(programacaoId, btn, dataIso) {
+  if (!confirm("Remover este show?")) return;
+  btn.disabled = true;
+  const token = sessionStorage.getItem("token");
+  try {
+    const res = await fetch(`${API_URL}/programacao/admin/${programacaoId}`, {
+      method: "DELETE",
+      headers: { "Authorization": `Bearer ${token}` }
+    });
+    if (res.ok) {
+      btn.closest(".item-edicao").remove();
+      delete programacaoCache[dataIso];
+      await renderizarProgramacao();
+    } else {
+      alert("Erro ao remover show.");
+      btn.disabled = false;
+    }
+  } catch(e) {
+    alert("Erro ao conectar ao servidor.");
+    btn.disabled = false;
+  }
+}
+
+async function adicionarItemEdicao(dataIso) {
+  const nomeCantor = document.getElementById("novoCantor").value.trim();
+  const horario = document.getElementById("novoHorario").value;
+  if (!nomeCantor || !horario) { alert("Preencha o cantor e o horário!"); return; }
+  const token = sessionStorage.getItem("token");
+  try {
+    const res = await fetch(`${API_URL}/programacao/admin`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
+      body: JSON.stringify({ data: dataIso, nomeCantor, horario: horario + ":00" })
+    });
+    if (res.ok) {
+      delete programacaoCache[dataIso];
+      await abrirEdicao(dataIso); // recarrega o modal com os dados atualizados
+      await renderizarProgramacao();
+    } else {
+      alert("Erro ao adicionar show.");
+    }
+  } catch(e) {
+    alert("Erro ao conectar ao servidor.");
+  }
+}
+
+// Posiciona o carrossel no dia atual
 function irParaDiaAtual() {
   const hoje = new Date(agoraFixo.getFullYear(), agoraFixo.getMonth(), agoraFixo.getDate());
   const hojeIso = hoje.toISOString().split("T")[0]; // "2026-06-08"
