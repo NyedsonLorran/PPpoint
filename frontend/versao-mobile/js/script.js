@@ -140,7 +140,7 @@ function mostrarPagina(pagina) {
   if (pagina === "ponto") document.body.classList.add("fundo-ponto");
   if (pagina === "retrospectiva") document.body.classList.add("fundo-retro");
 
-  // 🔥 TÍTULO NO TOPO
+  // TÍTULO NO TOPO
   const titulo = document.getElementById("titulo-topo");
   if (botao && titulo) {
     titulo.innerText = botao.querySelector("span").innerText;
@@ -194,7 +194,6 @@ async function fazerLogin() {
     return; 
   }
 
-
   try {
     const res = await fetch(`${API_URL}/auth/login`, {
       method: "POST",
@@ -209,7 +208,7 @@ async function fazerLogin() {
       const data = await res.json();
 
       sessionStorage.setItem("token", data.token);
-      sessionStorage.setItem("role", data.role);
+      sessionStorage.setItem("role", (data.role || "").toUpperCase());
 
       localStorage.setItem("usuarioLogado", JSON.stringify({
         usuario: emailInput,
@@ -220,7 +219,9 @@ async function fazerLogin() {
 
       fecharLoginCadastro();
       definirLogado(true);
-      renderizarCalendario();
+      await carregarDiasDisponiveis();
+      irParaDiaAtual();
+      renderizarProgramacao();
 
     } else {
       const data = await res.json();
@@ -272,11 +273,24 @@ async function handleGoogleCredential(response) {
                 email: payload.email,
                 nome: payload.name || payload.email
             }));
+              if (res.ok) {
+                  const data = await res.json();
 
-            if (data.role === "ADMIN") {
-                window.location.href = "/frontend/versao-mobile/admin/admin.html";
-                return;
-            }
+                  sessionStorage.setItem("token", data.token);
+                  sessionStorage.setItem("role", data.role);
+
+                  const payload = JSON.parse(atob(idToken.split('.')[1]));
+                  localStorage.setItem("usuarioLogado", JSON.stringify({
+                      usuario: payload.email,
+                      email: payload.email,
+                      nome: payload.name || payload.email
+                  }));
+
+                  fecharLoginCadastro();
+                  definirLogado(true);
+                  renderizarCalendario();
+                  renderizarProgramacao(); 
+              }
 
             fecharLoginCadastro();
             definirLogado(true);
@@ -295,7 +309,13 @@ function definirLogado(estado) {
   const botao = document.getElementById("btnLogin");
   botao.dataset.logged = estado;
   botao.innerText = estado ? "Sair" : "Entrar";
-  if (!estado) { localStorage.removeItem("usuarioLogado"); location.reload(); }
+
+  if (!estado) {
+    localStorage.removeItem("usuarioLogado");
+    sessionStorage.removeItem("token");
+    sessionStorage.removeItem("role"); 
+    location.reload();
+  }
 }
 
 function abrirJanelaEncerrado() { document.getElementById("janela-dia-encerrado").style.display = "flex"; }
@@ -557,7 +577,17 @@ if (flash) {
   }
 }
 
+function toggleSenha() {
+  const input = document.getElementById("loginSenha");
+  const icon = document.getElementById("iconSenha");
 
+  const hidden = input.type === "password";
+
+  input.type = hidden ? "text" : "password";
+
+  icon.classList.toggle("fa-eye");
+  icon.classList.toggle("fa-eye-slash");
+}
 function fecharCamera() {
   if (streamRecurso) {
     streamRecurso.getTracks().forEach(t => t.stop());
@@ -672,25 +702,7 @@ if (inputGaleria) {
   });
 }
 
-window.addEventListener("DOMContentLoaded", () => {
-  if (localStorage.getItem("usuarioLogado")) definirLogado(true);
-  renderizarCalendario();
-  atualizarProgramacao();
-  
-document.querySelectorAll(".fechar").forEach(b => {
-  b.onclick = () => {
-    fecharJanelaRegistrarDia(); 
-    fecharLoginCadastro();
-    fecharJanelaEncerrado(); 
-    fecharJanelaBloqueado();
-    fecharEsqueciSenha(); 
-  };
-});
-  const btnL = document.getElementById("btnLogin");
-  if(btnL) btnL.onclick = () => { if (btnL.dataset.logged === "true") definirLogado(false); else abrirLoginCadastro(); };
-});
-
-// ─── PROGRAMAÇÃO DINÂMICA (busca do backend) ───────────────────────────────
+//  PROGRAMAÇÃO DINÂMICA (busca do backend) 
 
 let diasDisponiveis = [];   // lista de datas retornadas pelo backend ex: ["2026-06-03", ...]
 let programacaoCache = {};  // cache: { "2026-06-03": [{cantorId, nome, foto, horario}, ...] }
@@ -727,12 +739,26 @@ async function buscarProgramacaoDoDia(dataIso) {
   }
 }
 
-// Renderiza os cards do carrossel com dados do backend
+function usuarioEAdmin() {
+  const role = sessionStorage.getItem("role");
+  const token = sessionStorage.getItem("token");
+
+  if (!token) return false;
+  if (!role) return false;
+
+  return role.toUpperCase() === "ADMIN";
+}
+
 async function renderizarProgramacao() {
+
+  console.log("Renderizando programação...");
+
+  if (usuarioEAdmin()) {
+  }
+
   const grid = document.getElementById("gridProgramacao");
   if (!grid) return;
 
-  // Carrega dias se ainda não carregou
   if (diasDisponiveis.length === 0) {
     grid.innerHTML = `<div class="card-dia"><div class="conteudo-dia"><div class="show">Carregando...</div></div></div>`;
     await carregarDiasDisponiveis();
@@ -743,10 +769,7 @@ async function renderizarProgramacao() {
     return;
   }
 
-  // Pega grupo de 3 dias a partir do índice atual
   const grupo = diasDisponiveis.slice(indiceAtual, indiceAtual + 3);
-
-  // Busca programação dos 3 dias em paralelo
   const programacoes = await Promise.all(grupo.map(d => buscarProgramacaoDoDia(d)));
 
   grid.innerHTML = "";
@@ -754,13 +777,11 @@ async function renderizarProgramacao() {
   const hoje = new Date(agoraFixo.getFullYear(), agoraFixo.getMonth(), agoraFixo.getDate());
 
   grupo.forEach((dataIso, i) => {
-    const shows = programacoes[i]; // [{cantorId, nome, foto, horario}, ...]
+    const shows = programacoes[i];
 
-    // Monta Date a partir da string "2026-06-03"
     const [anoD, mesD, diaD] = dataIso.split("-").map(Number);
     const dataEvento = new Date(anoD, mesD - 1, diaD);
 
-    // Status visual
     let classeStatus = "futuro";
     if (dataEvento.getTime() === hoje.getTime()) classeStatus = "hoje";
     else if (dataEvento < hoje) classeStatus = "passado";
@@ -772,9 +793,20 @@ async function renderizarProgramacao() {
     const div = document.createElement("div");
     div.classList.add("card-dia", classeStatus);
 
+    // AQUI CRIA O BOTÃO
+    let botaoEditar = "";
+
+    if (usuarioEAdmin() === true) {
+      botaoEditar = `
+        <button class="btn-editar-dia" onclick="abrirEdicao('${dataIso}')">
+          Editar
+        </button>
+      `;
+    }
+
     const showsHtml = shows.length > 0
       ? shows.map(s => {
-          const hora = s.horario ? s.horario.substring(0, 5) : "--:--"; // "20:00:00" → "20:00"
+          const hora = s.horario ? s.horario.substring(0, 5) : "--:--";
           const artista = s.nome || "Artista";
           const fotoHtml = s.foto
             ? `<img src="${s.foto}" alt="${artista}" class="foto-cantor" onerror="this.style.display='none'">`
@@ -789,12 +821,16 @@ async function renderizarProgramacao() {
         }).join("")
       : `<div class="show"><span class="artista">A confirmar</span></div>`;
 
+    //  INSERE O BOTÃO DE EDITAR NO CARD SE FOR ADMIN
     div.innerHTML = `
       <div class="data-dia">
         <span class="semana">${diaSemanaTexto}</span>
         <span class="dia">${diaFormatado}</span>
         <span class="mes">${mesTexto}</span>
+
+        ${botaoEditar}
       </div>
+
       <div class="conteudo-dia">
         ${showsHtml}
       </div>
@@ -817,6 +853,104 @@ function voltarProgramacao() {
     renderizarProgramacao();
   }
 }
+
+function fecharEdicao() {
+  const modal = document.getElementById("modalEditar");
+
+  if (modal) {
+    modal.style.display = "none";
+  }
+}
+
+function abrirEdicao(dataIso) {
+  const modal = document.getElementById("modalEditar");
+  const lista = document.getElementById("listaEdicao");
+  const titulo = document.getElementById("tituloEdicao");
+
+  if (!modal || !lista || !titulo) return;
+
+  modal.style.display = "flex";
+  lista.innerHTML = "";
+
+  const [anoD, mesD, diaD] = dataIso.split("-").map(Number);
+
+  const diaFormatado = String(diaD).padStart(2, "0");
+  const mesTexto = nomesMesesProg[mesD - 1].toUpperCase();
+
+  titulo.innerText = `Editar Dia - ${diaFormatado} ${mesTexto}`;
+
+  const shows = programacaoCache[dataIso] || [];
+
+  if (shows.length === 0) {
+    lista.innerHTML = "<p>Sem programação cadastrada.</p>";
+    return;
+  }
+
+  shows.forEach(show => {
+    const div = document.createElement("div");
+    div.classList.add("item-edicao");
+
+    div.innerHTML = `
+      <input type="text" value="${show.nome || ""}">
+      <input type="time" value="${show.horario ? show.horario.substring(0,5) : ""}">
+    `;
+
+    lista.appendChild(div);
+  });
+
+  modal.dataset.data = dataIso;
+}
+
+function salvarEdicao() {
+  const modal = document.getElementById("modalEditar");
+  const dataIso = modal.dataset.data;
+
+  const itens = document.querySelectorAll("#listaEdicao .item-edicao");
+
+  const novaProgramacao = [];
+
+  for (let item of itens) {
+    const inputs = item.querySelectorAll("input");
+
+    const nome = inputs[0].value.trim();
+    const hora = inputs[1].value;
+
+    if (!nome || !hora) {
+      alert("Preencha nome e horário!");
+      return;
+    }
+
+    const [h, m] = hora.split(":").map(Number);
+
+    // 🔥 VALIDAÇÃO FINAL (segurança)
+    const valido = (h >= 17 && h <= 23) || (h >= 0 && h <= 4);
+
+    if (!valido) {
+      alert("Horário inválido! Use entre 17:00 e 04:00");
+      return;
+    }
+
+    novaProgramacao.push({
+      nome,
+      horario: hora
+    });
+  }
+
+  // 🔥 ORDENAÇÃO (NOITE → MADRUGADA)
+  novaProgramacao.sort((a, b) => {
+    const getPeso = (hora) => {
+      const h = parseInt(hora.split(":")[0]);
+      return h < 12 ? h + 24 : h;
+    };
+
+    return getPeso(a.horario) - getPeso(b.horario);
+  });
+
+  console.log("EDITADO ORDENADO:", dataIso, novaProgramacao);
+
+  fecharEdicao();
+}
+
 
 // Posiciona o carrossel no dia atual (ou no mais próximo)
 function irParaDiaAtual() {

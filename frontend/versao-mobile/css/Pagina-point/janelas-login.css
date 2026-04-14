@@ -18,8 +18,7 @@
   text-decoration: underline;
 }
 
-
-.janelalogin p{
+.janelalogin p {
   font-size: 16px;
   margin-top: 15px; 
 }
@@ -69,10 +68,9 @@
   color: #f8f8f8;
   border-radius: 6px;
   cursor: pointer;
-  
 }
 
-.botoes-logar-registrar{
+.botoes-logar-registrar {
   display: flex;
   flex-direction: row;   
   gap: 10px;
@@ -99,24 +97,52 @@
 .input-com-icone {
   position: relative;
   width: 100%;
-  margin: 10px 0;
+  margin: 15px 0;
 }
 
-.input-com-icone i {
+.input-com-icone i:first-of-type {
   position: absolute;
   top: 50%;
-  left: 10px;
+  left: 12px;
   transform: translateY(-50%);
   color: #818181;
-  font-size: 16px;
+  font-size: 18px;
+  pointer-events: none;
+  z-index: 10;
 }
 
 .input-com-icone input {
   width: 100%;
-  padding: 10px 10px 10px 35px; 
+  padding: 12px 40px 12px 40px; 
   border-radius: 6px;
-  border: 1px solid #a399999c !important;
+  border: 1px solid #818181;
   outline: none;
+  font-size: 16px;
+  box-sizing: border-box; 
+}
+
+.btn-olho {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  background: transparent !important;
+  border: none !important;
+  cursor: pointer;
+  padding: 0 !important;
+  margin: 0 !important;
+  width: 30px !important;
+  height: 30px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #818181;
+  z-index: 20;
+}
+
+.btn-olho i {
+  font-size: 18px !important;
+  pointer-events: none;
 }
 
 #loginForm h2, 
@@ -174,39 +200,13 @@
   border-radius: 6px;
   cursor: pointer;
 }
-.input-com-icone {
-  position: relative;
-  width: 100%;
-  margin: 15px 0;
-}
-
-.input-com-icone i {
-  position: absolute;
-  top: 50%;
-  left: 12px;              
-  transform: translateY(-50%);
-  color: #818181;
-  font-size: 20px;          
-  pointer-events: none;    
-}
-
-.input-com-icone input {
-  width: 100%;
-  padding: 12px 12px 12px 45px; 
-  border-radius: 6px;
-  border: 1px solid #818181;
-  outline: none;
-  font-size: 16px;
-  box-sizing: border-box; 
-}
 
 .janela-recuperacao h2 {
   margin: 10px;
   white-space: nowrap;
 }
 
-
-.fechar{
+.fechar {
   position: absolute;
   top: 10px;
   right: 10px;
@@ -214,4 +214,3 @@
   color: #000000;
   cursor: pointer;
 }
-
