@@ -85,9 +85,6 @@
   transition: all 0.2s ease;
 }
 
-.btnLogin:hover {
-  background-color: #d84315;
-}
 
 #loginForm button:active, 
 #registerForm button:active {

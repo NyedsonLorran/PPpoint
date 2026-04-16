@@ -3,6 +3,12 @@
   src: url('/frontend/versao-mobile/css/fonts/Averia-Regular.ttf') format('truetype');
 }
 
+@font-face {
+  font-family: 'CitizenSans';
+  src: url('/frontend/versao-mobile/css/fonts/CitizenSans-Public.otf') format('truetype');
+}
+
+
 .calendario {
   margin: 80px auto 20px auto;
   padding: 15px 5%;
@@ -20,8 +26,10 @@
   font-family: 'Montserrat', sans-serif;
 }
 
-.Mes {              
-  font-size: 25px !important; 
+.Mes { 
+  font-family: 'CitizenSans', sans-serif;
+
+  font-size: 27px !important; 
   line-height: 1.2;
   color: #ffffff;
   margin-bottom: 20px; 
@@ -29,14 +37,12 @@
 
 .semanas{
   color: #ffffff;
+  font-weight: bold;
   margin-bottom: 20px;
-  
-
 }
 
 .dias{
   letter-spacing: 1px;
-
 }
 
 .semanas,
@@ -72,29 +78,16 @@
 }
 
 .flag.bloqueado {
-  background: #DC293E;
+  background: #991710;
 }
 
 .flag.encerrado {
-  background: #8f8282;
+  background: #797171;
 }
 
 .flag.disponivel {
-  background: #26963d;
+  background: #1f7a31;
 }
-
-.flag.disponivel:hover {
-  background: rgba(13, 209, 42, 0.911);
-}
-
-.flag.encerrado:hover {
-  background: rgb(157, 163, 148);
-}
-
-.flag.bloqueado:hover {
-  background: rgb(255, 0, 30);
-} 
-
 
 #voltarMes,
 #proximoMes {
@@ -109,6 +102,7 @@
   font-size: clamp(20px, 6vw, 26px);
   font-weight: 900;
 }
+
 
 #voltarMes{
   left: -5px;

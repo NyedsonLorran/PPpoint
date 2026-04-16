@@ -111,7 +111,6 @@ function renderizarCalendario() {
 
 function proximoMes() { if (mesAtual < nomesMeses.length - 1) { mesAtual++; renderizarCalendario(); } }
 function mesAnterior() { if (mesAtual > 0) { mesAtual--; renderizarCalendario(); } }
-
 function mostrarPagina(pagina) {
   
   // troca de página
@@ -144,6 +143,16 @@ function mostrarPagina(pagina) {
   const titulo = document.getElementById("titulo-topo");
   if (botao && titulo) {
     titulo.innerText = botao.querySelector("span").innerText;
+  }
+
+  const btnLogin = document.getElementById("btnLogin");
+
+  if (btnLogin) {
+    if (pagina === "ponto") {
+      btnLogin.style.display = "block"; 
+    } else {
+      btnLogin.style.display = "none";
+    }
   }
 }
 
@@ -872,54 +881,70 @@ async function abrirEdicao(dataIso) {
   if (!modal || !lista || !titulo) return;
 
   const [anoD, mesD, diaD] = dataIso.split("-").map(Number);
+
   titulo.innerText = `Editar Dia - ${String(diaD).padStart(2,"0")} ${nomesMesesProg[mesD-1].toUpperCase()}`;
   modal.dataset.data = dataIso;
   modal.style.display = "flex";
-  lista.innerHTML = `<p style="text-align:center;color:#888">Carregando...</p>`;
+
+  lista.innerHTML = `<p class="texto-carregando">Carregando...</p>`;
 
   try {
     const token = sessionStorage.getItem("token");
+
     const res = await fetch(`${API_URL}/programacao/admin?data=${dataIso}`, {
       headers: { "Authorization": `Bearer ${token}` }
     });
+
     if (!res.ok) throw new Error();
-    const shows = await res.json(); // [{programacaoId, nome, horario, ...}]
+
+    const shows = await res.json();
 
     lista.innerHTML = "";
 
     if (shows.length === 0) {
-      lista.innerHTML = `<p style="text-align:center;color:#888">Sem shows cadastrados.</p>`;
+      lista.innerHTML = `<p class="texto-vazio">Sem shows cadastrados.</p>`;
     }
 
     shows.forEach(show => {
       const div = document.createElement("div");
       div.classList.add("item-edicao");
       div.dataset.id = show.programacaoId;
+
       div.innerHTML = `
         <input type="text" value="${show.nome || ""}" placeholder="Cantor">
         <input type="time" value="${show.horario ? show.horario.substring(0,5) : ""}">
-        <button onclick="deletarItemEdicao('${show.programacaoId}', this, '${dataIso}')"
-                style="background:#e74c3c;color:#fff;border:none;border-radius:8px;padding:4px 8px;cursor:pointer;flex-shrink:0"
-                title="Remover">🗑️</button>`;
+        
+        <button class="btn-edicao btn-deletar"
+                onclick="deletarItemEdicao('${show.programacaoId}', this, '${dataIso}')"
+                title="Remover">
+          X
+        </button>
+      `;
+
       lista.appendChild(div);
     });
 
-    // Bloco adicionar novo show
+    // BLOCO NOVO SHOW
     const divNovo = document.createElement("div");
-    divNovo.style.marginTop = "10px";
+    divNovo.classList.add("novo-show");
+
     divNovo.innerHTML = `
-      <hr style="border-color:#ddd;margin-bottom:8px">
-      <p style="font-size:12px;color:#888;margin-bottom:6px">➕ Novo show</p>
+
       <div class="item-edicao">
         <input type="text" id="novoCantor" placeholder="Cantor">
         <input type="time" id="novoHorario">
-        <button onclick="adicionarItemEdicao('${dataIso}')"
-                style="background:#18bb13;color:#fff;border:none;border-radius:8px;padding:4px 8px;cursor:pointer;flex-shrink:0">✓</button>
-      </div>`;
+
+        <button class="btn-edicao btn-adicionar"
+                onclick="adicionarItemEdicao('${dataIso}')">
+          ✓
+        </button>
+      </div>
+    `;
+
     lista.appendChild(divNovo);
 
-  } catch(e) {
-    lista.innerHTML = `<p style="color:red;text-align:center">Erro ao carregar shows.</p>`;
+  } catch (e) {
+    lista.innerHTML = `<p class="texto-erro">Erro ao carregar shows.</p>`;
   }
 }
 

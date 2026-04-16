@@ -52,7 +52,6 @@
   border: 1px solid #ccc;
 }
 
-/* Apenas os botões diretos do modal (Salvar e Fechar), não os de dentro do item-edicao */
 .conteudo-modal > button {
   width: 100%;
   padding: 8px;
@@ -78,10 +77,9 @@
   color: rgb(0, 0, 0);
 }
 
-/* Botões inline dentro das linhas de edição */
 .conteudo-modal .item-edicao button {
   width: auto;
-  padding: 5px 10px;
+  padding: 5px 1px;
   margin-top: 0;
   flex-shrink: 0;
   font-size: 14px;
@@ -89,14 +87,13 @@
   font-weight: normal;
 }
 
-/* Botão Editar nos cards do carrossel */
 .btn-editar-dia {
   display: block;
   width: 100%;
   margin-top: 8px;
   padding: 5px 0;
-  background: #c8f000;
-  color: #0a0f1e;
+  background: #c8f000b0;
+  color: #000000;
   border: none;
   border-radius: 6px;
   font-size: 11px;
@@ -104,15 +101,21 @@
   letter-spacing: 1px;
   text-transform: uppercase;
   cursor: pointer;
-  transition: background 0.15s, transform 0.15s;
 }
 
-.btn-editar-dia:hover {
-  background: #b0d400;
-  transform: scale(1.05);
+.btn-edicao {
+  border: none;
+  border-radius: 8px;
+  padding: 4px 8px;
+  cursor: pointer;
+  flex-shrink: 0;
+  color: #fff;
 }
 
-@keyframes subirModal {
-  from { transform: translateY(30px); opacity: 0; }
-  to   { transform: translateY(0); opacity: 1; }
+.btn-deletar {
+  background: #e74c3c;
+}
+
+.btn-adicionar {
+  background: #18bb13;
 }
