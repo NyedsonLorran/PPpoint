@@ -32,7 +32,6 @@ function iniciarContadorRetro() {
 
     const agora = new Date();
     const fim = new Date(2026, 6, 6, 16, 59, 59);
-
     const diff = fim - agora;
 
     if (diff <= 0) {
@@ -47,9 +46,7 @@ function iniciarContadorRetro() {
 
     const format = (n) => String(n).padStart(2, "0");
 
-    el.innerText =
-      `${dias} dias ${format(horas)}horas ${format(min)}min ${format(seg)}s`;
-
+    el.innerText = `${dias} dias ${format(horas)}h ${format(min)}m ${format(seg)}s`;
   }, 1000);
 }
 
@@ -65,23 +62,16 @@ function liberarRetro() {
 
 function montarSlides() {
   slides = [
-    `<div class="retro-card bg-intro">Intro</div>`,
-
-    `<div class="retro-card bg-dias">Dias</div>`,
-
-    `<div class="retro-card bg-midias">Fotos</div>`,
-
-    `<div class="retro-card bg-amigos">Amigos</div>`,
-
-    `<div class="retro-card bg-bebidas">Bebidas</div>`,
-
-    `<div class="retro-card bg-shows">Shows</div>`,
-
-    `<div class="retro-card bg-resumo">Resumo</div>`
+    "/frontend/versao-mobile/css/Pagina-Retrospectiva/stories/html/intro.html",
+    "/frontend/versao-mobile/css/Pagina-Retrospectiva/stories/html/dias.html",
+    "/frontend/versao-mobile/css/Pagina-Retrospectiva/stories/html/midias.html",
+    "/frontend/versao-mobile/css/Pagina-Retrospectiva/stories/html/amigos.html",
+    "/frontend/versao-mobile/css/Pagina-Retrospectiva/stories/html/bebidas.html",
+    "/frontend/versao-mobile/css/Pagina-Retrospectiva/stories/html/shows.html",
+    "/frontend/versao-mobile/css/Pagina-Retrospectiva/stories/html/resumo.html"
   ];
 }
-
-function abrirRetrospectiva() {
+async function abrirRetrospectiva() {
   const el = document.getElementById("retroStories");
   if (!el) return;
 
@@ -91,7 +81,7 @@ function abrirRetrospectiva() {
   slideAtual = 0;
 
   criarBarras();
-  renderizarSlide();
+  await renderizarSlide();
   iniciarAuto();
 }
 
@@ -103,11 +93,21 @@ function fecharRetrospectiva() {
   clearInterval(intervaloSlide);
 }
 
-function renderizarSlide() {
+async function renderizarSlide() {
   const container = document.getElementById("slideContainer");
   if (!container) return;
 
-  container.innerHTML = slides[slideAtual];
+  const url = slides[slideAtual];
+
+  try {
+    const res = await fetch(url);
+    if (!res.ok) throw new Error();
+    const html = await res.text();
+    container.innerHTML = html;
+  } catch (e) {
+    container.innerHTML = `<div class="retro-slide">Erro ao carregar slide</div>`;
+  }
+
   atualizarBarras();
   atualizarBotaoCompartilhar();
 }
@@ -135,22 +135,23 @@ function atualizarBarras() {
   if (!barras.length) return;
 
   barras.forEach((b, i) => {
-    b.style.width = i < slideAtual ? "100%" : "0%";
     b.style.transition = "none";
+    b.style.width = i < slideAtual ? "100%" : "0%";
   });
 
   const atual = barras[slideAtual];
   if (!atual) return;
 
+  void atual.offsetWidth;
+
   setTimeout(() => {
-    atual.style.transition = "width 6s linear";
+    atual.style.transition = `width ${tempo}ms linear`;
     atual.style.width = "100%";
   }, 50);
 }
 
 function iniciarAuto() {
   clearInterval(intervaloSlide);
-
   intervaloSlide = setInterval(() => {
     proximoSlide();
   }, tempo);
@@ -160,6 +161,7 @@ function proximoSlide() {
   if (slideAtual < slides.length - 1) {
     slideAtual++;
     renderizarSlide();
+    iniciarAuto();
   } else {
     fecharRetrospectiva();
   }
@@ -169,6 +171,7 @@ function anteriorSlide() {
   if (slideAtual > 0) {
     slideAtual--;
     renderizarSlide();
+    iniciarAuto();
   }
 }
 
@@ -177,7 +180,6 @@ function atualizarBotaoCompartilhar() {
   if (!btn) return;
 
   btn.style.display = "block";
-
   btn.onclick = (e) => {
     e.stopPropagation();
     compartilharInstagram();
@@ -225,8 +227,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (e.clientX > meio) proximoSlide();
       else anteriorSlide();
-
-      iniciarAuto();
     });
   }
 });

@@ -1,4 +1,10 @@
-
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
 
 .btn-retro {
     display: block;
@@ -13,18 +19,32 @@
     font-weight: bold;
 }
 
-.retro-stories {
-  position: fixed;
+.export-mode {
+  background: transparent !important;
+}
+
+#slideContainer {
+  position: absolute;
   inset: 0;
   width: 100vw;
   height: 100vh;
-  background: rgb(0, 0, 0);
+  margin: 0;
+  padding: 0;
+}
+
+.retro-stories {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  background: #000;
   z-index: 999999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding-top: env(safe-area-inset-top);
-  padding-bottom: env(safe-area-inset-bottom);
+  display: block;
 }
 
 .hidden {
@@ -74,12 +94,13 @@
   left: 50%;
   transform: translateX(-50%);
   z-index: 999999;
-  padding: 12px 18px;
-  border-radius: 30px;
+  padding: 10px 16px;
+  border-radius: 20px;
   background: white;
   color: black;
   font-weight: bold;
   border: none;
+  white-space: nowrap;
 }
 
 .retro-card {

@@ -18,4 +18,11 @@
 /* PAGINA RETROSPECTIVA */
 @import url("Pagina-Retrospectiva/retrospectiva.css");
 @import url("Pagina-Retrospectiva/contagem.css");
-@import url("Pagina-Retrospectiva/stories.css");
+
+@import url("Pagina-Retrospectiva/stories/css/amigos.css");
+@import url("Pagina-Retrospectiva/stories/css/bebidas.css");
+@import url("Pagina-Retrospectiva/stories/css/dias.css");
+@import url("Pagina-Retrospectiva/stories/css/intro.css");
+@import url("Pagina-Retrospectiva/stories/css/midias.css");
+@import url("Pagina-Retrospectiva/stories/css/resumo.css");
+@import url("Pagina-Retrospectiva/stories/css/shows.css");
