@@ -3,7 +3,7 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: #f5f5f0e7;
+  background: #f0f1f5e7;
   width: 90%;
   max-width: 300px;
   padding: 30px 5% 100px;
@@ -12,7 +12,7 @@
 }
 
 .link-cadastro, .link-login {
-  color: #D7462D;
+  color: #991710;
   cursor: pointer;
   font-weight: 700;
   text-decoration: underline;
@@ -64,7 +64,7 @@
   padding: 8px;
   margin-top: 15px;
   border: none;
-  background: #D7462D;
+  background: #991710;
   color: #f8f8f8;
   border-radius: 6px;
   cursor: pointer;
@@ -88,7 +88,7 @@
 
 #loginForm button:active, 
 #registerForm button:active {
-  background: #eb4527;
+  background: #991710;
 }
 
 .input-com-icone {
@@ -160,7 +160,7 @@
 
 .esqueci-senha:hover {
   text-decoration: underline;  
-  color: #D7462D;
+  color: #991710;
 }
 
 .janela-recuperacao {
@@ -191,7 +191,7 @@
   padding: 10px;
   margin-top: 5px;
   border: none;
-  background: #d84315;
+  background: #991710;
   color: #ffffff;
   font-weight: 600;
   border-radius: 6px;

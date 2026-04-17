@@ -1,0 +1,46 @@
+.retro-lock {
+  height: 80vh;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: #fff;
+}
+
+.fa-lock {
+    font-size: 70px; 
+    margin-bottom: 15px; 
+    color: 991710;
+
+}
+
+.titulo {
+  font-size: 30px;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.sub {
+  font-size: 17px;
+  opacity: 0.7;
+  margin-bottom: 19px;
+  font-weight: bold;
+}
+
+.contador {
+    color: black;
+  font-size: 26px;
+  font-weight: bold;
+  background: rgb(255, 255, 255);
+  padding: 10px 20px;
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.1); opacity: 0.7; }
+  100% { transform: scale(1); opacity: 1; }
+}

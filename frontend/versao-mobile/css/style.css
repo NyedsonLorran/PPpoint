@@ -12,3 +12,10 @@
 /* PAGINA PROGRAMAÇÃO */
 @import url("Pagina-progamacao/progamação.css");
 @import url("Pagina-progamacao/edicao.css");
+
+
+
+/* PAGINA RETROSPECTIVA */
+@import url("Pagina-Retrospectiva/retrospectiva.css");
+@import url("Pagina-Retrospectiva/contagem.css");
+@import url("Pagina-Retrospectiva/stories.css");

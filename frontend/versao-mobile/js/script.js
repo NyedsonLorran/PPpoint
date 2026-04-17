@@ -9,7 +9,7 @@ const API_URL = ["localhost", "127.0.0.1"].includes(window.location.hostname) ? 
 const nomesMeses = ["Jun", "Jul"];
 let mesAtual = 0; // 0 para Junho, 1 para Julho
 const ano = 2026;
-const agoraFixo = new Date(2026, 5, 8, 12, 0, 0); // Simulação de data atual
+const agoraFixo = new Date(2026, 6, 6, 17, 1, 0); // Simulação de data atual
 let diaSelecionado = null;
 let streamRecurso = null;
 let fotoCapturada = null;  
@@ -35,15 +35,19 @@ function obterStatus(mes, dia) {
   let mesReal = mes === 0 ? 5 : 6;
   let dataEvento = new Date(ano, mesReal, dia);
 
+  // início 17:00 do próprio dia
   let inicio = new Date(dataEvento);
-  inicio.setDate(inicio.getDate() + 1);
-  inicio.setHours(0,0,0,0);
+  inicio.setHours(17, 0, 0, 0);
 
+  // fim 16:59 do dia seguinte
   let fim = new Date(inicio);
-  fim.setHours(23,59,59,999);
+  fim.setDate(fim.getDate() + 1);
+  fim.setHours(16, 59, 59, 999);
 
-  if (agoraFixo < inicio) return "bloqueado";
-  if (agoraFixo >= inicio && agoraFixo <= fim) return "disponivel";
+  const agora = agoraFixo || new Date();
+
+  if (agora < inicio) return "bloqueado";
+  if (agora >= inicio && agora <= fim) return "disponivel";
   return "encerrado";
 }
 
@@ -110,6 +114,7 @@ function renderizarCalendario() {
 }
 
 function proximoMes() { if (mesAtual < nomesMeses.length - 1) { mesAtual++; renderizarCalendario(); } }
+
 function mesAnterior() { if (mesAtual > 0) { mesAtual--; renderizarCalendario(); } }
 function mostrarPagina(pagina) {
   
@@ -129,6 +134,8 @@ function mostrarPagina(pagina) {
   } 
   else if (pagina === "retrospectiva") {
     botao = document.getElementById("btnRetrospectiva");
+
+    initRetrospectiva(); 
   }
 
   if (botao) botao.classList.add("active");
@@ -774,11 +781,6 @@ async function renderizarProgramacao() {
     await carregarDiasDisponiveis();
   }
 
-  if (diasDisponiveis.length === 0) {
-    grid.innerHTML = `<div class="card-dia"><div class="conteudo-dia"><div class="show">Sem programação cadastrada.</div></div></div>`;
-    return;
-  }
-
   const grupo = diasDisponiveis.slice(indiceAtual, indiceAtual + 3);
   const programacoes = await Promise.all(grupo.map(d => buscarProgramacaoDoDia(d)));
 
@@ -870,6 +872,19 @@ function fecharEdicao() {
   if (modal) {
     modal.style.display = "none";
   }
+}
+
+function eventoFinalizado() {
+  for (let mes = 0; mes <= 1; mes++) {
+    for (let dia = 1; dia <= 31; dia++) {
+      if (dentroDoEvento(mes, dia)) {
+        if (obterStatus(mes, dia) === "disponivel") {
+          return false; // ainda tem dia pra registrar
+        }
+      }
+    }
+  }
+  return true; // nenhum dia disponível → pode liberar
 }
 
 async function abrirEdicao(dataIso) {
