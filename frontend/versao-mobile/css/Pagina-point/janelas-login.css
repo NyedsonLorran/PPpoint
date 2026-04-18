@@ -198,6 +198,10 @@
   cursor: pointer;
 }
 
+#emailRecuperacao {
+  padding-left: 35px;
+}
+
 .janela-recuperacao h2 {
   margin: 10px;
   white-space: nowrap;
