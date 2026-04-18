@@ -3,16 +3,17 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: #f0f1f5e7;
+  background: #001120;
   width: 90%;
   max-width: 300px;
   padding: 30px 5% 100px;
   border-radius: 15px;
   text-align: center;
+
 }
 
 .link-cadastro, .link-login {
-  color: #991710;
+  color: #ebe5e5;
   cursor: pointer;
   font-weight: 700;
   text-decoration: underline;
@@ -21,6 +22,8 @@
 .janelalogin p {
   font-size: 16px;
   margin-top: 15px; 
+  color: white;
+
 }
 
 .janelalogin input {
@@ -29,6 +32,13 @@
   margin: 5px 0;
   border-radius: 6px;
   outline: none;
+  background-color: #1a3a5a;
+  color: white;
+}
+
+.janelalogin input::placeholder {
+  color: rgba(255, 255, 255, 0.795); 
+  font-size: 14px;
 }
 
 .btn-google {
@@ -42,8 +52,9 @@
 }
 
 .btn-google:hover {
-  background: #f7f7f7bb !important;
+  background: #ebe9e9bb !important;
 }
+
 
 .janelalogin button,
 .botoes-logar-registrar button {
@@ -52,7 +63,7 @@
   margin-top: 5px;
   border: none;
   background: #aca8a8;
-  color: #000;
+  color: #dfdddd;
   border-radius: 6px;
   cursor: pointer;
 }
@@ -64,7 +75,7 @@
   padding: 8px;
   margin-top: 15px;
   border: none;
-  background: #991710;
+  background: #961811f1;
   color: #f8f8f8;
   border-radius: 6px;
   cursor: pointer;
@@ -102,7 +113,7 @@
   top: 50%;
   left: 12px;
   transform: translateY(-50%);
-  color: #818181;
+  color: #e9e7e7;
   font-size: 18px;
   pointer-events: none;
   z-index: 10;
@@ -112,7 +123,7 @@
   width: 100%;
   padding: 12px 40px 12px 40px; 
   border-radius: 6px;
-  border: 1px solid #818181;
+  border: 1px solid #1a3a5a;
   outline: none;
   font-size: 16px;
   box-sizing: border-box; 
@@ -146,13 +157,14 @@
 #registerForm h2 {
   margin: 15px;
   white-space: nowrap;
+  color: white;
 }
 
 .esqueci-senha {
   display: block;
   margin-top: 20px;     
   font-size: 14px;
-  color: #2B2525;
+  color: #f5f3f3;
   cursor: pointer;
   border-bottom: 1px solid transparent;
   transition: border-color 0.2s ease;
@@ -160,15 +172,16 @@
 
 .esqueci-senha:hover {
   text-decoration: underline;  
-  color: #991710;
+  color: #dbd7d7;
 }
 
 .janela-recuperacao {
+  color: white;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: #fff;
+  background: #001120;
   width: 90%; 
   max-width: 350px;     
   padding: 40px 5% 120px; 
@@ -181,9 +194,12 @@
   width: 100%;
   padding: 8px;
   border-radius: 6px;
-  border: 1px solid #818181;
   outline: none;
   margin: 20px 0;
+}
+
+.janela-recuperacao input::placeholder {
+  color: rgba(255, 255, 255, 0.795); 
 }
 
 .janela-recuperacao button {
@@ -200,6 +216,8 @@
 
 #emailRecuperacao {
   padding-left: 35px;
+  background-color: #1a3a5a;
+  color: #fafafa;
 }
 
 .janela-recuperacao h2 {
@@ -207,11 +225,15 @@
   white-space: nowrap;
 }
 
+#janela-esqueci-senha .input-com-icone i {
+  color: #e9e7e7 ;
+}
+
 .fechar {
   position: absolute;
   top: 10px;
   right: 10px;
   font-size: 20px;
-  color: #000000;
+  color: #f0eeee;
   cursor: pointer;
 }

@@ -5,25 +5,26 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: transparent; 
+  background: rgba(0, 0, 0, 0.85); 
   z-index: 10000;
   justify-content: center;
   align-items: center;
   scroll-behavior: smooth;
-  font-family: 'Arial', sans-serif;
+  font-family: 'Segoe UI', Roboto , Helvetica, Arial, sans-serif;
+  backdrop-filter: blur(6px);
 }
 
 #janela-registrar-dia .modal-box {
   position: relative; 
-  background: #dbdb00;
+  background: #001120;
   width: 92%;
   max-width: 400px;
   max-height: 88vh; 
   overflow-y: auto; 
-  padding: 20px;
-  border-radius: 10px;
+  padding: 25px;
+  border-radius: 20px;
   text-align: center;
-  box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   -webkit-overflow-scrolling: touch;
 }
 
@@ -32,80 +33,145 @@
 }
 
 #janela-registrar-dia::-webkit-scrollbar-thumb {
-  background-color: rgba(215,70,45,0.6);
-  border-radius: 3px;
+  background-color: #991710;
+  border-radius: 10px;
 }
 
 #janela-registrar-dia h2 {
-  margin-bottom: 15px;
-  font-size: 22px;
-  color: #2b2525;
-  font-weight: 700;
+  margin-bottom: 20px;
+  font-size: 24px;
+  color: #ffffff;
+  font-weight: 800;
+  letter-spacing: -0.5px;
 }
 
 #janela-registrar-dia .campo {
-  margin-bottom: 15px;
+  margin-bottom: 20px;
   text-align: left;
 }
 
 #janela-registrar-dia label {
-  font-weight: 600;
-  color: #2b2525;
+  font-weight: 700;
+  color: #ffffff !important;
   font-size: 14px;
   display: block;
-  margin-bottom: 5px;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-#inputAmigos,
-#listaBebidas input {
-  width: 100%;
-  padding: 12px;
+#inputAmigos::placeholder {
+  color: #ffffff; 
+  opacity: 1;
+}
+
+.botoes-foto {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.ou-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #aaa;
+  font-weight: bold;
+}
+
+
+
+
+
+
+.botoes-foto button {
+  flex: 1;
+  padding: 10px;
   border-radius: 10px;
-  border: 1px solid #ccc;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.lista-amigos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+
+.tag-amigo {
+  background: #fcbe04d3;
+  color: rgb(0, 0, 0);
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+#inputAmigos {
+  width: 100%;
+  padding: 14px;
+  border-radius: 12px;
   outline: none;
   font-size: 16px; 
   margin-bottom: 5px;
-  transition: all 0.2s ease;
-  box-sizing: border-box;
+  background: #0a1f30;
+  border: none;
+  color: #fff;
 }
+
 
 #areaCamera {
   display: none; 
-  background: transparent;
-  padding: 15px;
+  padding: 20px;
   border-radius: 18px;
   margin-bottom: 20px;
   text-align: center;
+  border: 1px dashed #1a3a5a;
 }
 
 #areaCamera h3 {
-  font-size: 22px;
-  color: #0a0a0a;
-  margin-bottom: 5px;
+  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important;
+  font-size: 16px;            
+  color: #ffffff !important;  
+  font-weight: 700;
+  text-transform: uppercase;  
+  letter-spacing: 0.5px;      
+  margin-bottom: 8px;
 }
 
 #areaCamera p {
-  font-size: 14px;
-  color: #0a0a0a;
-  margin-bottom: 5px;
+  white-space: nowrap;
+  font-size: 12px;
+  letter-spacing: 0.5px;    
+  color: #bdc3c7;
+  margin-bottom: 0px;
 }
 
 .aviso-foto {
-  font-size: 12px;
-  color: #666;
+  font-size: 14px;
+  color: #ffffff;
   margin-bottom: 10px;
+  opacity: 0.;
 }
 
 #areaCamera button {
   width: 100%;
   padding: 12px;
-  background: #D7462D;
+  background: #991710;
   color: #fff;
   border: none;
   border-radius: 12px;
   font-weight: bold;
   font-size: 15px;
   cursor: pointer;
+  transition: transform 0.2s;
+}
+
+#areaCamera button:active {
+  transform: scale(0.95);
 }
 
 #videoPreview {
@@ -116,148 +182,200 @@
   display: none; 
 }
 
-.lista-opcoes label {
-  display: block;
-  background: #fff2e6;
-  padding: 12px;
-  margin-bottom: 8px;
-  border-radius: 10px;
-  cursor: pointer;
-  border: 1px solid #D7462D;
-  font-size: 15px;
-  font-weight: 500;
-}
-
 .notaShow-container {
   display: flex;
-  gap: 8px;
+  gap: 17px;
   justify-content: center;
   margin-top: 5px;
-}
-
-.notaShow-container button.meia {
   position: relative;
+  padding: 20px 0; 
 }
 
-.notaShow-container button.meia::before {
-  content: "★";
+.notaShow-container::before {
+  content: "";
   position: absolute;
-  width: 50%;
-  overflow: hidden;
-  color: #cc3434;
+  top: 15px; 
+  left: -25px; 
+  right: -25px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%; 
+  z-index: 0;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.5);
 }
 
 .notaShow-container button {
-  background: none;
+  background: rgba(172, 167, 167, 0.4);
   border: none;
-  font-size: 28px; 
+  width: 25px;
+  height: 35px;
   cursor: pointer;
-  color: #7a7373b9;
+  position: relative;
+  padding: 0;
+  clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 50% 70%, 0% 100%);
+  transition: transform 0.2s, background 0.2s;
+  color: transparent;
+  font-size: 0;
+  z-index: 1; 
+}
+
+.notaShow-container button {
+  margin-top: -5px; 
+}
+
+.notaShow-container button.meia::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  z-index: 1;
+}
+
+.notaShow-container:has(button:nth-child(5).active) button.meia::before {
+  background: inherit; 
+}
+
+.notaShow-container button {
+  background: rgba(172, 167, 167, 0.4);
+  border: none;
+  width: 25px;
+  height: 35px;
+  cursor: pointer;
+  position: relative;
+  padding: 0;
+  clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 50% 70%, 0% 100%);
+  transition: transform 0.2s, background 0.2s;
+  color: transparent;
+  font-size: 0;
+}
+
+.notaShow-container button.meia::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  background: #fcbc04;
+  z-index: 1;
 }
 
 .notaShow-container button.active {
-  color: #cc3434;
+  background: #fcbc04;
 }
+
 
 #listaBebidas {
   display: flex;
   flex-direction: column;
-  gap: 8px; 
+  gap: 10px; 
   margin-top: 10px;
+}
+
+.categoria-bebida-wrapper {
+  margin-bottom: 10px;
+  border-radius: 12px;
+  background: #0a1f30;
+  overflow: hidden;
+  border: 1px solid #1a3a5a;
+}
+
+.header-categoria {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  background: #112a40;
+  color: #ffffff;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.seta-indicadora {
+  display: inline-block;
+  transition: transform 0.3s ease; 
+  font-size: 12px;
+  color: #fcbe04d3;
+}
+
+.categoria-bebida-wrapper.aberto .seta-indicadora {
+  transform: rotate(180deg);
+}
+
+.lista-sub-bebidas {
+  display: none; 
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.categoria-bebida-wrapper.aberto .lista-sub-bebidas {
+  display: flex;
 }
 
 .card-bebida {
   display: flex;
-  justify-content: space-between; 
+  justify-content: space-between;
   align-items: center;
-  background: #fff;
-  padding: 10px 15px;
-  border-radius: 12px;
-  border: 1px solid #eee;
-  transition: all 0.2s ease;
-}
-
-.card-bebida.com-item {
-  border-color: #D7462D;
-  background: #fff9f8;
+  padding: 12px 15px;
+  background: #1a3a5a;
+  border-radius: 10px;
+  color: #fff;
 }
 
 .nome-bebida {
   font-size: 15px;
   font-weight: 600;
-  color: #333;
+  color: #ffffff;
 }
 
 .controles-qtd {
   display: flex;
   align-items: center;
-  gap: 8px;
-  background: #f0f0f0; 
-  padding: 4px 8px;
+  gap: 10px;
+  background: #0a1f30; 
+  padding: 5px 12px;
   border-radius: 20px;
 }
 
 .controles-qtd button {
-  width: 26px;
-  height: 26px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   border: none;
-  background: #D7462D;
-  color: #fff;
+  background: #fcbe04d3;
+  color: #050505;
   font-weight: bold;
-  font-size: 16px;
+  font-size: 18px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0;
+  flex-shrink: 0;
 }
 
 .bebidaQtd {
-  width: 25px !important; 
+  width: 40px !important; 
   border: none !important;
   background: transparent !important;
-  text-align: center;
+  text-align: center !important;
   font-weight: bold;
   font-size: 15px;
-  color: #2b2525;
+  color: #ffffff !important;
   padding: 0 !important;
   margin: 0 !important;
   outline: none;
+  appearance: none;
+  -moz-appearance: textfield;
 }
 
 .bebidaQtd::-webkit-inner-spin-button,
 .bebidaQtd::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
-}
-
-#janela-registrar-dia .btn-confirmar {
-  width: 100%;
-  padding: 15px;
-  margin-top: 10px;
-  border: none;
-  background: #D7462D;
-  color: #fff;
-  font-weight: bold;
-  border-radius: 12px;
-  cursor: pointer;
-  font-size: 17px;
-  transition: all 0.2s ease;
-  box-shadow: 0 4px 10px rgba(215, 70, 45, 0.2);
-}
-
-
-
-#janela-registrar-dia .fechar {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  font-size: 20px;
-  color: #000000;
-  cursor: pointer;
-  border: none;
-  background-color: transparent;
 }
 
 #listaShows {
@@ -275,18 +393,22 @@
 .conteudo-card {
   display: flex;
   align-items: center;
-  background: #ffffff;
+  background: #112a40;
   padding: 15px 20px;
   border-radius: 15px;
-  border: 2px solid #e0e0e0;
+  border: 2px solid #1a3a5a;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+.card-selecao input:checked + .conteudo-card {
+  border-color: #991710;
+  background: #1a3a5a;
 }
 
 .nome-show {
   font-size: 16px;
   font-weight: 700;
-  color: #444;
+  color: #ffffff !important;
   margin-left: 10px;
 }
 
@@ -296,84 +418,44 @@
   justify-content: center;
   width: 24px;
   height: 24px;
-  background: #ddd;
-  color: white;
+  background: #0a1f30;
+  color: transparent;
   border-radius: 50%;
   font-size: 12px;
-  transition: all 0.3s ease;
+  border: 1px solid #1a3a5a;
 }
 
-.card-selecao.selecionado .conteudo-card {
-  border-color: #D7462D; 
-  background: #fff5f2; 
-  transform: translateY(-2px); 
-  box-shadow: 0 6px 15px rgba(215, 70, 45, 0.2);
+.card-selecao input:checked + .conteudo-card .icone-check {
+  background: #991710;
+  border-color: #991710;
+  color: white;
 }
 
-.card-selecao.selecionado .icone-check {
-  background: #D7462D;
-  transform: scale(1.1);
-}
-
-.card-selecao.selecionado .nome-show {
-  color: #D7462D;
-}
-
-.card-selecao:active {
-  transform: scale(0.97);
-}
-
-.categoria-bebida-wrapper {
-  margin-bottom: 10px;
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.1);
-  overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.header-categoria {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 15px 20px;
-  background:#ff4e50;
-  color: #000;
-  cursor: pointer;
-  font-weight: bold;
-}
-
-.seta-indicadora {
-  display: inline-block;
-  transition: transform 0.3s ease; 
-  font-size: 0.8rem;
-}
-
-.categoria-bebida-wrapper.aberto .seta-indicadora {
-  transform: rotate(180deg);
-}
-
-.lista-sub-bebidas {
-  display: none; 
-  flex-direction: column;
-  gap: 8px;
+#janela-registrar-dia .btn-confirmar {
+  width: 65%;
   padding: 12px;
-  background: rgba(0, 0, 0, 0.1);
+  margin-top: 20px;
+  border: none;
+  background: #991710;
+  color: #fff;
+  font-weight: bold;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 15px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
-.categoria-bebida-wrapper.aberto .lista-sub-bebidas {
-  display: flex;
+#janela-registrar-dia .fechar {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  font-size: 24px;
+  color: #ffffff;
+  cursor: pointer;
+  border: none;
+  background-color: transparent;
 }
-
-.card-bebida {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 15px;
-  background: #fff;
-  border-radius: 8px;
-  color: #333;
-}
-
 
 .camera-full {
   position: fixed;
@@ -403,31 +485,35 @@
   border-radius: 50%;
   border: none;
   font-size: 20px;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  backdrop-filter: blur(10px);
 }
 
-
 #btnTirarFoto {
-  bottom: 30px;
+  bottom: 40px;
   left: 50%;
   transform: translateX(-50%);
-  width: 70px;
-  height: 70px;
-  font-size: 26px;
+  width: 80px;
+  height: 80px;
+  background: #991710;
+  border: 5px solid rgba(255, 255, 255, 0.3);
 }
 
 #btnFecharCamera {
-  top: 20px;
-  right: 20px;
+  top: 30px;
+  right: 25px;
 }
 
 #btnTrocarCamera {
-  bottom: 30px;
-  right: 20px;
+  bottom: 40px;
+  right: 25px;
+  width: 60px;
+  height: 60px;
 }
 
 #btnTirarFoto:active {
-  transform: scale(0.9);
-  background: #ccc;
+  transform: translateX(-50%) scale(0.9);
 }
 
 video {

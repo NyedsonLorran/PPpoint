@@ -267,47 +267,69 @@
 <div id="janela-registrar-dia" class="modal">
   <div class="modal-box">
 
-    <h2 id="tituloRegistro">Registrar dia</h2>
+    <h2 id="tituloRegistro"> </h2>
 
-    <!--  ÁREA DA FOTO  -->
-    <div id="areaCamera">
-      <h3>Tire sua foto dentro do PP</h3>
-      <p class="aviso-foto">Capriche vai aparecer na sua retrospectiva</p>
+  <!--  ÁREA DA FOTO  -->
+  <div id="areaCamera">
+    <h3>Tire uma foto dentro do PP</h3>
+    <p class="aviso-foto">Capriche! vai que aparece na sua retrospectiva</p>
 
-      <!-- PREVIEW DA FOTO -->
-      <img id="previewFoto"
-           style="display:none; width:100%; border-radius:12px; margin-bottom:10px;" />
+    <!-- PREVIEW DA FOTO -->
+    <img id="previewFoto"
+        style="display:none; width:100%; border-radius:12px; margin-bottom:10px;" />
 
-      <!-- BOTÕES -->
-      <button type="button" id="btnAtivarCamera" onclick="abrirOuRefazerFoto()"> Tirar Foto </button>
+    <!-- BOTÕES FOTO -->
+  <div class="botoes-foto">
 
-      <!-- INPUT GALERIA -->
-      <input type="file"
-             id="inputGaleria"
-             accept="image/*"
-             style="display:none;">
+    <!-- CÂMERA -->
+    <button type="button" class="btn-foto camera" onclick="ativarCamera()">
+      Tirar Foto
+    </button>
+
+    <div class="ou-divider">
+      <span>ou</span>
     </div>
+
+    <!-- GALERIA -->
+    <button type="button" class="btn-foto galeria"
+            onclick="document.getElementById('inputGaleria').click()">
+      Adicionar Foto
+    </button>
+
+  </div>
+
+    <!-- INPUT GALERIA OCULTO -->
+    <input type="file"
+          id="inputGaleria"
+          accept="image/*"
+          style="display:none;">
+  </div>
 
     <!--  NOTAS -->
     <div class="campo">
-      <label>Nota para os shows da noite</label>
+      <label>Passando a limpo as atrações: quantas bandeirinhas cada uma merece ?</label>
       <div id="notasShows"></div>
     </div>
 
     <!--  AMIGOS  -->
-    <div class="campo">
-      <label for="inputAmigos">Com quem você foi? (@ do Insta)</label>
-      <input type="text"
-             id="inputAmigos"
-             list="sugestoesAmigos"
-             placeholder="@usuario"
-             autocomplete="off">
-      <datalist id="sugestoesAmigos"></datalist>
-    </div>
+  <div class="campo">
+    <label for="inputAmigos"> Quem colou contigo ? joga o @ de quem tava nesse PP </label>
+
+    <input type="text"
+          id="inputAmigos"
+          list="sugestoesAmigos"
+          placeholder="@usuario"
+          autocomplete="off">
+
+    <datalist id="sugestoesAmigos"></datalist>
+
+    <!-- NOVO -->
+    <div id="listaAmigos" class="lista-amigos"></div>
+  </div>
 
     <!--  BEBIDAS  -->
     <div class="campo">
-      <label>Bebeu?</label>
+      <label>A memória falhou ? Tente lembrar o que passou pelo seu copo!</label>
       <div id="listaBebidas" class="lista-opcoes"></div>
     </div>
 
