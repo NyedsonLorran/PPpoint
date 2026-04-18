@@ -196,6 +196,7 @@ async function abrirEdicao(dataIso) {
       const div = document.createElement("div");
       div.classList.add("item-edicao");
       div.dataset.id = show.programacaoId;
+      div.dataset.cantorId = show.cantorId; // armazena cantorId para enviar no PUT
 
       div.innerHTML = `
         <input type="text" value="${show.nome || ""}" placeholder="Cantor">
@@ -265,15 +266,16 @@ async function salvarEdicao() {
     if (!valido) { alert("Horário inválido! Use entre 17:00 e 04:00"); return; }
   }
 
-  const promessas = Array.from(itens).map(item => {
+  const promessas = Array.from(itens).map(async item => {
     const programacaoId = item.dataset.id;
+    const cantorId = item.dataset.cantorId;
     const inputs = item.querySelectorAll("input");
     const nomeCantor = inputs[0].value.trim();
     const horario = inputs[1].value + ":00";
     return fetch(`${API_URL}/programacao/admin/${programacaoId}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
-      body: JSON.stringify({ nomeCantor, horario })
+      body: JSON.stringify({ cantorId, nomeCantor, horario })
     });
   });
 
@@ -303,10 +305,13 @@ async function deletarItemEdicao(programacaoId, btn, dataIso) {
       delete programacaoCache[dataIso];
       await renderizarProgramacao();
     } else {
-      alert("Erro ao remover show.");
+      const texto = await res.text();
+      console.error("Erro ao deletar:", res.status, texto);
+      alert(`Erro ao remover show (${res.status}): ${texto}`);
       btn.disabled = false;
     }
   } catch(e) {
+    console.error("Erro de conexão ao deletar:", e);
     alert("Erro ao conectar ao servidor.");
     btn.disabled = false;
   }

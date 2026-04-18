@@ -45,39 +45,33 @@ public class ProgramacaoService {
 
     // ─── Edição (somente ADMIN) ─────────────────────────────────────────────────
 
-    /**
-     * Edita cantor e/ou horário de um item existente na programação.
-     */
     @Transactional
     public ProgramacaoItemDTO editarShow(UUID programacaoId, EditarShowDTO dto) {
         Programacao prog = programacaoRepository.findById(programacaoId)
                 .orElseThrow(() -> new ResourceNotFoundException("Item de programação não encontrado"));
 
-        if (dto.cantorId() != null) {
-            Cantor cantor = cantorRepository.findById(dto.cantorId())
-                    .orElseThrow(() -> new ResourceNotFoundException("Cantor não encontrado"));
-            prog.setCantor(cantor);
-        } else if (dto.nomeCantor() != null && !dto.nomeCantor().isBlank()) {
-            prog.setCantor(resolverOuCriarCantor(dto.nomeCantor()));
+        UUID cantorId = dto.cantorId() != null ? dto.cantorId() : prog.getCantor().getId();
+
+        if (dto.nomeCantor() != null && !dto.nomeCantor().isBlank()) {
+            cantorRepository.updateNome(cantorId, dto.nomeCantor());
         }
 
         if (dto.horario() != null) {
             prog.setHorario(dto.horario());
+            programacaoRepository.save(prog);
         }
 
-        programacaoRepository.save(prog);
+        Cantor cantor = cantorRepository.findById(cantorId)
+                .orElseThrow(() -> new ResourceNotFoundException("Cantor não encontrado"));
 
         return new ProgramacaoItemDTO(
-                prog.getCantor().getId(),
-                prog.getCantor().getNome(),
-                prog.getCantor().getFoto(),
+                cantor.getId(),
+                cantor.getNome(),
+                cantor.getFoto(),
                 prog.getHorario()
         );
     }
 
-    /**
-     * Adiciona novo show a um dia (cria o Dia automaticamente se necessário).
-     */
     @Transactional
     public ProgramacaoItemDTO adicionarShow(AdicionarShowDTO dto) {
         Dia dia = diaRepository.findByData(dto.data())
@@ -88,10 +82,16 @@ public class ProgramacaoService {
                     return diaRepository.save(novo);
                 });
 
-        Cantor cantor = (dto.cantorId() != null)
-                ? cantorRepository.findById(dto.cantorId())
-                        .orElseThrow(() -> new ResourceNotFoundException("Cantor não encontrado"))
-                : resolverOuCriarCantor(dto.nomeCantor());
+        Cantor cantor;
+        if (dto.cantorId() != null) {
+            cantor = cantorRepository.findById(dto.cantorId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Cantor não encontrado"));
+        } else {
+            cantor = new Cantor();
+            cantor.setId(UUID.randomUUID());
+            cantor.setNome(dto.nomeCantor());
+            cantorRepository.save(cantor);
+        }
 
         Programacao prog = new Programacao();
         prog.setId(UUID.randomUUID());
@@ -105,25 +105,18 @@ public class ProgramacaoService {
     }
 
     /**
-     * Remove um show da programação pelo ID do item.
+     * Remove show e o cantor vinculado.
+     * Usa query direta para buscar o cantorId sem precisar do LAZY load.
      */
     @Transactional
     public void removerShow(UUID programacaoId) {
-        if (!programacaoRepository.existsById(programacaoId)) {
-            throw new ResourceNotFoundException("Item de programação não encontrado");
-        }
+        // Busca o cantorId via query direta — evita LazyInitializationException
+        UUID cantorId = programacaoRepository.findCantorIdByProgramacaoId(programacaoId)
+                .orElseThrow(() -> new ResourceNotFoundException("Item de programação não encontrado"));
+
         programacaoRepository.deleteById(programacaoId);
-    }
+        programacaoRepository.flush();
 
-    // ─── Helpers ────────────────────────────────────────────────────────────────
-
-    private Cantor resolverOuCriarCantor(String nome) {
-        return cantorRepository.findByNomeIgnoreCase(nome)
-                .orElseGet(() -> {
-                    Cantor novo = new Cantor();
-                    novo.setId(UUID.randomUUID());
-                    novo.setNome(nome);
-                    return cantorRepository.save(novo);
-                });
+        cantorRepository.deleteById(cantorId);
     }
 }

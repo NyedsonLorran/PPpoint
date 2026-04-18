@@ -17,7 +17,7 @@
     <version>0.0.1-SNAPSHOT</version>
 
     <properties>
-        <!-- 🔥 Força compatibilidade mesmo usando Java 25 -->
+       
         <java.version>17</java.version>
         <maven.compiler.release>17</maven.compiler.release>
     </properties>
@@ -70,7 +70,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.32</version>
+            <version>1.18.38</version>
             <scope>provided</scope>
         </dependency>
 
@@ -98,17 +98,17 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
 
-            <!-- 🔥 Compiler corrigido pra Java 25 + Lombok -->
+            
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.14.1</version>
                 <configuration>
 
-                    <!-- força Java 17 -->
+                    
                     <release>17</release>
 
-                    <!-- evita bug com Java 25 -->
+                   
                     <fork>true</fork>
 
                     <!-- Lombok -->
@@ -116,7 +116,7 @@
                         <path>
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok</artifactId>
-                            <version>1.18.32</version>
+                            <version>1.18.38</version>
                         </path>
                     </annotationProcessorPaths>
 
@@ -125,7 +125,7 @@
                         <path>
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok</artifactId>
-                            <version>1.18.32</version>
+                            <version>1.18.38</version>
                         </path>
                     </testAnnotationProcessorPaths>
 

@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface ProgramacaoRepository extends JpaRepository<Programacao, UUID> {
@@ -58,4 +59,10 @@ public interface ProgramacaoRepository extends JpaRepository<Programacao, UUID> 
             ORDER BY d.data ASC
             """)
     List<LocalDate> findDiasComProgramacao();
+
+    /**
+     * Busca o cantorId de um item de programação diretamente — evita LazyInitializationException.
+     */
+    @Query("SELECT p.cantor.id FROM Programacao p WHERE p.id = :programacaoId")
+    Optional<UUID> findCantorIdByProgramacaoId(@Param("programacaoId") UUID programacaoId);
 }
