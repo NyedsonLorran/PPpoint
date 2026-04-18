@@ -169,7 +169,7 @@ async function abrirEdicao(dataIso) {
 
   const [anoD, mesD, diaD] = dataIso.split("-").map(Number);
 
-  titulo.innerText = `Editar Dia - ${String(diaD).padStart(2,"0")} ${nomesMesesProg[mesD-1].toUpperCase()}`;
+  titulo.innerText = `EDITAR DIA ${String(diaD).padStart(2,"0")} DE ${nomesMesesProg[mesD-1].toUpperCase()}`;
   modal.dataset.data = dataIso;
   modal.style.display = "flex";
 
