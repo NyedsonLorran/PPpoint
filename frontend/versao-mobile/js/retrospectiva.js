@@ -31,7 +31,7 @@ function iniciarContadorRetro() {
     }
 
     const agora = getAgora();
-    const fim = new Date(2026, 6, 6, 16, 59, 59);
+    const fim = new Date(2026, 8, 8, 16, 59, 59);
     const diff = fim - agora;
 
     if (diff <= 0) {

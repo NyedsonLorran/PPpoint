@@ -1,5 +1,8 @@
 .bg-shows {
-  background: #be2206;
+  background-image: url('/frontend/versao-mobile/css/Pagina-Retrospectiva/stories/css/imagens/showaz.png'); 
+  background-size: cover;      
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .bg-shows .retro-card {

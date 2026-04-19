@@ -14,10 +14,11 @@ body {
 }
 
 body.fundo-ponto {
-  background-image: url(/frontend/versao-mobile/css/imagens/casasceu.png);
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center -45px;
+  background-image: url(/frontend/versao-mobile/css/imagens/casaceu.png);
+
 }
 
 body.fundo-programacao {
@@ -25,13 +26,16 @@ body.fundo-programacao {
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
+  background-image: url(/frontend/versao-mobile/css/imagens/ceu.png);
 }
 
 body.fundo-retro {
+  background-image: url(/frontend/versao-mobile/css/imagens/piramide.png);
   background-color: #000327;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  background-position: center -55px;
 }
 
 .nav-bottom {

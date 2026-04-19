@@ -43,11 +43,11 @@
 #titulo-topo {
   font-family: 'MADE', sans-serif;
   position: absolute;
-  left: 18px;
+  left: 1px;
   top: 75%;
   transform: translateY(-50%);
   color: hsl(150, 3%, 69%);
-  font-size: 40px;
+  font-size: 35px;
   font-weight: bold;
   white-space: nowrap;
 }

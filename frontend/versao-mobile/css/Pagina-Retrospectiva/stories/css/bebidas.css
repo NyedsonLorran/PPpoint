@@ -1,5 +1,8 @@
 .bg-bebidas {
-  background: #0714c9;
+  background-image: url('/frontend/versao-mobile/css/Pagina-Retrospectiva/stories/css/imagens/showam.png'); 
+  background-size: cover;      
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .bg-bebidas .retro-card {
