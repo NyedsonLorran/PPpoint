@@ -1,8 +1,42 @@
 let usandoFrontal = false;
 
+let amigosSelecionados = [];
+
+window.addEventListener("DOMContentLoaded", () => {
+  const inputAmigos = document.getElementById("inputAmigos");
+
+  if (!inputAmigos) return;
+
+  inputAmigos.addEventListener("keydown", function(e) {
+    if (e.key === "Enter") {
+      e.preventDefault();
+
+      let valor = inputAmigos.value.trim();
+
+      if (!valor.startsWith("@")) {
+        alert("Digite no formato @usuario");
+        return;
+      }
+
+      if (amigosSelecionados.includes(valor)) {
+        inputAmigos.value = "";
+        return;
+      }
+
+      amigosSelecionados.push(valor);
+      renderizarAmigos();
+      inputAmigos.value = "";
+    }
+  });
+});
+
 async function abrirJanelaRegistrarDia() {
   document.getElementById("fundoTransparente").style.display = "block";
   document.getElementById("janela-registrar-dia").style.display = "flex";
+
+  amigosSelecionados = [];
+  renderizarAmigos();
+
   const usuario = getUsuarioLogado();
   const areaCam = document.getElementById("areaCamera");
   if (usuario && areaCam) {
@@ -13,7 +47,7 @@ async function abrirJanelaRegistrarDia() {
   carregarSugestoesAmigos();
   let mesReal = mesAtual === 0 ? 5 : 6;
   let d = new Date(ano, mesReal, diaSelecionado);
-  document.getElementById("tituloRegistro").innerText = `Registrar dia ${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}`;
+  document.getElementById("tituloRegistro").innerText = `REGISTRAR DIA ${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}`;
 }
 
 function fecharJanelaRegistrarDia() {
@@ -22,6 +56,25 @@ function fecharJanelaRegistrarDia() {
   if (streamRecurso) { streamRecurso.getTracks().forEach(t => t.stop()); streamRecurso = null; }
 }
 
+function selecionarDaGaleria(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+
+  reader.onload = function(e) {
+    fotoCapturada = e.target.result;
+
+    const preview = document.getElementById("previewFoto");
+
+    if (preview) {
+      preview.src = fotoCapturada;
+      preview.style.display = "block";
+    }
+  };
+
+  reader.readAsDataURL(file);
+}
 
 function salvarSugestaoAmigo(arroba) {
   if (!arroba || !arroba.includes('@')) return;
@@ -62,7 +115,7 @@ async function getEstruturaBebidas() {
   try {
     const res = await fetch(`${API_URL}/bebidas`);
     if (!res.ok) throw new Error("Erro ao buscar bebidas");
-    return await res.json(); // [{ id, nome, bebidas: [{id, nome}] }]
+    return await res.json();
   } catch (e) {
     console.error("Erro ao carregar bebidas:", e);
     return [];
@@ -78,12 +131,11 @@ async function carregarDadosFormulario() {
   containerNotas.innerHTML = "";
   containerBebidas.innerHTML = "";
 
-  //  RENDER NOTAS (5 ESTRELAS COM MEIA, SÓ UM 5 POR NOITE)
-  let notaMaximaDada = false; // controla se algum show já tem nota 5
+  let notaMaximaDada = false; 
   shows.forEach(show => {
     const div = document.createElement("div");
     div.classList.add("item");
-    div.innerHTML = `<p style="margin-top:10px; font-weight:bold;">${show}</p><div class="notaShow-container"></div>`;
+    div.innerHTML = `<p class="nome-show" style="margin-top:15px; margin-bottom:5px;">${show}</p><div class="notaShow-container"></div>`;
     const cont = div.querySelector(".notaShow-container");
 
     for (let i = 1; i <= 5; i++) {
@@ -95,13 +147,13 @@ async function carregarDadosFormulario() {
       btn.onclick = (e) => {
         const clickX = e.offsetX;
         const width = btn.offsetWidth;
-        let nota = i; // estrela inteira
+        let nota = i; 
 
         if (clickX < width / 2) nota = i - 0.5;
 
         if (nota === 5 && notaMaximaDada) {
           alert("Você só pode dar nota 5 para um show da noite!");
-          nota = 4.5; // força menos de 5
+          nota = 4.5;
         }
 
         cont.querySelectorAll("button").forEach((b, j) => {
@@ -115,20 +167,17 @@ async function carregarDadosFormulario() {
 
         div.dataset.nota = nota;
 
-        // atualiza controle do 5
         if (nota === 5) notaMaximaDada = true;
         else if (nota < 5) {
           notaMaximaDada = Array.from(containerNotas.querySelectorAll('.item')).some(d => parseFloat(d.dataset.nota) === 5);
         }
       };
-
       cont.appendChild(btn);
     }
-
     containerNotas.appendChild(div);
   });
 
-  // RENDER BEBIDAS COM ACORDEÃO 
+  // RENDER BEBIDAS COM ACORDEÃO
   estrutura.forEach(cat => {
     const catDiv = document.createElement("div");
     catDiv.classList.add("categoria-bebida-wrapper");
@@ -144,7 +193,7 @@ async function carregarDadosFormulario() {
     cat.bebidas.forEach(bebida => {
       const item = document.createElement("div");
       item.classList.add("card-bebida");
-      const idLimpo = bebida.id; // usa UUID do BD como chave
+      const idLimpo = bebida.id;
       item.innerHTML = `
         <span class="nome-bebida">${bebida.nome}</span>
         <div class="controles-qtd">
@@ -159,6 +208,26 @@ async function carregarDadosFormulario() {
   });
 }
 
+function coletarBebidas() {
+  const inputs = document.querySelectorAll(".bebidaQtd");
+  let bebidas = [];
+
+  inputs.forEach(input => {
+    const qtd = parseInt(input.value);
+
+    if (qtd > 0) {
+      const nome = input.closest(".card-bebida")
+        .querySelector(".nome-bebida").innerText;
+
+      bebidas.push({
+        nome: nome,
+        quantidade: qtd
+      });
+    }
+  });
+
+  return bebidas;
+}
 
 async function ativarCamera() {
   try {
@@ -175,7 +244,6 @@ async function ativarCamera() {
     if (video) {
       video.srcObject = s;
 
-      // controla espelho
       if (usandoFrontal) {
         video.classList.add("video-frontal");
       } else {
@@ -184,8 +252,6 @@ async function ativarCamera() {
     }
 
     document.getElementById('cameraFullscreen').style.display = "block";
-
-    // esconde modal
     document.getElementById("janela-registrar-dia").style.display = "none";
 
   } catch (e) {
@@ -212,7 +278,6 @@ function capturarFoto() {
 
   const ctx = canvas.getContext("2d");
 
-  // corrige espelho da frontal
   if (usandoFrontal) {
     ctx.translate(canvas.width, 0);
     ctx.scale(-1, 1);
@@ -222,27 +287,7 @@ function capturarFoto() {
 
   const imagem = canvas.toDataURL("image/png");
 
-  const flash = document.getElementById("flashCamera");
-if (flash) {
-  flash.classList.add("flash-ativo");
-
-  setTimeout(() => {
-    flash.classList.remove("flash-ativo");
-  }, 250);
-}
-
-  const preview = document.getElementById("previewFoto");
-  if (preview) {
-    preview.src = imagem;
-    preview.style.display = "block";
-  }
-
-  fecharCamera();
-
-  const btn = document.getElementById("btnAtivarCamera");
-  if (btn) {
-    btn.innerText = "Tirar outra foto";
-  }
+  fotoCapturada = imagem;
 }
 
 function fecharCamera() {
@@ -257,16 +302,50 @@ function fecharCamera() {
   document.getElementById("janela-registrar-dia").style.display = "flex";
 }
 
-function enviarRegistro() {
-  const arroba = document.getElementById("inputAmigos").value;
-  if(arroba) salvarSugestaoAmigo(arroba);
+async function enviarRegistro() {
   let user = getUsuarioLogado();
-  let chave = "registros_" + user.usuario;
-  let regs = JSON.parse(localStorage.getItem(chave)) || [];
-  regs.push({ dia: diaSelecionado, mes: mesAtual });
-  localStorage.setItem(chave, JSON.stringify(regs));
-  alert("Dia registrado!");
-  fecharJanelaRegistrarDia(); renderizarCalendario();
+
+  if (!user) {
+    alert("Usuário não logado");
+    return;
+  }
+
+  const payload = {
+    usuario: user.usuario,
+    data: formatarData(),
+    amigos: amigosSelecionados || [],
+    notasShows: coletarNotasShows() || [],
+    bebidas: coletarBebidas() || [],
+    foto: fotoCapturada || null
+  };
+
+  console.log("ENVIANDO:", payload);
+
+  try { 
+    const resposta = await fetch(`${API_URL}/api/registros-diarios`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(payload)
+    });
+
+    if (!resposta.ok) throw new Error();
+
+    alert("Registro enviado com sucesso!");
+    fecharJanelaRegistrarDia();
+    renderizarCalendario();
+
+  } catch (e) {
+    console.error(e);
+    alert("Erro ao enviar");
+  }
+}
+
+function formatarData() {
+  let mesReal = mesAtual === 0 ? 5 : 6;
+  const d = new Date(ano, mesReal, diaSelecionado);
+  return d.toISOString().split("T")[0];
 }
 
 function trocarCamera() {
@@ -278,3 +357,48 @@ function trocarCamera() {
 
   ativarCamera();
 }
+
+function coletarNotasShows() {
+  const itens = document.querySelectorAll("#notasShows .item");
+  let notas = [];
+
+  itens.forEach(item => {
+    const nome = item.querySelector(".nome-show").innerText;
+    const nota = parseFloat(item.dataset.nota || 0);
+
+    if (nota > 0) {
+      notas.push({ show: nome, nota: nota });
+    }
+  });
+
+  return notas;
+}
+
+function renderizarAmigos() {
+  const lista = document.getElementById("listaAmigos");
+
+  if (!lista) return;
+
+  lista.innerHTML = "";
+
+  amigosSelecionados.forEach((amigo, index) => {
+    const tag = document.createElement("span");
+    tag.classList.add("tag-amigo");
+    tag.innerText = amigo;
+
+    tag.onclick = () => {
+      amigosSelecionados.splice(index, 1);
+      renderizarAmigos();
+    };
+
+    lista.appendChild(tag);
+  });
+}
+
+window.addEventListener("DOMContentLoaded", () => {
+  const inputGaleria = document.getElementById("inputGaleria");
+
+  if (inputGaleria) {
+    inputGaleria.addEventListener("change", selecionarDaGaleria);
+  }
+});
