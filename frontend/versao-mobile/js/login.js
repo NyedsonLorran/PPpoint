@@ -34,32 +34,57 @@ async function registrar() {
   const usuario = document.getElementById("cadastroUsuario").value;
   const senhaConf = document.getElementById("cadastroSenhaConfirm").value;
 
-  if (!email || !senha || !usuario || !senhaConf) { alert("Preencha todos os campos!"); return; }
-  if(senha !== senhaConf){ alert("As senhas não conferem!"); return; }
+  if (!email || !senha || !usuario || !senhaConf) {
+    alert("Preencha todos os campos!");
+    return;
+  }
 
-    try {
-        const res = await fetch(`${API_URL}/auth/register`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                username: usuario,
-                email,
-                password: senha,
-                confirmPassword: senhaConf
-            })
-        });
+  if (senha !== senhaConf) {
+    alert("As senhas não conferem!");
+    return;
+  }
 
-        if (res.status === 201) {
-            alert("Conta criada com sucesso!");
-            mostrarLogin();
-        } else {
-            const data = await res.json();
-            alert("Erro: " + data.message);
-        }
-    } catch (e) {
-        alert("Erro ao conectar com o servidor.");
+  try {
+    const res = await fetch(`${API_URL}/auth/register`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        username: usuario,
+        email,
+        password: senha,
+        confirmPassword: senhaConf
+      })
+    });
+
+    const data = await res.json();
+
+    if (res.status === 201) {
+      // pega o nome vindo do backend
+      localStorage.setItem("nomeUsuario", data.username);
+
+      alert("Conta criada com sucesso!");
+      mostrarLogin();
+
+    } else {
+      alert("Erro: " + (data.message || "Erro desconhecido"));
     }
+
+  } catch (e) {
+    alert("Erro ao conectar com o servidor.");
+  }
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+  const nome = localStorage.getItem("nomeUsuario");
+
+  console.log("NOME DO STORAGE:", nome);
+
+  const el = document.getElementById("nomeUsuario");
+
+  if (el && nome) {
+    el.innerText = `Olá, ${nome}! `;
+  }
+});
 
 async function fazerLogin() {
   const emailInput = document.getElementById("loginUsuario").value;

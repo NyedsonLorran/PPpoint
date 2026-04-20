@@ -9,7 +9,8 @@ const API_URL = ["localhost", "127.0.0.1"].includes(window.location.hostname) ? 
 const nomesMeses = ["Jun", "Jul"];
 let mesAtual = 0; 
 const ano = 2026;
-const agoraFixo = new Date(2026, 5, 5, 17, 0, 0); //  para testes
+                        //  A   M   D  H   M  S 
+const agoraFixo = new Date(2026, 5, 6, 17, 0, 0); //  para testes
 let diaSelecionado = null;
 let streamRecurso = null;
 let fotoCapturada = null;  

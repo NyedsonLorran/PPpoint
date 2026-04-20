@@ -9,37 +9,45 @@ window.addEventListener("DOMContentLoaded", () => {
 
   inputAmigos.value = "@";
 
+  function adicionarAmigo() {
+    let valor = inputAmigos.value.replace(/@/g, "").trim();
+
+    if (!valor) return;
+
+    valor = "@" + valor;
+
+    if (amigosSelecionados.includes(valor)) {
+      inputAmigos.value = "@";
+      return;
+    }
+
+    amigosSelecionados.push(valor);
+    renderizarAmigos();
+
+    inputAmigos.value = "@";
+  }
+
   inputAmigos.addEventListener("input", function () {
     let valor = this.value;
 
-    valor = valor.replace(/@/g, "");
+    if (valor.includes(" ")) {
+      valor = valor.replace(/\s/g, "");
+      this.value = "@" + valor;
+      adicionarAmigo();
+      return;
+    }
 
+    valor = valor.replace(/@/g, "").replace(/\s/g, "");
     this.value = "@" + valor;
   });
 
   inputAmigos.addEventListener("keydown", function (e) {
-    if (e.key === "Enter" || e.key === " ") {
+    if (e.key === "Enter") {
       e.preventDefault();
-
-      let valor = this.value.replace(/@/g, "").trim();
-
-      if (!valor) return;
-
-      valor = "@" + valor;
-
-      if (amigosSelecionados.includes(valor)) {
-        this.value = "@";
-        return;
-      }
-
-      amigosSelecionados.push(valor);
-      renderizarAmigos();
-
-      // 🔥 volta pro estado inicial correto
-      this.value = "@";
+      adicionarAmigo();
     }
   });
-});
+});;
 
 async function abrirJanelaRegistrarDia() {
   document.getElementById("fundoTransparente").style.display = "block";
@@ -65,6 +73,11 @@ function fecharJanelaRegistrarDia() {
   document.getElementById("fundoTransparente").style.display = "none";
   document.getElementById("janela-registrar-dia").style.display = "none";
   if (streamRecurso) { streamRecurso.getTracks().forEach(t => t.stop()); streamRecurso = null; }
+}
+
+function removerAmigo(index) {
+  amigosSelecionados.splice(index, 1);
+  renderizarAmigos();
 }
 
 function selecionarDaGaleria(event) {
@@ -406,11 +419,17 @@ function renderizarAmigos() {
   amigosSelecionados.forEach((amigo, index) => {
     const tag = document.createElement("span");
     tag.classList.add("tag-amigo");
-    tag.innerText = amigo;
 
-    tag.onclick = () => {
-      amigosSelecionados.splice(index, 1);
-      renderizarAmigos();
+    tag.innerHTML = `
+      ${amigo}
+      <button type="button" class="btn-remover-amigo">×</button>
+    `;
+
+    const btn = tag.querySelector(".btn-remover-amigo");
+
+    btn.onclick = (e) => {
+      e.stopPropagation(); 
+      removerAmigo(index);
     };
 
     lista.appendChild(tag);

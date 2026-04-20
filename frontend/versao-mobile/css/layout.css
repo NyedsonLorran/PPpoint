@@ -40,12 +40,12 @@
   align-items: center;
   justify-content: center;
   line-height: 1.1;
-  clip-path: polygon(0 0, 100% 0, 100% 80%, 50% 100%, 0 75%);
+  clip-path: polygon(0 0, 100% 0, 100% 80%, 50% 100%, 0 80%);
 }
 
 .btnLogin span {
   display: block;
-  transform: translateX(-1px); 
+  transform: translateX(-1.5px); 
 }
 
 #titulo-topo {

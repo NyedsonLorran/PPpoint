@@ -47,6 +47,13 @@ html, body {
   padding: 9px 24px;
 }
 
+#nomeUsuario {
+  font-size: 16px;
+  font-weight: bold;
+  margin: 10px 0;
+  color: #fff;
+}
+
 .export-mode {
   background: transparent !important;
 }

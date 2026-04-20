@@ -39,6 +39,7 @@ function initRetrospectiva() {
     }
 }
 
+
 function renderizarExplicacaoPublica() {
   const container = document.getElementById("retro-container-dinamico");
   container.innerHTML = `
