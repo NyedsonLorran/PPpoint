@@ -28,13 +28,13 @@ html, body {
   color: #ffffff  ;
 }
 
-#retroNaoLogado, #containerAcessoRetro p {
+#retroNaoLogado p , #containerAcessoRetro p {
   font-size: 13px;
   margin-top: 18px;
   text-transform: uppercase;
 }
 
-#retroNaoLogado, #containerAcessoRetro h2 {
+#retroNaoLogado h2, #containerAcessoRetro h2 {
   font-size: 20px !important;
   text-transform: uppercase;
 }

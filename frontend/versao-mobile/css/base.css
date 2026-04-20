@@ -18,7 +18,6 @@ body.fundo-ponto {
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center -45px;
-  background-image: url(./imagens/casaceu.png);
 }
 
 body.fundo-programacao {
@@ -29,7 +28,6 @@ body.fundo-programacao {
 }
 
 body.fundo-retro {
-  background-image: url(./imagens/piramide.png);
   background-color: #000327;
   background-size: cover;
   background-position: center;
