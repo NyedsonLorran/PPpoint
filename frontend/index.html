@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+    <script>
+        const isMobile = /Mobi|Android|iPhone/i.test(navigator.userAgent);
+
+        if (isMobile) {
+            window.location.href = "./versao-mobile/index.html";
+        } else {
+            window.location.href = "./versao-pc/index.html";
+        }
+    </script>
+</head>
+<body>
+</body>
+</html>
