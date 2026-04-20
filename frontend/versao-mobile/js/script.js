@@ -13,7 +13,14 @@ const ano = 2026;
 const agoraFixo = new Date(2026, 5, 6, 17, 0, 0); //  para testes
 let diaSelecionado = null;
 let streamRecurso = null;
-let fotoCapturada = null;  
+let fotoCapturada = null;
+let ultimoIndex = 1; 
+const ordemPaginas = {
+    "programacao": 0,
+    "ponto": 1,
+    "retrospectiva": 2
+};
+
 
 function getAgora() {
   return agoraFixo || new Date();
@@ -38,47 +45,80 @@ function eventoFinalizado() {
   return true;
 }
 
+
 function mostrarPagina(pagina) {
-  const paginas = document.querySelectorAll(".pagina");
-  paginas.forEach(p => p.classList.remove("active"));
-  
-  const paginaAlvo = document.getElementById(pagina);
-  if (paginaAlvo) {
-    paginaAlvo.classList.add("active");
-  }
-
-  document.querySelectorAll(".nav-bottom button").forEach(btn => btn.classList.remove("active"));
-
-  let botaoId = "";
-  if (pagina === "programacao") botaoId = "btnProgramacao";
-  else if (pagina === "ponto") botaoId = "btnPonto";
-  else if (pagina === "retrospectiva") botaoId = "btnRetrospectiva";
-
-  const botao = document.getElementById(botaoId);
-  if (botao) {
-    botao.classList.add("active");
+    const track = document.getElementById('fundoTrack');
+    const indexAlvo = ordemPaginas[pagina];
     
-    const titulo = document.getElementById("titulo-topo");
-    if (titulo) {
-      const span = botao.querySelector("span");
-      if (span) titulo.innerText = span.innerText;
-    }
-  }
+    if (!track || indexAlvo === undefined) return;
 
-  document.body.classList.remove("fundo-programacao", "fundo-ponto", "fundo-retro");
-  if (pagina === "programacao") document.body.classList.add("fundo-programacao");
-  if (pagina === "ponto") document.body.classList.add("fundo-ponto");
-  if (pagina === "retrospectiva") {
-    document.body.classList.add("fundo-retro");
-    if (typeof initRetrospectiva === "function") {
-      initRetrospectiva();
-    }
-  }
+    const vindoDaPontaParaPonta = Math.abs(indexAlvo - ultimoIndex) > 1;
 
-  const btnLogin = document.getElementById("btnLogin");
-  if (btnLogin) {
-    btnLogin.style.display = (pagina === "ponto") ? "block" : "none";
-  }
+    if (vindoDaPontaParaPonta) {
+        track.style.transition = "none";
+        
+        if (ultimoIndex === 2 && indexAlvo === 0) {
+            track.appendChild(track.firstElementChild); 
+            track.style.transform = "translateX(-100vw)";
+        } else if (ultimoIndex === 0 && indexAlvo === 2) {
+            track.insertBefore(track.lastElementChild, track.firstChild);
+            track.style.transform = "translateX(-100vw)";
+        }
+
+        track.offsetHeight; 
+
+        track.style.transition = "transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)";
+        track.style.transform = (ultimoIndex === 2) ? "translateX(-200vw)" : "translateX(0vw)";
+        
+        setTimeout(() => {
+            track.style.transition = "none";
+            const p = track.querySelector('.programacao');
+            const pt = track.querySelector('.point');
+            const r = track.querySelector('.retrospectiva');
+            track.appendChild(p);
+            track.appendChild(pt);
+            track.appendChild(r);
+            track.style.transform = `translateX(-${indexAlvo * 100}vw)`;
+        }, 600);
+
+    } else {
+        track.style.transition = "transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)";
+        track.style.transform = `translateX(-${indexAlvo * 100}vw)`;
+    }
+
+    ultimoIndex = indexAlvo;
+
+    const paginas = document.querySelectorAll(".pagina");
+    paginas.forEach(p => p.classList.remove("active"));
+    
+    const paginaAlvo = document.getElementById(pagina);
+    if (paginaAlvo) paginaAlvo.classList.add("active");
+
+    document.querySelectorAll(".nav-bottom button").forEach(btn => btn.classList.remove("active"));
+
+    let botaoId = "";
+    if (pagina === "programacao") botaoId = "btnProgramacao";
+    else if (pagina === "ponto") botaoId = "btnPonto";
+    else if (pagina === "retrospectiva") botaoId = "btnRetrospectiva";
+
+    const botao = document.getElementById(botaoId);
+    if (botao) {
+        botao.classList.add("active");
+        const titulo = document.getElementById("titulo-topo");
+        if (titulo) {
+            const span = botao.querySelector("span");
+            if (span) titulo.innerText = span.innerText;
+        }
+    }
+
+    if (pagina === "retrospectiva" && typeof initRetrospectiva === "function") {
+        initRetrospectiva();
+    }
+
+    const btnLogin = document.getElementById("btnLogin");
+    if (btnLogin) {
+        btnLogin.style.display = (pagina === "ponto") ? "block" : "none";
+    }
 }
 
 window.onload = function() {
@@ -114,3 +154,8 @@ window.addEventListener("DOMContentLoaded", async () => {
     };
   }
 });
+
+
+
+
+
