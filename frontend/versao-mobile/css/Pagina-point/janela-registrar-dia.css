@@ -110,6 +110,14 @@
   cursor: pointer;
 }
 
+.remover-amigo {
+  background: transparent;
+  border: none;
+  color: #000000;
+  font-size: 16px;
+  cursor: pointer;
+}
+
 #inputAmigos {
   width: 100%;
   padding: 14px;

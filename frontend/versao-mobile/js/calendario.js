@@ -26,11 +26,11 @@
   return "encerrado";
 }
 
-  function renderizarCalendario() {
+function renderizarCalendario() {
   const containerDias = document.getElementById("dias");
   const labelMes = document.getElementById("Mes");
 
-  if(!containerDias) return;
+  if (!containerDias) return;
   containerDias.innerHTML = "";
   labelMes.innerText = nomesMeses[mesAtual];
 
@@ -39,11 +39,16 @@
   let totalDias = new Date(ano, mesReal + 1, 0).getDate();
 
   let usuario = getUsuarioLogado();
-  let registros = [];
+  let registros = JSON.parse(localStorage.getItem("registros")) || [];
 
-  if (usuario) {
-    let chave = "registros_" + usuario.usuario;
-    registros = JSON.parse(localStorage.getItem(chave)) || [];
+  if (usuario && usuario.usuario) {
+    const email = usuario.usuario.toLowerCase().trim();
+    registros = registros.filter(r =>
+      r && r.usuario && r.data &&
+      r.usuario.toLowerCase().trim() === email
+    );
+  } else {
+    registros = [];
   }
 
   for (let i = 0; i < primeiroDia; i++) {
@@ -56,7 +61,12 @@
     flag.innerText = dia;
 
     let status = obterStatus(mesAtual, dia);
-    let jaRegistrado = registros.some(r => r.dia === dia && r.mes === mesAtual);
+
+    let dataFormatada = `${ano}-${String(mesReal + 1).padStart(2, "0")}-${String(dia).padStart(2, "0")}`;
+
+    let jaRegistrado = registros.some(r => r.data === dataFormatada);
+
+    flag.classList.remove("disponivel", "bloqueado", "encerrado", "fora");
 
     if (jaRegistrado) {
       flag.classList.add("encerrado");
@@ -65,11 +75,10 @@
     }
 
     flag.onclick = () => {
-      if (jaRegistrado && status === "disponivel") {
-        alert("Você já registrou esse dia!");
+      if (jaRegistrado) {
+        abrirJanelaEncerrado();
         return;
       }
-      if (jaRegistrado) return;
 
       if (status === "disponivel") {
         if (!usuarioLogado()) {
@@ -84,6 +93,7 @@
         abrirJanelaBloqueado();
       }
     };
+
     containerDias.appendChild(flag);
   }
 }

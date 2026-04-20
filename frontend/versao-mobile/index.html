@@ -105,22 +105,41 @@
 
 <!-- página retrospectiva -->
 <div class="pagina" id="retrospectiva">
-
-  <!-- BLOQUEADO -->
-  <div id="retroBloqueado" class="retro-lock">
-    <i class="fa-solid fa-lock"></i>
-    <p class="sub">
-      Disponível em
-    </p>
-    <div class="contador" id="contadorRetro">
-      Carregando...
-    </div>
+  
+  <!-- LOGAR PARA VER RETROSPECTIVA -->
+  <div id="retroNaoLogado" class="retro-lock hidden">
+      <i class="fa-solid fa-user-lock"></i>
+      
+      <h2>Sua retrospectiva estará aqui!</h2>
+      
+      <p class="sub">
+        Faça login para registrar seus momentos e garantir sua retrospectiva exclusiva ao final do maior são joão do mundo.
+      </p>
+      
+      <button onclick="abrirLoginCadastro()" class="btn-retro">
+        Entrar
+      </button>
   </div>
 
-  <!-- BOTÃO -->
-  <button id="btnAbrirRetro" class="btn-retro" style="display:none;">
-    Acessar minha retrospectiva  
-  </button>
+  <!-- CRONOMETRO PARA LIBERAÇÃO DA RESTROPECTIVA -->
+  <div id="retroBloqueado" class="retro-lock">
+        <i class="fa-solid fa-lock"></i>
+        <p class="sub"> Disponível em </p>
+        <div class="contador" id="contadorRetro"> Carregando... </div>
+  </div>
+
+
+  <!--  BOTÃO DISPONIVEL PARA ACESSAR -->
+  <div id="containerAcessoRetro" class="retro-lock" style="display:none;">
+      <i class="fa-solid fa-star"></i>
+      
+      <h2>Sua retrospectiva está pronta!</h2>
+      <p class="sub">VEJA O RESUMO DOS SEUS MOMENTOS NO MAIOR E MELHOR SÃO JOÃO DO MUNDO</p>
+      
+      <button id="btnAbrirRetro" class="btn-retro">
+        ACESSAR MINHA RETROSPECTIVA
+      </button>
+  </div>
 
   <!-- STORIES -->
   <div id="retroStories" class="retro-stories hidden">

@@ -70,6 +70,28 @@ async function fazerLogin() {
     return; 
   }
 
+  const DEV = true;
+
+  //  FAKE GENTE É PARA TESTER SEM BEACKEND PQ TA FODA
+  if (DEV && emailInput === "teste@gmail.com" && senhaInput === "111111") {
+    sessionStorage.setItem("token", "fake-token");
+    sessionStorage.setItem("role", "ADMIN");
+
+    localStorage.setItem("usuarioLogado", JSON.stringify({
+      usuario: emailInput,
+      email: emailInput
+    }));
+
+    fecharLoginCadastro();
+    definirLogado(true);
+    await carregarDiasDisponiveis();
+    irParaDiaAtual();
+    renderizarProgramacao();
+    renderizarCalendario();
+
+    return; 
+  }
+
   try {
     const res = await fetch(`${API_URL}/auth/login`, {
       method: "POST",
@@ -91,8 +113,6 @@ async function fazerLogin() {
         email: emailInput
       }));
 
-      
-
       fecharLoginCadastro();
       definirLogado(true);
       await carregarDiasDisponiveis();
@@ -102,14 +122,14 @@ async function fazerLogin() {
 
     } else {
       const data = await res.json();
-      alert("Erro: " + data.message);
+      alert("Erro: " + (data.message || "Falha no login"));
     }
 
   } catch (e) {
+    console.error(e);
     alert("Erro ao conectar com o servidor.");
   }
 }
-
 function loginComGoogle() {
     google.accounts.id.initialize({
         client_id: "24281345430-ctit3iu4en7otpu2kjfakopamsf9pclf.apps.googleusercontent.com",
@@ -173,6 +193,10 @@ function definirLogado(estado) {
   const botao = document.getElementById("btnLogin");
   botao.dataset.logged = estado;
   botao.innerText = estado ? "Sair" : "Entrar";
+
+  if (document.getElementById("retrospectiva").classList.contains("active")) {
+      initRetrospectiva();
+  }
 
   if (!estado) {
     localStorage.removeItem("usuarioLogado");

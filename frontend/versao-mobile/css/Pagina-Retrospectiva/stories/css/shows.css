@@ -1,5 +1,5 @@
 .bg-shows {
-  background-image: url('/frontend/versao-mobile/css/Pagina-Retrospectiva/stories/css/imagens/showaz.png'); 
+  background-image: url('./imagens/showaz.png'); 
   background-size: cover;      
   background-position: center;
   background-repeat: no-repeat;

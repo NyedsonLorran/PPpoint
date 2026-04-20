@@ -9,7 +9,7 @@ const API_URL = ["localhost", "127.0.0.1"].includes(window.location.hostname) ? 
 const nomesMeses = ["Jun", "Jul"];
 let mesAtual = 0; 
 const ano = 2026;
-const agoraFixo = new Date(2026, 5, 6, 17, 0, 0); //  para testes
+const agoraFixo = new Date(2026, 6, 6, 17, 0, 0); //  para testes
 let diaSelecionado = null;
 let streamRecurso = null;
 let fotoCapturada = null;  
@@ -38,49 +38,45 @@ function eventoFinalizado() {
 }
 
 function mostrarPagina(pagina) {
+  const paginas = document.querySelectorAll(".pagina");
+  paginas.forEach(p => p.classList.remove("active"));
   
-  // troca de página
-  document.querySelectorAll(".pagina").forEach(p => p.classList.remove("active"));
-  document.getElementById(pagina).classList.add("active");
-
-  // botão ativo
-  document.querySelectorAll(".nav-bottom button").forEach(btn => btn.classList.remove("active"));
-
-  let botao;
-  if (pagina === "programacao") {
-    botao = document.getElementById("btnProgramacao");
-  } 
-  else if (pagina === "ponto") {
-    botao = document.getElementById("btnPonto");
-  } 
-  else if (pagina === "retrospectiva") {
-    botao = document.getElementById("btnRetrospectiva");
-
-    initRetrospectiva(); 
+  const paginaAlvo = document.getElementById(pagina);
+  if (paginaAlvo) {
+    paginaAlvo.classList.add("active");
   }
 
-  if (botao) botao.classList.add("active");
+  document.querySelectorAll(".nav-bottom button").forEach(btn => btn.classList.remove("active"));
 
-  // fundo
-  document.body.classList.remove("fundo-programacao","fundo-ponto","fundo-retro");
+  let botaoId = "";
+  if (pagina === "programacao") botaoId = "btnProgramacao";
+  else if (pagina === "ponto") botaoId = "btnPonto";
+  else if (pagina === "retrospectiva") botaoId = "btnRetrospectiva";
+
+  const botao = document.getElementById(botaoId);
+  if (botao) {
+    botao.classList.add("active");
+    
+    const titulo = document.getElementById("titulo-topo");
+    if (titulo) {
+      const span = botao.querySelector("span");
+      if (span) titulo.innerText = span.innerText;
+    }
+  }
+
+  document.body.classList.remove("fundo-programacao", "fundo-ponto", "fundo-retro");
   if (pagina === "programacao") document.body.classList.add("fundo-programacao");
   if (pagina === "ponto") document.body.classList.add("fundo-ponto");
-  if (pagina === "retrospectiva") document.body.classList.add("fundo-retro");
-
-  // TÍTULO NO TOPO
-  const titulo = document.getElementById("titulo-topo");
-  if (botao && titulo) {
-    titulo.innerText = botao.querySelector("span").innerText;
+  if (pagina === "retrospectiva") {
+    document.body.classList.add("fundo-retro");
+    if (typeof initRetrospectiva === "function") {
+      initRetrospectiva();
+    }
   }
 
   const btnLogin = document.getElementById("btnLogin");
-
   if (btnLogin) {
-    if (pagina === "ponto") {
-      btnLogin.style.display = "block"; 
-    } else {
-      btnLogin.style.display = "none";
-    }
+    btnLogin.style.display = (pagina === "ponto") ? "block" : "none";
   }
 }
 

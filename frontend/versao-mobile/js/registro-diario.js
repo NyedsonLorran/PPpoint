@@ -7,25 +7,36 @@ window.addEventListener("DOMContentLoaded", () => {
 
   if (!inputAmigos) return;
 
-  inputAmigos.addEventListener("keydown", function(e) {
-    if (e.key === "Enter") {
+  inputAmigos.value = "@";
+
+  inputAmigos.addEventListener("input", function () {
+    let valor = this.value;
+
+    valor = valor.replace(/@/g, "");
+
+    this.value = "@" + valor;
+  });
+
+  inputAmigos.addEventListener("keydown", function (e) {
+    if (e.key === "Enter" || e.key === " ") {
       e.preventDefault();
 
-      let valor = inputAmigos.value.trim();
+      let valor = this.value.replace(/@/g, "").trim();
 
-      if (!valor.startsWith("@")) {
-        alert("Digite no formato @usuario");
-        return;
-      }
+      if (!valor) return;
+
+      valor = "@" + valor;
 
       if (amigosSelecionados.includes(valor)) {
-        inputAmigos.value = "";
+        this.value = "@";
         return;
       }
 
       amigosSelecionados.push(valor);
       renderizarAmigos();
-      inputAmigos.value = "";
+
+      // 🔥 volta pro estado inicial correto
+      this.value = "@";
     }
   });
 });
@@ -287,7 +298,18 @@ function capturarFoto() {
 
   const imagem = canvas.toDataURL("image/png");
 
+  // 🔥 salva foto
   fotoCapturada = imagem;
+
+  // 🔥 mostra preview
+  const preview = document.getElementById("previewFoto");
+  if (preview) {
+    preview.src = imagem;
+    preview.style.display = "block";
+  }
+
+  // 🔥 fecha câmera automaticamente
+  fecharCamera();
 }
 
 function fecharCamera() {
