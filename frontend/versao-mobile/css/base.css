@@ -42,17 +42,17 @@ body {
 
 
 .fundo-item.programacao {
-  background-image: url('/frontend/versao-mobile/css/imagens/progamacao.jpg');
+  background-image: url('./imagens/progamacao.jpg');
   background-position: center -60px;
 }
 
 .fundo-item.point {
-  background-image: url('/frontend/versao-mobile/css/imagens/point.jpg');
+  background-image: url('./imagens/point.jpg');
   background-position: center -60px;
 }
 
 .fundo-item.retrospectiva {
-  background-image: url('/frontend/versao-mobile/css/imagens/retrospectiva.jpg');
+  background-image: url('./imagens/retrospectiva.jpg');
   background-position: center -60px;
 }
 
