@@ -13,8 +13,9 @@ const ano = 2026;
 const agoraFixo = new Date(2026, 5, 6, 17, 0, 0); //  para testes
 let diaSelecionado = null;
 let streamRecurso = null;
-let fotoCapturada = null;
-let ultimoIndex = 1; 
+let fotoCapturada = null;  
+let ultimoIndex = 1;
+
 const ordemPaginas = {
     "programacao": 0,
     "ponto": 1,

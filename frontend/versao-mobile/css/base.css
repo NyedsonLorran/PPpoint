@@ -42,18 +42,18 @@ body {
 
 
 .fundo-item.programacao {
-  background-image: url('/frontend/versao-mobile/css/imagens/prog.jpg');
-  background-position: center -45px;
+  background-image: url('/frontend/versao-mobile/css/imagens/progamacao.jpg');
+  background-position: center -60px;
 }
 
 .fundo-item.point {
   background-image: url('/frontend/versao-mobile/css/imagens/point.jpg');
-  background-position: center -45px;
+  background-position: center -60px;
 }
 
 .fundo-item.retrospectiva {
-  background-image: url('/frontend/versao-mobile/css/imagens/retro.jpg');
-  background-position: center -45px;
+  background-image: url('/frontend/versao-mobile/css/imagens/retrospectiva.jpg');
+  background-position: center -60px;
 }
 
 .nav-bottom {
