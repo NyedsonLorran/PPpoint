@@ -60,7 +60,7 @@ async function abrirJanelaRegistrarDia() {
   const areaCam = document.getElementById("areaCamera");
   if (usuario && areaCam) {
     const registros = JSON.parse(localStorage.getItem("registros_" + usuario.usuario)) || [];
-    areaCam.style.display = (registros.length === 0) ? "block" : "none";
+    areaCam.style.display = "block";
   }
   await carregarDadosFormulario(); 
   carregarSugestoesAmigos();
@@ -332,19 +332,34 @@ function fecharCamera() {
   document.getElementById("janela-registrar-dia").style.display = "flex";
 }
 
+let enviandoRegistro = false;
+
 async function enviarRegistro() {
+  if (enviandoRegistro) return;
+  enviandoRegistro = true;
+
   let user = getUsuarioLogado();
   const token = sessionStorage.getItem("token");
 
+  const botao = document.getElementById("btnEnviarRegistro");
+  const texto = botao?.querySelector(".texto-btn");
+  const loader = botao?.querySelector(".loader");
+
   if (!user || !token) {
     alert("Você precisa estar logado para registrar o dia!");
+    enviandoRegistro = false;
     return;
+  }
+
+  if (botao && texto && loader) {
+    botao.disabled = true;
+    texto.style.display = "none";
+    loader.style.display = "inline-block";
   }
 
   const payload = {
     data: formatarData(),
     acompanhanteInsta: (() => {
-      // pega o que está no array + o que ainda está digitado no campo
       const digitado = document.getElementById("inputAmigos")?.value?.replace(/@/g, "").trim();
       const todos = [...amigosSelecionados];
       if (digitado) todos.push("@" + digitado);
@@ -365,12 +380,28 @@ async function enviarRegistro() {
       body: JSON.stringify(payload)
     });
 
-    if (resposta.status === 409) {
-      alert("Você já registrou esse dia!");
-      return;
-    }
+  if (resposta.status === 409) {
+  alert("Você já registrou esse dia!");
+
+  if (botao && texto && loader) {
+    botao.disabled = false;
+    texto.style.display = "inline";
+    loader.style.display = "none";
+  }
+
+  enviandoRegistro = false;
+  return;
+}
 
     if (!resposta.ok) throw new Error();
+
+    let chave = "registros_" + user.usuario;
+    let registros = JSON.parse(localStorage.getItem(chave)) || [];
+
+    if (!registros.some(r => r.data === payload.data)) {
+      registros.push({ data: payload.data });
+      localStorage.setItem(chave, JSON.stringify(registros));
+    }
 
     alert("Dia registrado com sucesso!");
     fecharJanelaRegistrarDia();
@@ -379,6 +410,15 @@ async function enviarRegistro() {
   } catch (e) {
     console.error(e);
     alert("Erro ao registrar o dia.");
+
+    if (botao && texto && loader) {
+      botao.disabled = false;
+      texto.style.display = "inline";
+      loader.style.display = "none";
+    }
+
+  } finally {
+    enviandoRegistro = false;
   }
 }
 

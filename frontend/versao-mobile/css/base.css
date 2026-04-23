@@ -46,18 +46,18 @@ body {
 }
 
 .fundo-item.programacao {
-  background-image: url('./imagens/progamacao.jpg');
-  background-position: center -60px;
+  background-image: url('./imagens/S.jpg');
+  background-position: center -65px;
 }
 
 .fundo-item.point {
-  background-image: url('./imagens/point.jpg');
-  background-position: center -60px;
+  background-image: url('./imagens/R.jpg');
+  background-position: center -65px;
 }
 
 .fundo-item.retrospectiva {
-  background-image: url('./imagens/retrospectiva.jpg');
-  background-position: center -60px;
+  background-image: url('./imagens/M.jpg');
+  background-position: center -65px;
 }
 
 .nav-bottom {

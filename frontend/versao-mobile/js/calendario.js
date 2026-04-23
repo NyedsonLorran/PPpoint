@@ -39,8 +39,11 @@ function renderizarCalendario() {
   let totalDias = new Date(ano, mesReal + 1, 0).getDate();
 
   let usuario = getUsuarioLogado();
-  let registros = JSON.parse(localStorage.getItem("registros")) || [];
+  let registros = [];
 
+  if (usuario && usuario.usuario) {
+    registros = JSON.parse(localStorage.getItem("registros_" + usuario.usuario)) || [];
+  }
   if (usuario && usuario.usuario) {
     const email = usuario.usuario.toLowerCase().trim();
     registros = registros.filter(r =>
