@@ -1,9 +1,16 @@
 // Busca os nomes dos cantores do dia selecionado para o formulário de registro
 async function getProgramacaoPorDia(dia, mes) {
-  const mesReal = mes === 0 ? 5 : 6; // mesAtual 0=Jun(5), 1=Jul(6)
+  const mesReal = mes === 0 ? 5 : 6;
   const dataIso = `${ano}-${String(mesReal + 1).padStart(2,'0')}-${String(dia).padStart(2,'0')}`;
   const dados = await buscarProgramacaoDoDia(dataIso);
   return dados.map(s => s.nome || "Artista");
+}
+
+// Retorna dados completos (com cantorId) para o formulário de registro
+async function getShowsCompletosParaRegistro(dia, mes) {
+  const mesReal = mes === 0 ? 5 : 6;
+  const dataIso = `${ano}-${String(mesReal + 1).padStart(2,'0')}-${String(dia).padStart(2,'0')}`;
+  return await buscarProgramacaoDoDia(dataIso); // [{ cantorId, nome, foto, horario }]
 }
 
 function atualizarProgramacao() {

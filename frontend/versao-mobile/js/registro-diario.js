@@ -147,7 +147,7 @@ async function getEstruturaBebidas() {
 }
 
 async function carregarDadosFormulario() {
-  let shows = await getProgramacaoPorDia(diaSelecionado, mesAtual);
+  let shows = await getShowsCompletosParaRegistro(diaSelecionado, mesAtual);
   let estrutura = await getEstruturaBebidas();
   const containerNotas = document.getElementById("notasShows");
   const containerBebidas = document.getElementById("listaBebidas");
@@ -159,7 +159,8 @@ async function carregarDadosFormulario() {
   shows.forEach(show => {
     const div = document.createElement("div");
     div.classList.add("item");
-    div.innerHTML = `<p class="nome-show" style="margin-top:15px; margin-bottom:5px;">${show}</p><div class="notaShow-container"></div>`;
+    div.dataset.cantorId = show.cantorId; // guarda cantorId para coletar depois
+    div.innerHTML = `<p class="nome-show" style="margin-top:15px; margin-bottom:5px;">${show.nome || "Artista"}</p><div class="notaShow-container"></div>`;
     const cont = div.querySelector(".notaShow-container");
 
     for (let i = 1; i <= 5; i++) {
@@ -234,23 +235,17 @@ async function carregarDadosFormulario() {
 
 function coletarBebidas() {
   const inputs = document.querySelectorAll(".bebidaQtd");
-  let bebidas = [];
+  let consumo = {};
 
   inputs.forEach(input => {
     const qtd = parseInt(input.value);
-
     if (qtd > 0) {
-      const nome = input.closest(".card-bebida")
-        .querySelector(".nome-bebida").innerText;
-
-      bebidas.push({
-        nome: nome,
-        quantidade: qtd
-      });
+      const bebidaId = input.id.replace("qtd-", "");
+      consumo[bebidaId] = qtd;
     }
   });
 
-  return bebidas;
+  return consumo; // { "uuid-bebida": quantidade }
 }
 
 async function ativarCamera() {
@@ -339,41 +334,51 @@ function fecharCamera() {
 
 async function enviarRegistro() {
   let user = getUsuarioLogado();
+  const token = sessionStorage.getItem("token");
 
-  if (!user) {
-    alert("Usuário não logado");
+  if (!user || !token) {
+    alert("Você precisa estar logado para registrar o dia!");
     return;
   }
 
   const payload = {
-    usuario: user.usuario,
     data: formatarData(),
-    amigos: amigosSelecionados || [],
-    notasShows: coletarNotasShows() || [],
-    bebidas: coletarBebidas() || [],
-    foto: fotoCapturada || null
+    acompanhanteInsta: (() => {
+      // pega o que está no array + o que ainda está digitado no campo
+      const digitado = document.getElementById("inputAmigos")?.value?.replace(/@/g, "").trim();
+      const todos = [...amigosSelecionados];
+      if (digitado) todos.push("@" + digitado);
+      return todos.length > 0 ? todos.join(", ") : null;
+    })(),
+    fotoBase64: fotoCapturada || null,
+    consumo: coletarBebidas(),
+    avaliacoes: coletarNotasShows()
   };
 
-  console.log("ENVIANDO:", payload);
-
   try { 
-    const resposta = await fetch(`${API_URL}/api/registros-diarios`, {
+    const resposta = await fetch(`${API_URL}/registros`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
       },
       body: JSON.stringify(payload)
     });
 
+    if (resposta.status === 409) {
+      alert("Você já registrou esse dia!");
+      return;
+    }
+
     if (!resposta.ok) throw new Error();
 
-    alert("Registro enviado com sucesso!");
+    alert("Dia registrado com sucesso!");
     fecharJanelaRegistrarDia();
     renderizarCalendario();
 
   } catch (e) {
     console.error(e);
-    alert("Erro ao enviar");
+    alert("Erro ao registrar o dia.");
   }
 }
 
@@ -398,11 +403,11 @@ function coletarNotasShows() {
   let notas = [];
 
   itens.forEach(item => {
-    const nome = item.querySelector(".nome-show").innerText;
+    const cantorId = item.dataset.cantorId;
     const nota = parseFloat(item.dataset.nota || 0);
 
-    if (nota > 0) {
-      notas.push({ show: nome, nota: nota });
+    if (nota > 0 && cantorId) {
+      notas.push({ cantorId, nota });
     }
   });
 
