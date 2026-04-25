@@ -110,13 +110,13 @@ function liberarRetro() {
 
 function montarSlides() {
   slides = [
-    "./css/Pagina-Retrospectiva/stories/html/intro.html",
-    "./css/Pagina-Retrospectiva/stories/html/dias.html",
-    "./css/Pagina-Retrospectiva/stories/html/midias.html",
-    "./css/Pagina-Retrospectiva/stories/html/amigos.html",
-    "./css/Pagina-Retrospectiva/stories/html/bebidas.html",
-    "./css/Pagina-Retrospectiva/stories/html/shows.html",
-    "./css/Pagina-Retrospectiva/stories/html/resumo.html"
+    "/frontend/versao-mobile/css/Pagina-Retrospectiva/stories/html/intro.html",
+    "/frontend/versao-mobile/css/Pagina-Retrospectiva/stories/html/dias.html",
+    "/frontend/versao-mobile/css/Pagina-Retrospectiva/stories/html/midias.html",
+    "/frontend/versao-mobile/css/Pagina-Retrospectiva/stories/html/amigos.html",
+    "/frontend/versao-mobile/css/Pagina-Retrospectiva/stories/html/bebidas.html",
+    "/frontend/versao-mobile/css/Pagina-Retrospectiva/stories/html/shows.html",
+    "/frontend/versao-mobile/css/Pagina-Retrospectiva/stories/html/resumo.html"
   ];
 }
 

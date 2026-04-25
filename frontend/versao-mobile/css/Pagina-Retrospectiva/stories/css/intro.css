@@ -1,10 +1,10 @@
 
 .bg-intro {
-  background-image: url('./imagens/testeintro.png'); 
+  background-image: url('./imagens/testeintro1.png');
   background-size: cover;      
   background-repeat: no-repeat;
   background-position: center;
-  background-position: center -15px;
+  background-position: center -40px;
 }
 
 .bg-intro h1 {
