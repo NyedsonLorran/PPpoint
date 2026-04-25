@@ -47,17 +47,17 @@ body {
 
 .fundo-item.programacao {
   background-image: url('./imagens/003.jpg');
-  background-position: center -65px;
+  background-position: center -60px;
 }
 
 .fundo-item.point {
   background-image: url('./imagens/001.jpg');
-  background-position: center -65px;
+  background-position: center -60px;
 }
 
 .fundo-item.retrospectiva {
   background-image: url('./imagens/002.jpg');
-  background-position: center -65px;
+  background-position: center -60px;
 }
 
 .nav-bottom {

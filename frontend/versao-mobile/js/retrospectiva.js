@@ -39,7 +39,6 @@ function initRetrospectiva() {
     }
 }
 
-
 function renderizarExplicacaoPublica() {
   const container = document.getElementById("retro-container-dinamico");
   container.innerHTML = `
@@ -120,6 +119,7 @@ function montarSlides() {
     "./css/Pagina-Retrospectiva/stories/html/resumo.html"
   ];
 }
+
 async function abrirRetrospectiva() {
   const el = document.getElementById("retroStories");
   if (!el) return;
