@@ -1,11 +1,9 @@
 
 .bg-resumo {
-  background-image: url('./imagens/fundostories.png');
+  background-image: url('./imagens/resumo.png');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
 }
 
-.bg-resumo .retro-card {
-  color: #f5f5f5;
-}
+

@@ -251,15 +251,13 @@ function compartilharInstagram() {
 
   html2canvas(el, {
     backgroundColor: null,
-    scale: window.devicePixelRatio * 4, 
+    scale: 3,
     useCORS: true,
     allowTaint: true,
-    width,
-    height,
+    width: width,
+    height: height,
     windowWidth: width,
-    windowHeight: height,
-    imageTimeout: 0,
-    logging: false
+    windowHeight: height
   }).then(canvas => {
 
     canvas.toBlob((blob) => {
@@ -272,7 +270,7 @@ function compartilharInstagram() {
         });
       } else {
         const link = document.createElement("a");
-        link.href = URL.createObjectURL(blob);
+        link.href = URL.createObjectURL(blob); 
         link.download = "story.png";
         link.click();
       }
