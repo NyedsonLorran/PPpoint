@@ -111,13 +111,13 @@ function liberarRetro() {
 
 function montarSlides() {
   slides = [
-    "/frontend/versao-mobile/css/Pagina-Retrospectiva/stories/html/intro.html",
-    "/frontend/versao-mobile/css/Pagina-Retrospectiva/stories/html/dias.html",
-    "/frontend/versao-mobile/css/Pagina-Retrospectiva/stories/html/midias.html",
-    "/frontend/versao-mobile/css/Pagina-Retrospectiva/stories/html/amigos.html",
-    "/frontend/versao-mobile/css/Pagina-Retrospectiva/stories/html/bebidas.html",
-    "/frontend/versao-mobile/css/Pagina-Retrospectiva/stories/html/shows.html",
-    "/frontend/versao-mobile/css/Pagina-Retrospectiva/stories/html/resumo.html"
+    "./css/Pagina-Retrospectiva/stories/html/intro.html",
+    "./css/Pagina-Retrospectiva/stories/html/dias.html",
+    "./css/Pagina-Retrospectiva/stories/html/midias.html",
+    "./css/Pagina-Retrospectiva/stories/html/amigos.html",
+    "./css/Pagina-Retrospectiva/stories/html/bebidas.html",
+    "./css/Pagina-Retrospectiva/stories/html/shows.html",
+    "./css/Pagina-Retrospectiva/stories/html/resumo.html"
   ];
 }
 async function abrirRetrospectiva() {
@@ -154,7 +154,7 @@ async function renderizarSlide() {
     const html = await res.text();
     container.innerHTML = html;
   } catch (e) {
-    container.innerHTML = `<div class="retro-slide">Erro ao carregar slide</div>`;
+    container.innerHTML = `<div class="retro-slide">Erro ao carregar stories</div>`;
   }
 
   atualizarBarras();
