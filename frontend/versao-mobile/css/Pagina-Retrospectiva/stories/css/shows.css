@@ -1,9 +1,13 @@
+.retro-slide {
+  width: 100%;
+  height: 100dvh;
+}
+
 .bg-shows {
-  background-image: url('./imagens/show.png'); 
-  background-size: cover;      
+  background-image: url('./imagens/show.png');
+  background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  
 }
 
 .bg-shows .retro-card {
