@@ -246,11 +246,20 @@ function compartilharInstagram() {
   const el = document.getElementById("slideContainer");
   if (!el) return;
 
+  const width = 1080;
+  const height = 1920;
+
   html2canvas(el, {
     backgroundColor: null,
-    scale: 2,
-    useCORS: true
+    scale: 3,
+    useCORS: true,
+    allowTaint: true,
+    width: width,
+    height: height,
+    windowWidth: width,
+    windowHeight: height
   }).then(canvas => {
+
     canvas.toBlob((blob) => {
       const file = new File([blob], "story.png", { type: "image/png" });
 
@@ -261,11 +270,13 @@ function compartilharInstagram() {
         });
       } else {
         const link = document.createElement("a");
-        link.href = canvas.toDataURL("image/png");
+        link.href = URL.createObjectURL(blob); 
         link.download = "story.png";
         link.click();
       }
-    });
+
+    }, "image/png", 1);
+
   });
 }
 
