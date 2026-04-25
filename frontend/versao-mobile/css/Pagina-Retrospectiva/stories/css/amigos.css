@@ -1,7 +1,11 @@
+
 .bg-amigos {
-  background: #ebad05;
+  background-image: url('./imagens/fundostories.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .bg-amigos .retro-card {
-  color: #000000;
+  color: #f5f5f5;
 }

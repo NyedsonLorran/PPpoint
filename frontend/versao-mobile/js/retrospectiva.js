@@ -228,7 +228,14 @@ function atualizarBotaoCompartilhar() {
   const btn = document.getElementById("btnCompartilhar");
   if (!btn) return;
 
-  btn.style.display = "block";
+  if (slideAtual >= 1) {
+    btn.classList.remove("hidden");
+    btn.style.display = "block";
+  } else {
+    btn.classList.add("hidden");
+    btn.style.display = "none";
+  }
+
   btn.onclick = (e) => {
     e.stopPropagation();
     compartilharInstagram();
