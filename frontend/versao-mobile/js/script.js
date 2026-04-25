@@ -10,7 +10,7 @@ const nomesMeses = ["Jun", "Jul"];
 let mesAtual = 0; 
 const ano = 2026;
                         //  A   M   D  H   M  S 
-const agoraFixo = new Date(2026, 5, 20, 17, 0, 0); //  para testes
+const agoraFixo = new Date(2026, 6, 6, 17, 0, 0); //  para testes
 let diaSelecionado = null;
 let streamRecurso = null;
 let fotoCapturada = null;  

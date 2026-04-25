@@ -1,7 +1,12 @@
 
 .bg-intro {
-    background-color: #611111;
+  background-image: url('./imagens/testeintro.png'); 
+  background-size: cover;      
+  background-repeat: no-repeat;
+  background-position: center -20px;
+
 }
+
 .bg-intro h1 {
   font-size: 3rem;
   color: #fff;
