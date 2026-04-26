@@ -135,6 +135,10 @@ function loginComGoogle() {
         if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
 
           const container = document.getElementById("google-btn-container");
+          const btnGoogle = document.querySelector(".btn-google");
+
+          if (btnGoogle) { btnGoogle.style.display = "none"; }
+
           if (container) {
             container.style.display = "block";
             google.accounts.id.renderButton(container, {
