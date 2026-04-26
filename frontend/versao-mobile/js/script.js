@@ -1,10 +1,8 @@
 // Substituir https://backenddeploy.com pela url real quando em produção
-const DEV_ORIGINS = [
-    "localhost",
-    "127.0.0.1",
-];
-
-const API_URL = ["localhost", "127.0.0.1"].includes(window.location.hostname) ? "http://localhost:8080" : "https://backenddeploy.com";
+const DEV_ORIGINS = ["localhost", "127.0.0.1"];
+const API_URL = DEV_ORIGINS.includes(window.location.hostname) 
+  ? "http://localhost:8080" 
+  : "https://backenddeploy.com";
 
 const nomesMeses = ["Jun", "Jul"];
 let mesAtual = 0; 

@@ -56,35 +56,18 @@ async function registrar() {
       })
     });
 
-    const data = await res.json();
-
     if (res.status === 201) {
-      // pega o nome vindo do backend
-      localStorage.setItem("nomeUsuario", data.username);
-
-      alert("Conta criada com sucesso!");
-      mostrarLogin();
-
-    } else {
-      alert("Erro: " + (data.message || "Erro desconhecido"));
-    }
+            alert("Conta criada com sucesso!");
+            mostrarLogin();
+        } else {
+            const data = await res.json();
+            alert("Erro: " + data.message);
+        }
 
   } catch (e) {
     alert("Erro ao conectar com o servidor.");
   }
 }
-
-document.addEventListener("DOMContentLoaded", () => {
-  const nome = localStorage.getItem("nomeUsuario");
-
-  console.log("NOME DO STORAGE:", nome);
-
-  const el = document.getElementById("nomeUsuario");
-
-  if (el && nome) {
-    el.innerText = `Olá, ${nome}! `;
-  }
-});
 
 async function fazerLogin() {
   const emailInput = document.getElementById("loginUsuario").value;
@@ -92,28 +75,6 @@ async function fazerLogin() {
 
   if (!emailInput || !senhaInput) { 
     alert("Preencha todos os campos!"); 
-    return; 
-  }
-
-  const DEV = true;
-
-  //  FAKE GENTE É PARA TESTER SEM BEACKEND PQ TA FODA
-  if (DEV && emailInput === "teste@gmail.com" && senhaInput === "111111") {
-    sessionStorage.setItem("token", "fake-token");
-    sessionStorage.setItem("role", "ADMIN");
-
-    localStorage.setItem("usuarioLogado", JSON.stringify({
-      usuario: emailInput,
-      email: emailInput
-    }));
-
-    fecharLoginCadastro();
-    definirLogado(true);
-    await carregarDiasDisponiveis();
-    irParaDiaAtual();
-    renderizarProgramacao();
-    renderizarCalendario();
-
     return; 
   }
 
@@ -131,12 +92,19 @@ async function fazerLogin() {
       const data = await res.json();
 
       sessionStorage.setItem("token", data.token);
-      sessionStorage.setItem("role", (data.role || "").toUpperCase());
+      sessionStorage.setItem("role", data.role );
 
       localStorage.setItem("usuarioLogado", JSON.stringify({
         usuario: emailInput,
         email: emailInput
       }));
+
+      /*
+      if (data.role === "ADMIN") {
+          window.location.href = "/frontend/versao-mobile/admin/admin.html";
+          return;
+      }
+      */
 
       fecharLoginCadastro();
       definirLogado(true);
@@ -147,7 +115,7 @@ async function fazerLogin() {
 
     } else {
       const data = await res.json();
-      alert("Erro: " + (data.message || "Falha no login"));
+      alert("Erro: " + (data.message || "Tente novamente"));
     }
 
   } catch (e) {
@@ -155,6 +123,7 @@ async function fazerLogin() {
     alert("Erro ao conectar com o servidor.");
   }
 }
+
 function loginComGoogle() {
     google.accounts.id.initialize({
         client_id: "24281345430-ctit3iu4en7otpu2kjfakopamsf9pclf.apps.googleusercontent.com",
