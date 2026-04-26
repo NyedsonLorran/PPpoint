@@ -125,6 +125,12 @@ async function fazerLogin() {
 }
 
 function loginComGoogle() {
+    const btnGoogle = document.querySelector("btnGoogleLogin");
+    const container = document.getElementById("google-btn-container"); // "novo" botão quando o prompt é bloqueado
+
+    // Esconde o botão ao clicar
+    if (btnGoogle) btnGoogle.style.display = "none";
+    
     google.accounts.id.initialize({
         client_id: "24281345430-ctit3iu4en7otpu2kjfakopamsf9pclf.apps.googleusercontent.com",
         callback: handleGoogleCredential,
@@ -133,12 +139,7 @@ function loginComGoogle() {
 
     google.accounts.id.prompt((notification) => {
         if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-
-          const container = document.getElementById("google-btn-container");
-          const btnGoogle = document.querySelector(".btn-google");
-
-          if (btnGoogle) { btnGoogle.style.display = "none"; }
-
+          // Se o prompt for bloqueado exibe o novo botão
           if (container) {
             container.style.display = "block";
             google.accounts.id.renderButton(container, {
@@ -153,6 +154,9 @@ function loginComGoogle() {
                 { theme: "outline", size: "large", width: 260 }
             );
           */
+        } else {
+            // Se o prompt for exibido normalmente e o usuário fechar sem logar: restaura o botão "antigo"
+            if (btnGoogle) btnGoogle.style.display = "block"
         }
     });
 }
