@@ -128,17 +128,27 @@ function loginComGoogle() {
     google.accounts.id.initialize({
         client_id: "24281345430-ctit3iu4en7otpu2kjfakopamsf9pclf.apps.googleusercontent.com",
         callback: handleGoogleCredential,
-        use_fedcm_for_prompt: true
+        //use_fedcm_for_prompt: true
     });
 
     google.accounts.id.prompt((notification) => {
         if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
 
-            google.accounts.id.renderButton(
+          const container = document.getElementById("google-btn-container");
+          if (container) {
+            container.style.display = "block";
+            google.accounts.id.renderButton(container, {
+              theme: "outline",
+              size: "large",
+              width: 260
+            });
+          }
+          /*
+          google.accounts.id.renderButton(
                 document.getElementById("google-btn-container"),
                 { theme: "outline", size: "large", width: 260 }
             );
-
+          */
         }
     });
 }
