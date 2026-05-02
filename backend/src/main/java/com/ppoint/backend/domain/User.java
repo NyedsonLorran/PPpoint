@@ -23,4 +23,7 @@ public class User {
     private String instagramUser;
     private String provider;
     private String googleId;
+
+    @Column(name = "email_verified", nullable = false)
+    private boolean emailVerified = false;
 }
