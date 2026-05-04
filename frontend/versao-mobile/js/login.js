@@ -1,5 +1,36 @@
+// ─── Auxiliares internos ──────────────────────────────────────────────────────
 
+let _emailPendente = "";
+let _tipoCodigo = "REGISTRO";
 
+function _esconderPaineis() {
+  ["loginForm", "registerForm", "codigoVerificacaoForm",
+   "codigoResetForm", "novaSenhaForm"].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = "none";
+  });
+}
+
+function _finalizarLogin(data, email, nome) {
+  sessionStorage.setItem("token", data.token);
+  sessionStorage.setItem("role", data.role);
+
+  localStorage.setItem("usuarioLogado", JSON.stringify({
+    usuario: email,
+    email:   email,
+    nome:    nome || email
+  }));
+
+  fecharLoginCadastro();
+  definirLogado(true);
+  carregarDiasDisponiveis().then(() => {
+    irParaDiaAtual();
+    renderizarProgramacao();
+  });
+  renderizarCalendario();
+}
+
+// ─── Funções originais + novas ────────────────────────────────────────────────
 
 function usuarioLogado() {
   const btn = document.getElementById("btnLogin");
@@ -11,6 +42,7 @@ function getUsuarioLogado() {
 }
 
 function abrirLoginCadastro() {
+  mostrarLogin();
   document.getElementById("janela-login").style.display = "flex";
 }
 
@@ -19,12 +51,12 @@ function fecharLoginCadastro() {
 }
 
 function mostrarLogin() {
+  _esconderPaineis();
   document.getElementById("loginForm").style.display = "block";
-  document.getElementById("registerForm").style.display = "none";
 }
 
 function mostrarCadastro() {
-  document.getElementById("loginForm").style.display = "none";
+  _esconderPaineis();
   document.getElementById("registerForm").style.display = "block";
 }
 
@@ -56,16 +88,59 @@ async function registrar() {
       })
     });
 
-    if (res.status === 201) {
-            alert("Conta criada com sucesso!");
-            mostrarLogin();
-        } else {
-            const data = await res.json();
-            alert("Erro: " + data.message);
-        }
+    if (res.status === 201 || res.status === 202) {
+      _emailPendente = email;
+      _tipoCodigo = "REGISTRO";
+      _esconderPaineis();
+      document.getElementById("labelEmailCodigo").innerText =
+        `Código enviado para ${email}`;
+      document.getElementById("inputCodigo").value = "";
+      document.getElementById("codigoVerificacaoForm").style.display = "block";
+    } else {
+      const data = await res.json();
+      alert("Erro: " + data.message);
+    }
 
   } catch (e) {
     alert("Erro ao conectar com o servidor.");
+  }
+}
+
+// NOVA — verificação de email após cadastro ou login bloqueado
+async function verificarCodigo() {
+  const codigo = document.getElementById("inputCodigo").value.trim();
+  if (codigo.length !== 6) { alert("Digite o código de 6 dígitos."); return; }
+
+  try {
+    const res = await fetch(`${API_URL}/auth/email-verification`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: _emailPendente, codigo })
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+      _finalizarLogin(data, _emailPendente);
+    } else {
+      alert("Erro: " + (data.message || "Código inválido"));
+    }
+  } catch (e) {
+    alert("Erro ao conectar com o servidor.");
+  }
+}
+
+// NOVA — reenvio de código de verificação de email
+async function reenviarCodigo() {
+  try {
+    await fetch(`${API_URL}/auth/resend-code`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: _emailPendente, tipo: _tipoCodigo })
+    });
+    alert("Código reenviado!");
+  } catch (e) {
+    alert("Erro ao reenviar código.");
   }
 }
 
@@ -90,29 +165,18 @@ async function fazerLogin() {
 
     if (res.ok) {
       const data = await res.json();
-
-      sessionStorage.setItem("token", data.token);
-      sessionStorage.setItem("role", data.role );
-
-      localStorage.setItem("usuarioLogado", JSON.stringify({
-        usuario: emailInput,
-        email: emailInput
-      }));
-
-      /*
-      if (data.role === "ADMIN") {
-          window.location.href = "/frontend/versao-mobile/admin/admin.html";
-          return;
+      _finalizarLogin(data, emailInput);
+    } else if (res.status === 403) {
+      const data = await res.json();
+      if (data.message === "EMAIL_NAO_VERIFICADO") {
+        _emailPendente = data.email || emailInput;
+        _tipoCodigo = "REGISTRO";
+        _esconderPaineis();
+        document.getElementById("labelEmailCodigo").innerText =
+          `Código enviado para ${_emailPendente}`;
+        document.getElementById("inputCodigo").value = "";
+        document.getElementById("codigoVerificacaoForm").style.display = "block";
       }
-      */
-
-      fecharLoginCadastro();
-      definirLogado(true);
-      await carregarDiasDisponiveis();
-      irParaDiaAtual();
-      renderizarProgramacao();
-      renderizarCalendario();
-
     } else {
       const data = await res.json();
       alert("Erro: " + (data.message || "Tente novamente"));
@@ -126,9 +190,8 @@ async function fazerLogin() {
 
 function loginComGoogle() {
     const btnGoogle = document.querySelector("btnGoogleLogin");
-    const container = document.getElementById("google-btn-container"); // "novo" botão quando o prompt é bloqueado
+    const container = document.getElementById("google-btn-container");
 
-    // Esconde o botão ao clicar
     if (btnGoogle) btnGoogle.style.display = "none";
     
     google.accounts.id.initialize({
@@ -139,7 +202,6 @@ function loginComGoogle() {
 
     google.accounts.id.prompt((notification) => {
         if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-          // Se o prompt for bloqueado exibe o novo botão
           if (container) {
             container.style.display = "block";
             google.accounts.id.renderButton(container, {
@@ -148,14 +210,7 @@ function loginComGoogle() {
               width: 260
             });
           }
-          /*
-          google.accounts.id.renderButton(
-                document.getElementById("google-btn-container"),
-                { theme: "outline", size: "large", width: 260 }
-            );
-          */
         } else {
-            // Se o prompt for exibido normalmente e o usuário fechar sem logar: restaura o botão "antigo"
             if (btnGoogle) btnGoogle.style.display = "block"
         }
     });
@@ -174,23 +229,8 @@ async function handleGoogleCredential(response) {
         const data = await res.json(); 
 
         if (res.ok) {
-
-            sessionStorage.setItem("token", data.token);
-            sessionStorage.setItem("role", data.role);
-
             const payload = JSON.parse(atob(idToken.split('.')[1]));
-
-            localStorage.setItem("usuarioLogado", JSON.stringify({
-                usuario: payload.email,
-                email: payload.email,
-                nome: payload.name || payload.email
-            }));
-
-            fecharLoginCadastro();
-            definirLogado(true);
-            renderizarCalendario();
-            renderizarProgramacao();
-
+            _finalizarLogin(data, payload.email, payload.name || payload.email);
         } else {
             alert("Erro no login com Google: " + (data.message || "Tente novamente"));
         }
@@ -254,11 +294,107 @@ function abrirEsqueciSenha() {
   }
 }
 
-function enviarRecuperacao() {
+async function enviarRecuperacao() {
   const email = document.getElementById("emailRecuperacao").value;
   if (!email) { alert("Digite um email válido!"); return; }
-  alert(`Instruções de recuperação enviadas para ${email} `);
-  fecharEsqueciSenha();
+
+  try {
+    const res = await fetch(`${API_URL}/auth/forgot-password`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email })
+    });
+
+    if (res.ok) {
+      _emailPendente = email;
+      fecharEsqueciSenha();
+      document.getElementById("janela-login").style.display = "flex";
+      _esconderPaineis();
+      document.getElementById("labelEmailReset").innerText =
+        `Código enviado para ${email}`;
+      document.getElementById("inputCodigoReset").value = "";
+      document.getElementById("codigoResetForm").style.display = "block";
+    } else {
+      const data = await res.json();
+      alert("Erro: " + (data.message || "Tente novamente"));
+    }
+  } catch (e) {
+    alert("Erro ao conectar com o servidor.");
+  }
+}
+
+// NOVA — verificação do código de reset de senha
+async function verificarCodigoReset() {
+  const codigo = document.getElementById("inputCodigoReset").value.trim();
+  if (codigo.length !== 6) { alert("Digite o código de 6 dígitos."); return; }
+
+  try {
+    const res = await fetch(`${API_URL}/auth/check-reset`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: _emailPendente, codigo })
+    });
+
+    if (res.ok) {
+      document.getElementById("inputCodigoNovaSenha").value = codigo;
+      _esconderPaineis();
+      document.getElementById("novaSenhaForm").style.display = "block";
+    } else {
+      const data = await res.json();
+      alert("Erro: " + (data.message || "Código inválido"));
+    }
+  } catch (e) {
+    alert("Erro ao conectar com o servidor.");
+  }
+}
+
+// NOVA — reenvio do código de reset de senha
+async function reenviarCodigoReset() {
+  try {
+    await fetch(`${API_URL}/auth/resend-code`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: _emailPendente, tipo: "RESET_SENHA" })
+    });
+    alert("Código reenviado!");
+  } catch (e) {
+    alert("Erro ao reenviar código.");
+  }
+}
+
+// NOVA — redefinição da nova senha
+async function redefinirSenha() {
+  const novaSenha      = document.getElementById("inputNovaSenha").value;
+  const confirmarSenha = document.getElementById("inputConfirmarSenha").value;
+  const codigo         = document.getElementById("inputCodigoNovaSenha").value;
+
+  if (!novaSenha || !confirmarSenha) { alert("Preencha todos os campos!"); return; }
+  if (novaSenha !== confirmarSenha)  { alert("As senhas não conferem!"); return; }
+  if (novaSenha.length < 6)          { alert("Mínimo 6 caracteres."); return; }
+
+  try {
+    const res = await fetch(`${API_URL}/auth/reset-password`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email: _emailPendente,
+        codigo,
+        novaSenha,
+        confirmarSenha
+      })
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+      alert("Senha redefinida com sucesso!");
+      _finalizarLogin(data, _emailPendente);
+    } else {
+      alert("Erro: " + (data.message || "Tente novamente"));
+    }
+  } catch (e) {
+    alert("Erro ao conectar com o servidor.");
+  }
 }
 
 function usuarioEAdmin() {

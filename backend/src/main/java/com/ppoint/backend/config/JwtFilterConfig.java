@@ -64,4 +64,17 @@ public class JwtFilterConfig extends OncePerRequestFilter {
 
         filterChain.doFilter(request, response);
     }
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        String path = request.getServletPath();
+        return path.equals("/auth/email-verification")
+            || path.equals("/auth/resend-code")
+            || path.equals("/auth/forgot-password")
+            || path.equals("/auth/check-reset")
+            || path.equals("/auth/reset-password")
+            || path.equals("/auth/login")
+            || path.equals("/auth/register")
+            || path.equals("/auth/login/google");
+    }
 }

@@ -36,7 +36,7 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid  @RequestBody RegisterDTO dto) {
         try {
-            authService.register(dto.username(), dto.email(), dto.email(), dto.confirmPassword());
+            authService.register(dto.username(), dto.email(), dto.password(), dto.confirmPassword());
             return ResponseEntity.status(HttpStatus.CREATED)
             .body(Map.of("message", "Código de verificação enviado para " + dto.email()));
         } catch (EmailAlreadyRegisteredException e) {

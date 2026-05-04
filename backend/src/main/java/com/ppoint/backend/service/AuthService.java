@@ -184,7 +184,7 @@ public class AuthService {
         
         validarCodigo(user.getId(), codigoInformado, "RESET_SENHA");
 
-        user.setPassword(novaSenha);
+        user.setPassword(crypto.encrypt(novaSenha));
         repository.save(user);
 
         String token = jwtService.generateToken(user.getEmail());

@@ -244,6 +244,56 @@
       </p>
     </div>
 
+    <!-- VERIFICAÇÃO DE EMAIL (registro + login bloqueado) -->
+    <div id="codigoVerificacaoForm" style="display:none;">
+      <h2>Verificar email</h2>
+      <p id="labelEmailCodigo" style="color:white; margin: 10px 0 16px; font-size:14px;"></p>
+      <div class="input-com-icone">
+        <i class="fa-solid fa-key"></i>
+        <input type="text" id="inputCodigo" placeholder="Código de 6 dígitos"
+               maxlength="6" inputmode="numeric">
+      </div>
+      <button onclick="verificarCodigo()">Confirmar</button>
+      <span class="esqueci-senha" onclick="reenviarCodigo()">Reenviar código</span>
+      <p>
+        <span class="link-login" onclick="mostrarLogin()">Voltar ao login</span>
+      </p>
+    </div>
+
+    <!-- CÓDIGO DE RESET DE SENHA -->
+    <div id="codigoResetForm" style="display:none;">
+      <h2>Verificar código</h2>
+      <p id="labelEmailReset" style="color:white; margin: 10px 0 16px; font-size:14px;"></p>
+      <div class="input-com-icone">
+        <i class="fa-solid fa-key"></i>
+        <input type="text" id="inputCodigoReset" placeholder="Código de 6 dígitos"
+               maxlength="6" inputmode="numeric">
+      </div>
+      <button onclick="verificarCodigoReset()">Confirmar</button>
+      <span class="esqueci-senha" onclick="reenviarCodigoReset()">Reenviar código</span>
+      <p>
+        <span class="link-login" onclick="abrirEsqueciSenha()">Voltar</span>
+      </p>
+    </div>
+
+    <!-- NOVA SENHA -->
+    <div id="novaSenhaForm" style="display:none;">
+      <input type="hidden" id="inputCodigoNovaSenha">
+      <h2>Nova senha</h2>
+      <div class="input-com-icone">
+        <i class="fa-solid fa-lock"></i>
+        <input type="password" id="inputNovaSenha" placeholder="Nova senha">
+      </div>
+      <div class="input-com-icone">
+        <i class="fa-solid fa-lock"></i>
+        <input type="password" id="inputConfirmarSenha" placeholder="Confirmar nova senha">
+      </div>
+      <button onclick="redefinirSenha()">Salvar nova senha</button>
+      <p>
+        <span class="link-login" onclick="mostrarLogin()">Voltar ao login</span>
+      </p>
+    </div>
+
     <span class="fechar" onclick="fecharLoginCadastro()">×</span>
 
   </div>

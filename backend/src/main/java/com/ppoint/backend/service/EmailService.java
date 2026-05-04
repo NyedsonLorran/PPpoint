@@ -21,44 +21,20 @@ public class EmailService {
     }
 
     public void enviarCodigoConfirmacao(String destinatario, String codigo) {
-        String assunto = "PP Point — Confirme seu email";
-        String corpo = """
-                <div style="font-family: Arial, sans-serif; max-width: 400px; margin: 0 auto;">
-                    <h2 style="color: #991710;">PP Point</h2>
-                    <p>Seu código de confirmação é:</p>
-                    <div style="font-size: 36px; font-weight: bold; letter-spacing: 8px;
-                                color: #991710; text-align: center; padding: 20px 0;">
-                        %s
-                    </div>
-                    <p style="color: #666;">Este código expira em 15 minutos.</p>
-                    <p style="color: #666; font-size: 12px;">
-                        Se você não criou uma conta no PP Point, ignore este email.
-                    </p>
-                </div>
-                """.formatted(codigo);
-
-        enviar(destinatario, assunto, corpo);
-    }
+    String assunto = "PP Point — Confirme seu email";
+    String corpo = "<p>Seu código de confirmação é:</p>"
+                 + "<h1>" + codigo + "</h1>"
+                 + "<p>Este código expira em 15 minutos.</p>";
+    enviar(destinatario, assunto, corpo);
+}
 
     public void enviarCodigoResetSenha(String destinatario, String codigo) {
-        String assunto = "PP Point — Redefinição de senha";
-        String corpo = """
-                <div style="font-family: Arial, sans-serif; max-width: 400px; margin: 0 auto;">
-                    <h2 style="color: #991710;">PP Point</h2>
-                    <p>Você solicitou a redefinição de senha. Seu código é:</p>
-                    <div style="font-size: 36px; font-weight: bold; letter-spacing: 8px;
-                                color: #991710; text-align: center; padding: 20px 0;">
-                        %s
-                    </div>
-                    <p style="color: #666;">Este código expira em 15 minutos.</p>
-                    <p style="color: #666; font-size: 12px;">
-                        Se você não solicitou isso, ignore este email.
-                    </p>
-                </div>
-                """.formatted(codigo);
-
-        enviar(destinatario, assunto, corpo);
-    }
+    String assunto = "PP Point — Redefinição de senha";
+    String corpo = "<p>Seu código de redefinição de senha é:</p>"
+                 + "<h1>" + codigo + "</h1>"
+                 + "<p>Este código expira em 15 minutos.</p>";
+    enviar(destinatario, assunto, corpo);
+}
 
     private void enviar(String destinatario, String assunto, String corpo) {
         try {
