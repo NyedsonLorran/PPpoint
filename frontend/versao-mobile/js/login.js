@@ -199,14 +199,20 @@ function loginComGoogle() {
         return;
     }
 
-    // Esconde permanentemente o botão customizado
+    // Remove o botão customizado do layout
     if (btnGoogle) {
-        btnGoogle.style.display = "none";
+        btnGoogle.style.visibility = "hidden";
+        btnGoogle.style.opacity = "0";
+        btnGoogle.style.pointerEvents = "none";
+        btnGoogle.style.height = "0";
+        btnGoogle.style.margin = "0";
+        btnGoogle.style.padding = "0";
+        btnGoogle.style.border = "0";
     }
 
     container.style.display = "block";
 
-    // Evita renderizar múltiplas vezes
+    // Evita múltiplos renderButton()
     if (googleButtonRendered) {
         return;
     }
