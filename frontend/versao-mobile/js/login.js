@@ -188,32 +188,49 @@ async function fazerLogin() {
   }
 }
 
+let googleButtonRendered = false;
+
 function loginComGoogle() {
-    const btnGoogle = document.querySelector("btnGoogleLogin");
+    const btnGoogle = document.getElementById("btnGoogleLogin");
     const container = document.getElementById("google-btn-container");
 
-    if (btnGoogle) btnGoogle.style.display = "none";
-    
-    google.accounts.id.initialize({
-        client_id: "24281345430-ctit3iu4en7otpu2kjfakopamsf9pclf.apps.googleusercontent.com",
-        callback: handleGoogleCredential,
-        //use_fedcm_for_prompt: true
-    });
+    if (!container) {
+        console.error("Container Google não encontrado.");
+        return;
+    }
 
-    google.accounts.id.prompt((notification) => {
-        if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-          if (container) {
-            container.style.display = "block";
-            google.accounts.id.renderButton(container, {
-              theme: "outline",
-              size: "large",
-              width: 260
-            });
-          }
-        } else {
-            if (btnGoogle) btnGoogle.style.display = "block"
-        }
-    });
+    // Esconde permanentemente o botão customizado
+    if (btnGoogle) {
+        btnGoogle.style.display = "none";
+    }
+
+    container.style.display = "block";
+
+    // Evita renderizar múltiplas vezes
+    if (googleButtonRendered) {
+        return;
+    }
+
+    googleButtonRendered = true;
+
+    try {
+        google.accounts.id.initialize({
+            client_id: "24281345430-ctit3iu4en7otpu2kjfakopamsf9pclf.apps.googleusercontent.com",
+            callback: handleGoogleCredential,
+        });
+
+        google.accounts.id.renderButton(container, {
+            theme: "outline",
+            size: "large",
+            width: 260,
+            shape: "pill",
+            text: "signin_with"
+        });
+
+    } catch (error) {
+        console.error("Erro login Google:", error);
+        alert("Erro ao carregar login Google.");
+    }
 }
 
 async function handleGoogleCredential(response) {
