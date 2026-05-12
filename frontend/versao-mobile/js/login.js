@@ -431,25 +431,3 @@ function usuarioEAdmin() {
 }
 
 
-
-const DEV = true;
-
-  //  FAKE GENTE É PARA TESTER SEM BEACKEND PQ TA FODA
-  if (DEV && emailInput === "teste@gmail.com" && senhaInput === "111111") {
-    sessionStorage.setItem("token", "fake-token");
-    sessionStorage.setItem("role", "ADMIN");
-
-    localStorage.setItem("usuarioLogado", JSON.stringify({
-      usuario: emailInput,
-      email: emailInput
-    }));
-
-    fecharLoginCadastro();
-    definirLogado(true);
-    await carregarDiasDisponiveis();
-    irParaDiaAtual();
-    renderizarProgramacao();
-    renderizarCalendario();
-
-    return; 
-  }
