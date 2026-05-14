@@ -25,7 +25,7 @@ public class AuthService {
     private final CodigoVerificacaoRepository codigoVerificacaoRepository;
     private final EmailService emailService;
 
-    public record LoginResult(String token, String role) {}
+    public record LoginResult(String token, String role, String nome) {}
 
     public AuthService(UserRepository repository, EncryptionService crypto, 
         JwtService jwtService, GoogleAuthService googleAuthService,
@@ -56,7 +56,7 @@ public class AuthService {
         });
 
         User user = new User();
-        user.setInstagramUser(username);
+        user.setName(username);
         user.setEmail(email);
         user.setPassword(crypto.encrypt(password));
         user.setRole("USER");
@@ -83,7 +83,7 @@ public class AuthService {
         repository.save(user);
 
         String token = jwtService.generateToken(user.getEmail());
-        return new LoginResult(token, user.getRole());
+        return new LoginResult(token, user.getRole(), user.getName());
     }
 
     // Login
@@ -99,7 +99,7 @@ public class AuthService {
         }
 
         String token = jwtService.generateToken(user.getEmail());
-        return new LoginResult(token, user.getRole());
+        return new LoginResult(token, user.getRole(), user.getName());
     }
 
     public LoginResult googleAuth(String token) {
@@ -115,12 +115,14 @@ public class AuthService {
 
         String email = payload.getEmail();
         String googleId = payload.getSubject();
+        String name = (String) payload.get("name");
 
         User user = repository.findByEmail(email).map(existing -> {
             // Se já existe, opcional vincular conta
             if (existing.getGoogleId() == null) {
                 existing.setGoogleId(googleId);
                 existing.setProvider("GOOGLE");
+                existing.setName((String) payload.get("name"));
                 existing.setEmailVerified(true);
                 return repository.save(existing);
             }
@@ -131,6 +133,7 @@ public class AuthService {
             newUser.setEmail(email);
             newUser.setGoogleId(googleId);
             newUser.setProvider("GOOGLE");
+            newUser.setName(name);
             newUser.setRole("USER");
             newUser.setEmailVerified(true);
 
@@ -138,7 +141,7 @@ public class AuthService {
         });
 
         String jwtToken = jwtService.generateToken(user.getEmail());
-        return new LoginResult(jwtToken, user.getRole());
+        return new LoginResult(jwtToken, user.getRole(), user.getName());
     }
 
     // Esqueci senha
@@ -188,7 +191,7 @@ public class AuthService {
         repository.save(user);
 
         String token = jwtService.generateToken(user.getEmail());
-        return new LoginResult(token, user.getRole());
+        return new LoginResult(token, user.getRole(), user.getName());
 
 
     }

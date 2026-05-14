@@ -18,7 +18,7 @@ function _finalizarLogin(data, email, nome) {
   localStorage.setItem("usuarioLogado", JSON.stringify({
     usuario: email,
     email:   email,
-    nome:    nome || email
+    nome:    data.nome || nome || email
   }));
 
   fecharLoginCadastro();

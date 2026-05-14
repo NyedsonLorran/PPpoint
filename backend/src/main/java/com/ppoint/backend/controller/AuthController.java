@@ -54,7 +54,7 @@ public class AuthController {
     @PostMapping("/email-verification")
     public ResponseEntity<AuthResponseDTO> verificarEmail(@Valid @RequestBody VerificarCodigoDTO dto) {
         AuthService.LoginResult result = authService.verificarEmail(dto.email(), dto.codigo());
-        return ResponseEntity.ok(new AuthResponseDTO(result.token(), result.role()));
+        return ResponseEntity.ok(new AuthResponseDTO(result.token(), result.role(), result.nome()));
     }
 
     @PostMapping("/resend-code")
@@ -70,7 +70,7 @@ public class AuthController {
     public ResponseEntity<?> login(@Valid @RequestBody LoginDTO dto) {
         try {
             AuthService.LoginResult result = authService.login(dto.email(), dto.password());
-            return ResponseEntity.ok(new AuthResponseDTO(result.token(), result.role())); 
+            return ResponseEntity.ok(new AuthResponseDTO(result.token(), result.role(), result.nome())); 
         } catch (InvalidCredentialsException e) {
             if ("EMAIL_NAO_VERIFICADO".equals(e.getMessage())) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN)
@@ -84,7 +84,7 @@ public class AuthController {
     @PostMapping("/login/google")
     public ResponseEntity<AuthResponseDTO> googleLogin(@RequestBody GoogleTokenDTO dto) {
         AuthService.LoginResult result = authService.googleAuth(dto.token());
-        return ResponseEntity.ok(new AuthResponseDTO(result.token(), result.role()));
+        return ResponseEntity.ok(new AuthResponseDTO(result.token(), result.role(), result.nome()));
     }
 
     @PostMapping("/forgot-password")
@@ -103,6 +103,6 @@ public class AuthController {
     public ResponseEntity<AuthResponseDTO> redefinirSenha(@Valid @RequestBody RedefinirSenhaDTO dto) {
         AuthService.LoginResult result = authService.redefinirSenha(
                 dto.email(), dto.codigo(), dto.novaSenha(), dto.confirmarSenha());
-        return ResponseEntity.ok(new AuthResponseDTO(result.token(), result.role()));
+        return ResponseEntity.ok(new AuthResponseDTO(result.token(), result.role(), result.nome()));
     }
 }
