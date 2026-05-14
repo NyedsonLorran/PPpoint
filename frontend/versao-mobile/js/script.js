@@ -2,7 +2,7 @@
 const DEV_ORIGINS = ["localhost", "127.0.0.1"];
 const API_URL = DEV_ORIGINS.includes(window.location.hostname) 
   ? "http://localhost:8080" 
-  : "https://pppoint-backend.onrender.com/";
+  : "https://pppoint-backend.onrender.com";
 
 const nomesMeses = ["Jun", "Jul"];
 let mesAtual = 0; 
