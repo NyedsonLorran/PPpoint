@@ -1,4 +1,4 @@
-// ─── Auxiliares internos ──────────────────────────────────────────────────────
+// Auxiliares internos 
 
 let _emailPendente = "";
 let _tipoCodigo = "REGISTRO";
@@ -30,7 +30,7 @@ function _finalizarLogin(data, email, nome) {
   renderizarCalendario();
 }
 
-// ─── Funções originais + novas ────────────────────────────────────────────────
+// Funções antigas
 
 function usuarioLogado() {
   const btn = document.getElementById("btnLogin");
@@ -44,6 +44,7 @@ function getUsuarioLogado() {
 function abrirLoginCadastro() {
   mostrarLogin();
   document.getElementById("janela-login").style.display = "flex";
+  loginComGoogle();
 }
 
 function fecharLoginCadastro() {
@@ -106,7 +107,7 @@ async function registrar() {
   }
 }
 
-// NOVA — verificação de email após cadastro ou login bloqueado
+// Verificação de email após cadastro ou login bloqueado
 async function verificarCodigo() {
   const codigo = document.getElementById("inputCodigo").value.trim();
   if (codigo.length !== 6) { alert("Digite o código de 6 dígitos."); return; }
@@ -130,7 +131,7 @@ async function verificarCodigo() {
   }
 }
 
-// NOVA — reenvio de código de verificação de email
+// Reenvio de código de verificação de email
 async function reenviarCodigo() {
   try {
     await fetch(`${API_URL}/auth/resend-code`, {
@@ -191,29 +192,10 @@ async function fazerLogin() {
 let googleButtonRendered = false;
 
 function loginComGoogle() {
-    const btnGoogle = document.getElementById("btnGoogleLogin");
     const container = document.getElementById("google-btn-container");
 
-    if (!container) {
+    if (!container || googleButtonRendered) {
         console.error("Container Google não encontrado.");
-        return;
-    }
-
-    // Remove o botão customizado do layout
-    if (btnGoogle) {
-        btnGoogle.style.visibility = "hidden";
-        btnGoogle.style.opacity = "0";
-        btnGoogle.style.pointerEvents = "none";
-        btnGoogle.style.height = "0";
-        btnGoogle.style.margin = "0";
-        btnGoogle.style.padding = "0";
-        btnGoogle.style.border = "0";
-    }
-
-    container.style.display = "block";
-
-    // Evita múltiplos renderButton()
-    if (googleButtonRendered) {
         return;
     }
 
@@ -266,6 +248,7 @@ async function handleGoogleCredential(response) {
 
 function definirLogado(estado) {
   const botao = document.getElementById("btnLogin");
+
   botao.dataset.logged = estado;
   botao.innerText = estado ? "Sair" : "Entrar";
 
@@ -274,9 +257,18 @@ function definirLogado(estado) {
   }
 
   if (!estado) {
+
+    try {
+      google.accounts.id.disableAutoSelect();
+    } catch (e) {
+      console.warn("Erro logout Google:", e);
+    }
+
     localStorage.removeItem("usuarioLogado");
+
     sessionStorage.removeItem("token");
-    sessionStorage.removeItem("role"); 
+    sessionStorage.removeItem("role");
+
     location.reload();
   }
 }
@@ -346,7 +338,7 @@ async function enviarRecuperacao() {
   }
 }
 
-// NOVA — verificação do código de reset de senha
+// Verificação do código de reset de senha
 async function verificarCodigoReset() {
   const codigo = document.getElementById("inputCodigoReset").value.trim();
   if (codigo.length !== 6) { alert("Digite o código de 6 dígitos."); return; }
@@ -371,7 +363,7 @@ async function verificarCodigoReset() {
   }
 }
 
-// NOVA — reenvio do código de reset de senha
+// Reenvio do código de reset de senha
 async function reenviarCodigoReset() {
   try {
     await fetch(`${API_URL}/auth/resend-code`, {
@@ -385,7 +377,7 @@ async function reenviarCodigoReset() {
   }
 }
 
-// NOVA — redefinição da nova senha
+// Redefinição da nova senha
 async function redefinirSenha() {
   const novaSenha      = document.getElementById("inputNovaSenha").value;
   const confirmarSenha = document.getElementById("inputConfirmarSenha").value;
