@@ -3,6 +3,10 @@ let slideAtual = 0;
 let tempo = 6000;
 let intervaloSlide;
 
+let isPaused = false;
+let tempoRestante = tempo; 
+let startTimer; 
+
 function initRetrospectiva() {
     const logado = localStorage.getItem("usuarioLogado");
     
@@ -58,7 +62,7 @@ function renderizarExplicacaoPublica() {
     <div class="retro-info-card">
       <h3>Sua Retrospectiva PPpoint</h3>
       <p>Registre seus momentos no festival para gerar um resumo exclusivo ao final do evento!</p>
-      <button onclick="abrirLoginCadastro()" class="btn-entrar-retro">Entrar ou Cadastrar</author>
+      <button onclick="abrirLoginCadastro()" class="btn-entrar-retro">Entrar ou Cadastrar</button>
     </div>
   `;
 }
@@ -105,13 +109,13 @@ function iniciarContadorRetro() {
 
 function liberarRetro() {
     const bloqueado = document.getElementById("retroBloqueado");
-    const containerAcesso = document.getElementById("containerAcessoRetro"); // ID da nova Div
+    const containerAcesso = document.getElementById("containerAcessoRetro");
     const btn = document.getElementById("btnAbrirRetro");
 
     if (bloqueado) bloqueado.style.display = "none"; 
     
     if (containerAcesso) {
-        containerAcesso.style.display = "flex"; // Usa FLEX para centralizar igual aos outros
+        containerAcesso.style.display = "flex";
     }
 
     if (btn) {
@@ -133,6 +137,7 @@ function montarSlides() {
   ];
 }
 
+
 async function abrirRetrospectiva() {
   const el = document.getElementById("retroStories");
   if (!el) return;
@@ -141,10 +146,10 @@ async function abrirRetrospectiva() {
   document.body.style.overflow = "hidden";
 
   slideAtual = 0;
+  tempoRestante = tempo;
 
   criarBarras();
   await renderizarSlide();
-  iniciarAuto();
 }
 
 function fecharRetrospectiva() {
@@ -170,7 +175,13 @@ async function renderizarSlide() {
     container.innerHTML = `<div class="retro-slide">Erro ao carregar stories</div>`;
   }
 
-  atualizarBarras();
+  tempoRestante = tempo;
+  atualizarBarras(); 
+  
+  setTimeout(() => {
+      iniciarAuto(tempo);
+  }, 10);
+
   atualizarBotaoCompartilhar();
 }
 
@@ -197,44 +208,48 @@ function atualizarBarras() {
   if (!barras.length) return;
 
   barras.forEach((b, i) => {
-    b.style.transition = "none";
-    b.style.width = i < slideAtual ? "100%" : "0%";
+    b.style.transition = "none"; 
+    if (i < slideAtual) {
+        b.style.width = "100%";
+    } else {
+        b.style.width = "0%";
+    }
   });
 
-  const atual = barras[slideAtual];
-  if (!atual) return;
-
-  void atual.offsetWidth;
-
-  setTimeout(() => {
-    atual.style.transition = `width ${tempo}ms linear`;
-    atual.style.width = "100%";
-  }, 50);
+  void barras[0].offsetWidth;
 }
 
-function iniciarAuto() {
-  clearInterval(intervaloSlide);
-  intervaloSlide = setInterval(() => {
-    proximoSlide();
-  }, tempo);
+function iniciarAuto(duracao) {
+    clearInterval(intervaloSlide);
+    
+    intervaloSlide = setInterval(() => {
+        proximoSlide();
+    }, duracao);
+
+    const barras = document.querySelectorAll(".retro-bar-fill");
+    const atual = barras[slideAtual];
+    if (atual) {
+        atual.style.transition = `width ${duracao}ms linear`;
+        atual.style.width = "100%";
+    }
 }
 
 function proximoSlide() {
-  if (slideAtual < slides.length - 1) {
-    slideAtual++;
-    renderizarSlide();
-    iniciarAuto();
-  } else {
-    fecharRetrospectiva();
-  }
+    clearInterval(intervaloSlide);
+    if (slideAtual < slides.length - 1) {
+        slideAtual++;
+        renderizarSlide();
+    } else {
+        fecharRetrospectiva();
+    }
 }
 
 function anteriorSlide() {
-  if (slideAtual > 0) {
-    slideAtual--;
-    renderizarSlide();
-    iniciarAuto();
-  }
+    clearInterval(intervaloSlide);
+    if (slideAtual > 0) {
+        slideAtual--;
+        renderizarSlide();
+    }
 }
 
 function atualizarBotaoCompartilhar() {
@@ -293,20 +308,52 @@ function compartilharInstagram() {
   });
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  initRetrospectiva();
+const retro = document.getElementById("retroStories");
 
-  const retro = document.getElementById("retroStories");
+if (retro) {
+    const iniciarPausa = (e) => {
+        isPaused = true;
+        startTimer = Date.now();
+        clearInterval(intervaloSlide);
+        
+        const barras = document.querySelectorAll(".retro-bar-fill");
+        if (barras[slideAtual]) {
+            const estiloComputado = window.getComputedStyle(barras[slideAtual]);
+            const larguraAtual = estiloComputado.width;
+            barras[slideAtual].style.transition = "none";
+            barras[slideAtual].style.width = larguraAtual;
+        }
+    };
 
-  if (retro) {
-    retro.addEventListener("click", (e) => {
-      const btn = document.getElementById("btnCompartilhar");
-      if (btn && btn.contains(e.target)) return;
+    const finalizarPausa = (e) => {
+        if (!isPaused) return;
+        
+        if (e.cancelable) e.preventDefault();
+        e.stopPropagation();
 
-      const meio = window.innerWidth / 2;
+        isPaused = false;
+        const duracaoToque = Date.now() - startTimer;
 
-      if (e.clientX > meio) proximoSlide();
-      else anteriorSlide();
-    });
-  }
-});
+        if (duracaoToque < 250) { 
+            const meio = window.innerWidth / 2;
+            const x = e.changedTouches ? e.changedTouches[0].clientX : e.clientX;
+            
+            if (x > meio) proximoSlide();
+            else anteriorSlide();
+        } else { 
+            const tempoPassado = duracaoToque; 
+            tempoRestante -= tempoPassado;
+            
+            if (tempoRestante <= 200) {
+                proximoSlide();
+            } else {
+                iniciarAuto(tempoRestante);
+            }
+        }
+    };
+
+    retro.addEventListener("mousedown", iniciarPausa);
+    retro.addEventListener("mouseup", finalizarPausa);
+    retro.addEventListener("touchstart", iniciarPausa, { passive: false });
+    retro.addEventListener("touchend", finalizarPausa, { passive: false });
+}
