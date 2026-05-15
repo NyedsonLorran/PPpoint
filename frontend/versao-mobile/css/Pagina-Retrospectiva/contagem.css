@@ -6,7 +6,7 @@
   justify-content: center;
   align-items: center;
   text-align: center;
-  color: #fff;
+  color: hsl(0, 0%, 100%);
 }
 
 .fa-lock {
@@ -19,6 +19,7 @@
   font-size: 17px;
   opacity: 0.7;
   margin-bottom: 10px;
+  text-transform: uppercase;
   font-weight: bold;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 
@@ -29,16 +30,14 @@
   color: rgb(253, 253, 253);
   font-size: 26px;
   font-weight: bold;
-  background: rgba(0, 0, 0, 0.329);
   padding: 10px 20px;
   border-radius: 20px;
-  backdrop-filter: blur(10px);
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 /* Estilo para quando o usuário não está logado */
 #retroNaoLogado {
-    height: 80vh;
+    height: 60vh;
     display: flex;
     flex-direction: column;
     justify-content: center;

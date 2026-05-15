@@ -44,15 +44,13 @@ function renderizarCalendario() {
   if (usuario && usuario.usuario) {
     registros = JSON.parse(localStorage.getItem("registros_" + usuario.usuario)) || [];
   }
+  
   if (usuario && usuario.usuario) {
-    const email = usuario.usuario.toLowerCase().trim();
-    registros = registros.filter(r =>
-      r && r.usuario && r.data &&
-      r.usuario.toLowerCase().trim() === email
-    );
+    registros = JSON.parse(localStorage.getItem("registros_" + usuario.usuario)) || [];
   } else {
     registros = [];
   }
+
 
   for (let i = 0; i < primeiroDia; i++) {
     containerDias.innerHTML += "<div></div>";

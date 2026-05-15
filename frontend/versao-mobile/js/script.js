@@ -13,7 +13,10 @@ let diaSelecionado = null;
 let streamRecurso = null;
 let fotoCapturada = null;  
 let ultimoIndex = 1;
+let touchStartX = 0;
+let touchEndX = 0;
 
+const swipeThreshold = 50;
 const ordemPaginas = {
     "programacao": 0,
     "ponto": 1,
@@ -43,7 +46,31 @@ function eventoFinalizado() {
 
   return true;
 }
+function gerenciarSwipe() {
+    const diferenca = touchStartX - touchEndX;
+    const paginas = ["programacao", "ponto", "retrospectiva"];
+    
+    // Swipe para a Esquerda (Próxima página)
+    if (diferenca > swipeThreshold) {
+        let proximoIndex = (ultimoIndex + 1) % paginas.length;
+        mostrarPagina(paginas[proximoIndex]);
+    } 
+    // Swipe para a Direita (Página anterior)
+    else if (diferenca < -swipeThreshold) {
+        let anteriorIndex = (ultimoIndex - 1 + paginas.length) % paginas.length;
+        mostrarPagina(paginas[anteriorIndex]);
+    }
+}
 
+// Ouvintes de eventos de toque
+window.addEventListener('touchstart', e => {
+    touchStartX = e.changedTouches[0].screenX;
+}, { passive: true });
+
+window.addEventListener('touchend', e => {
+    touchEndX = e.changedTouches[0].screenX;
+    gerenciarSwipe();
+}, { passive: true });
 
 function mostrarPagina(pagina) {
     const track = document.getElementById('fundoTrack');

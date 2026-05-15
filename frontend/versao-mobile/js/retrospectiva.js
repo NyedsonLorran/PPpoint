@@ -24,6 +24,19 @@ function initRetrospectiva() {
         if (divBloqueado) {
             divBloqueado.style.display = "flex";
             divBloqueado.classList.remove("hidden");
+
+            const usuario = getUsuarioLogado();
+            const texto = divBloqueado.querySelector(".sub");
+
+            if (usuario && texto) {
+                const nome = usuario.nome || usuario.usuario || "Usuário";
+              texto.innerHTML = `
+  <span class="nome-user">${nome}</span><br>
+  <span class="frase-retro">SUA RETROSPECTIVA ESTARÁ</span><br>
+  <span class="frase-retro">DISPONÍVEL EM</span>
+`;
+            }
+
             iniciarContadorRetro();
         }
     } 
