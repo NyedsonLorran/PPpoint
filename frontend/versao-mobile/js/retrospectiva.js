@@ -1,4 +1,5 @@
 let slides = [];
+let slidesPrecarregados = {}; 
 let slideAtual = 0;
 let tempo = 6000;
 let intervaloSlide;
@@ -6,6 +7,8 @@ let intervaloSlide;
 let isPaused = false;
 let tempoRestante = tempo; 
 let startTimer; 
+
+let audioRetro = new Audio("./css/Pagina-Retrospectiva/stories/css/musicas/olha-pro-ceu.mp3");
 
 function initRetrospectiva() {
     const logado = localStorage.getItem("usuarioLogado");
@@ -133,15 +136,50 @@ function montarSlides() {
     "./css/Pagina-Retrospectiva/stories/html/amigos.html",
     "./css/Pagina-Retrospectiva/stories/html/bebidas.html",
     "./css/Pagina-Retrospectiva/stories/html/shows.html",
-    "./css/Pagina-Retrospectiva/stories/html/resumo.html"
+    "./css/Pagina-Retrospectiva/stories/html/resumo.html",
+    "./css/Pagina-Retrospectiva/stories/html/compartilhar.html"
   ];
 }
 
-
 async function abrirRetrospectiva() {
   const el = document.getElementById("retroStories");
+  const loading = document.getElementById("retroLoading");
+  const textoLoading = document.querySelector("#retroLoading p"); 
   if (!el) return;
 
+  try {
+    if (!audioRetro) {
+      audioRetro = new Audio("./olha-pro-ceu.mp3");
+      audioRetro.loop = true;
+    }
+    audioRetro.currentTime = 0;
+    audioRetro.play().catch(e => console.log(e));
+  } catch (err) {}
+
+  if (loading) loading.classList.remove("hidden");
+  if (textoLoading) textoLoading.innerText = "Iniciando retrospectiva...";
+
+  const tempoMinimo = new Promise(resolve => setTimeout(resolve, 2000));
+
+  setTimeout(() => {
+    if (textoLoading) textoLoading.innerText = "Carregando seus momentos...";
+  }, 800);
+
+  const carregarSlides = slides.map(async (url) => {
+    const res = await fetch(url);
+    if (!res.ok) throw new Error();
+    const html = await res.text();
+    slidesPrecarregados[url] = html;
+  });
+
+  try {
+    await Promise.all([...carregarSlides, tempoMinimo]);
+  } catch (e) {
+    console.error("Erro ao pré-carregar os stories", e);
+    await tempoMinimo; 
+  }
+
+  if (loading) loading.classList.add("hidden");
   el.classList.remove("hidden");
   document.body.style.overflow = "hidden";
 
@@ -158,29 +196,50 @@ function fecharRetrospectiva() {
 
   document.body.style.overflow = "auto";
   clearInterval(intervaloSlide);
+
+  if (audioRetro) {
+    try {
+      audioRetro.pause();
+      audioRetro.currentTime = 0;
+    } catch (e) {}
+  }
 }
 
 async function renderizarSlide() {
   const container = document.getElementById("slideContainer");
+  const progress = document.getElementById("retroProgress");
   if (!container) return;
 
   const url = slides[slideAtual];
-
-  try {
-    const res = await fetch(url);
-    if (!res.ok) throw new Error();
-    const html = await res.text();
-    container.innerHTML = html;
-  } catch (e) {
+  
+  if (slidesPrecarregados[url]) {
+    container.innerHTML = slidesPrecarregados[url];
+  } else {
     container.innerHTML = `<div class="retro-slide">Erro ao carregar stories</div>`;
   }
 
   tempoRestante = tempo;
   atualizarBarras(); 
   
-  setTimeout(() => {
-      iniciarAuto(tempo);
-  }, 10);
+  if (slideAtual === slides.length - 1) {
+    clearInterval(intervaloSlide);
+    if (progress) progress.style.display = 'none'; 
+    if (audioRetro) {
+      try {
+        audioRetro.pause();
+        audioRetro.currentTime = 0;
+      } catch (e) {}
+    }
+    preencherEMostrarCarrossel();
+  } else {
+    if (progress) progress.style.display = 'flex'; 
+    if (audioRetro && audioRetro.paused) {
+      audioRetro.play().catch(err => console.log(err));
+    }
+    setTimeout(() => {
+        iniciarAuto(tempo);
+    }, 10);
+  }
 
   atualizarBotaoCompartilhar();
 }
@@ -254,32 +313,146 @@ function anteriorSlide() {
 
 function atualizarBotaoCompartilhar() {
   const btn = document.getElementById("btnCompartilhar");
-  if (!btn) return;
-
-  if (slideAtual >= 1) {
-    btn.classList.remove("hidden");
-    btn.style.display = "block";
-  } else {
-    btn.classList.add("hidden");
-    btn.style.display = "none";
-  }
-
-  btn.onclick = (e) => {
-    e.stopPropagation();
-    compartilharInstagram();
-  };
+  if (btn) btn.style.display = "none"; 
 }
 
-function compartilharInstagram() {
-  const el = document.getElementById("slideContainer");
-  if (!el) return;
+async function preencherEMostrarCarrossel() {
+  const track = document.querySelector('.carousel-track');
+  const slideFinal = document.querySelector('.slide-final-compartilhar');
+  if (!track || !slideFinal) return;
 
+  track.innerHTML = ''; 
+
+  const btnFecharExibido = slideFinal.querySelector('.btn-fechar-retro');
+  if (!btnFecharExibido) {
+    const btnFechar = document.createElement('button');
+    btnFechar.innerHTML = '&#10005;'; 
+    btnFechar.className = 'btn-fechar-retro';
+    btnFechar.onclick = (e) => {
+      e.stopPropagation();
+      fecharRetrospectiva();
+    };
+    slideFinal.appendChild(btnFechar);
+  }
+
+  for (let i = 0; i < slides.length - 1; i++) {
+    const urlStory = slides[i];
+    const htmlStory = slidesPrecarregados[urlStory];
+
+    if (htmlStory) {
+      const card = document.createElement('div');
+      card.className = 'carousel-card';
+      
+      const miniStoryContainer = document.createElement('div');
+      miniStoryContainer.className = 'mini-story-container';
+      
+      miniStoryContainer.innerHTML = htmlStory;
+
+      const retroSlideReal = miniStoryContainer.querySelector('.retro-slide');
+      if (retroSlideReal) {
+        retroSlideReal.classList.add('mini-story-scaled');
+      }
+
+      card.appendChild(miniStoryContainer);
+      track.appendChild(card);
+    }
+  }
+
+  inicializarCarrosselLogica();
+}
+
+function inicializarCarrosselLogica() {
+  const track = document.querySelector('.carousel-track');
+  const cards = document.querySelectorAll('.carousel-card');
+  const slideFinal = document.querySelector('.slide-final-compartilhar');
+  
+  if (!track || !cards.length || !slideFinal) return;
+
+  const deterInterferencia = (e) => {
+    e.stopPropagation();
+  };
+
+  slideFinal.addEventListener('touchstart', deterInterferencia, { passive: false });
+  slideFinal.addEventListener('touchmove', deterInterferencia, { passive: false });
+  slideFinal.addEventListener('touchend', deterInterferencia);
+  slideFinal.addEventListener('mousedown', deterInterferencia);
+  slideFinal.addEventListener('click', deterInterferencia);
+
+  const atualizarCardAtivo = () => {
+    const centroCarrossel = track.getBoundingClientRect().left + (track.offsetWidth / 2);
+    let cardMaisProximo = null;
+    let menorDistancia = Infinity;
+
+    cards.forEach(card => {
+      const centroCard = card.getBoundingClientRect().left + (card.offsetWidth / 2);
+      const distancia = Math.abs(centroCarrossel - centroCard);
+      
+      card.classList.remove('active');
+      if (distancia < menorDistancia) {
+        menorDistancia = distancia;
+        cardMaisProximo = card;
+      }
+    });
+
+    if (cardMaisProximo) {
+      cardMaisProximo.classList.add('active');
+    }
+  };
+
+  track.addEventListener('scroll', atualizarCardAtivo);
+  track.scrollLeft = 0;
+  setTimeout(atualizarCardAtivo, 100);
+
+  const btnComp = document.getElementById("btnConfirmarCompartilhar");
+  if (btnComp) {
+    btnComp.onclick = (e) => {
+      e.preventDefault();
+      e.stopPropagation(); 
+      
+      const cardAtivo = document.querySelector('.carousel-card.active');
+      if (cardAtivo) {
+        const miniStoryReal = cardAtivo.querySelector('.mini-story-container .retro-slide');
+        if (miniStoryReal) {
+            compartilharStoryReal(miniStoryReal);
+        }
+      }
+    };
+  }
+}
+
+function compartilharStoryReal(elementoStory) {
   const width = 1080;
   const height = 1920;
+  const loading = document.getElementById('retroLoading');
 
-  html2canvas(el, {
-    backgroundColor: null,
-    scale: 3,
+  if (loading) loading.classList.remove('hidden');
+
+  const wrapperParaRender = document.createElement('div');
+  wrapperParaRender.style.position = 'fixed';
+  wrapperParaRender.style.top = '0';
+  wrapperParaRender.style.left = '0';
+  wrapperParaRender.style.width = width + 'px';
+  wrapperParaRender.style.height = height + 'px';
+  wrapperParaRender.style.zIndex = '-99999';
+  wrapperParaRender.style.overflow = 'hidden';
+  wrapperParaRender.style.backgroundColor = '#000';
+
+  const cloneStory = elementoStory.cloneNode(true);
+  cloneStory.classList.remove('mini-story-scaled');
+  cloneStory.style.transform = 'none';
+  cloneStory.style.webkitTransform = 'none';
+  cloneStory.style.width = '100%';
+  cloneStory.style.height = '100%';
+  cloneStory.style.position = 'relative';
+  cloneStory.style.top = '0';
+  cloneStory.style.left = '0';
+
+  wrapperParaRender.appendChild(cloneStory);
+  document.body.appendChild(wrapperParaRender);
+
+  html2canvas(wrapperParaRender, {
+    backgroundColor: '#000', 
+    scale: 1, 
     useCORS: true,
     allowTaint: true,
     width: width,
@@ -287,6 +460,9 @@ function compartilharInstagram() {
     windowWidth: width,
     windowHeight: height
   }).then(canvas => {
+    
+    document.body.removeChild(wrapperParaRender);
+    if (loading) loading.classList.add('hidden');
 
     canvas.toBlob((blob) => {
       const file = new File([blob], "story.png", { type: "image/png" });
@@ -305,6 +481,12 @@ function compartilharInstagram() {
 
     }, "image/png", 1);
 
+  }).catch(err => {
+    console.error(err);
+    if (document.body.contains(wrapperParaRender)) {
+        document.body.removeChild(wrapperParaRender);
+    }
+    if (loading) loading.classList.add('hidden');
   });
 }
 
@@ -312,9 +494,17 @@ const retro = document.getElementById("retroStories");
 
 if (retro) {
     const iniciarPausa = (e) => {
+        if (slideAtual === slides.length - 1) return;
+        
         isPaused = true;
         startTimer = Date.now();
         clearInterval(intervaloSlide);
+        
+        if (audioRetro) {
+          try {
+            audioRetro.pause();
+          } catch (err) {}
+        }
         
         const barras = document.querySelectorAll(".retro-bar-fill");
         if (barras[slideAtual]) {
@@ -326,6 +516,8 @@ if (retro) {
     };
 
     const finalizarPausa = (e) => {
+        if (slideAtual === slides.length - 1) return;
+        
         if (!isPaused) return;
         
         if (e.cancelable) e.preventDefault();
@@ -347,6 +539,9 @@ if (retro) {
             if (tempoRestante <= 200) {
                 proximoSlide();
             } else {
+                if (audioRetro && audioRetro.paused) {
+                  audioRetro.play().catch(err => console.log(err));
+                }
                 iniciarAuto(tempoRestante);
             }
         }

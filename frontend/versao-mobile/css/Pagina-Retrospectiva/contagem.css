@@ -1,18 +1,19 @@
 .retro-lock {
   height: 80vh;
   padding: 20px;
+  padding-top: 8vh;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   text-align: center;
   color: hsl(0, 0%, 100%);
 }
 
 .fa-lock {
-    font-size: 70px; 
-    margin-bottom: 25px; 
-    color: #fff;
+  font-size: 70px; 
+  margin-bottom: 25px; 
+  color: #fff;
 }
 
 .sub {
@@ -22,11 +23,10 @@
   text-transform: uppercase;
   font-weight: bold;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-
 }
 
 .contador {
-  margin-bottom: 90px;
+  margin-bottom: 40px;
   color: rgb(253, 253, 253);
   font-size: 26px;
   font-weight: bold;
@@ -35,7 +35,6 @@
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Estilo para quando o usuário não está logado */
 #retroNaoLogado {
     height: 60vh;
     display: flex;
@@ -48,24 +47,21 @@
 }
 
 #retroNaoLogado h2 {
-    font-size: 22px;
-    margin-bottom: 20px;
-    font-family: 'Segoe UI', sans-serif;
+  font-size: 22px;
+  margin-bottom: 20px;
+  font-family: 'Segoe UI', sans-serif;
 }
 
 .btn-entrar-retro {
-    background: #b92207;
-    color: white;
-    border: none;
-    padding: 12px 30px;
-    border-radius: 50px;
-    font-weight: bold;
-    text-transform: uppercase;
-    cursor: pointer;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  background: #b92207;
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 50px;
+  font-weight: bold;
+  text-transform: uppercase;
+  cursor: pointer;
 }
-
-
 
 @keyframes pulse {
   0% { transform: scale(1); opacity: 1; }
