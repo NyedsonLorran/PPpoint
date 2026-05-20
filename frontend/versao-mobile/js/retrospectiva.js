@@ -38,7 +38,6 @@ function initRetrospectiva() {
             if (usuario && texto) {
                 const nome = usuario.nome || usuario.usuario || "Usuário";
               texto.innerHTML = `
-  <span class="nome-user">${nome}</span><br>
   <span class="frase-retro">SUA RETROSPECTIVA ESTARÁ</span><br>
   <span class="frase-retro">DISPONÍVEL EM</span>
 `;
