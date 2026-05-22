@@ -1,6 +1,255 @@
-<div class="retro-slide bg-bebidas">
-  <div class="retro-card">
-    <h1>  </h1>
-    <p> </p>
+<link rel="stylesheet" href="./css/bebidas.css">
+
+<div class="retro-slide bg-bebidas" id="slide-bebidas">
+
+  <div class="bebidas-content">
+
+    <!-- Cabeçalho -->
+    <div class="bebidas-header">
+      <h1 class="bebidas-title">PP POINT 2026</h1>
+
+      <p class="bebidas-sub">
+        MAS A MÃO NUNCA FICOU VAZIA
+      </p>
+
+      <p class="bebidas-sub2">
+        SUA BEBIDA DESSE SÃO JOÃO FOI...
+      </p>
+    </div>
+
+    <!-- Foto Top 1 -->
+    <div class="bebidas-foto-wrapper">
+      <img
+        id="beb-foto-top1"
+        class="bebidas-foto"
+        alt="Bebida #1"
+        style="display:none;"
+      >
+    </div>
+
+    <!-- Ranking -->
+    <div class="bebidas-ranking">
+
+      <div class="beb-rank-item rank-1" id="beb-rank-1">
+        <span class="beb-rank-num">#01</span>
+        <span class="beb-rank-nome" id="beb-nome-1">—</span>
+        <span class="beb-rank-qtd" id="beb-qtd-1">0</span>
+      </div>
+
+      <div class="beb-rank-item rank-2" id="beb-rank-2">
+        <span class="beb-rank-num">#02</span>
+        <span class="beb-rank-nome" id="beb-nome-2">—</span>
+        <span class="beb-rank-qtd" id="beb-qtd-2">0</span>
+      </div>
+
+      <div class="beb-rank-item rank-3" id="beb-rank-3">
+        <span class="beb-rank-num">#03</span>
+        <span class="beb-rank-nome" id="beb-nome-3">—</span>
+        <span class="beb-rank-qtd" id="beb-qtd-3">0</span>
+      </div>
+
+    </div>
+
+    <!-- Total -->
+    <div class="bebidas-total">
+      <p id="beb-total-texto">
+        NO TOTAL FORAM MAIS DE
+        <strong id="beb-total-litros">?</strong>
+        NESSES 33 DIAS...
+      </p>
+    </div>
+
   </div>
+
 </div>
+
+<script>
+(function () {
+
+  const DEV_ORIGINS = ["localhost", "127.0.0.1"];
+
+  const API_URL = DEV_ORIGINS.includes(window.location.hostname)
+    ? "http://localhost:8080"
+    : "https://pppoint-backend.onrender.com";
+
+  async function carregarEstatisticasBebidas() {
+
+    try {
+
+      const usuario = JSON.parse(
+        localStorage.getItem("usuarioLogado")
+      );
+
+      const token = sessionStorage.getItem("token");
+
+      if (!usuario || !token) {
+        return usarDadosFallback();
+      }
+
+      const resposta = await fetch(
+        `${API_URL}/registros/usuario/bebidas`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      );
+
+      if (!resposta.ok) {
+        return usarDadosFallback();
+      }
+
+      const retro = await resposta.json();
+
+      console.log("RETRO:", retro);
+
+      if (!retro.top3 || retro.top3.length === 0) {
+        return usarDadosFallback();
+      }
+
+      const ranking = retro.top3.map(item => ({
+        id: item.bebidaId,
+        nome: item.nome || "SEM NOME",
+        qtd: item.quantidade || 0
+      }));
+
+      console.log("RANKING:", ranking);
+
+      const totalLitros = Number(
+        retro.totalLitros || 0
+      ).toFixed(1);
+
+      /* FOTO TOP 1 */
+
+      if (retro.fotoTop1) {
+
+        const img = document.getElementById(
+          "beb-foto-top1"
+        );
+
+        if (img) {
+          img.style.display = "block";
+          img.src = retro.fotoTop1;
+        }
+      }
+
+      preencherSlide(ranking, totalLitros);
+
+    } catch (erro) {
+
+      console.warn(
+        "Erro bebidas:",
+        erro
+      );
+
+      usarDadosFallback();
+    }
+  }
+
+  function preencherSlide(ranking, totalLitros) {
+
+    const nomes = [
+      "beb-nome-1",
+      "beb-nome-2",
+      "beb-nome-3"
+    ];
+
+    const qtds = [
+      "beb-qtd-1",
+      "beb-qtd-2",
+      "beb-qtd-3"
+    ];
+
+    const items = [
+      "beb-rank-1",
+      "beb-rank-2",
+      "beb-rank-3"
+    ];
+
+    ranking.slice(0, 3).forEach((item, index) => {
+
+      const elNome = document.getElementById(
+        nomes[index]
+      );
+
+      const elQtd = document.getElementById(
+        qtds[index]
+      );
+
+      const elItem = document.getElementById(
+        items[index]
+      );
+
+    if (elNome) {
+
+      let nome = item.nome || "SEM NOME";
+
+  
+
+     if (
+    nome.toLowerCase() === "verde" ||
+    nome.toLowerCase() === "azul" ||
+    nome.toLowerCase() === "vermelha"
+  ) {
+    nome = "BEATS " + nome;
+  }
+
+  elNome.textContent = nome.toUpperCase();
+}
+
+      if (elQtd) {
+        elQtd.textContent = item.qtd;
+      }
+
+      if (elItem) {
+        elItem.style.display = "flex";
+      }
+    });
+
+    /* ESCONDE LINHAS VAZIAS */
+
+    for (let i = ranking.length; i < 3; i++) {
+
+      const el = document.getElementById(
+        items[i]
+      );
+
+      if (el) {
+        el.style.display = "none";
+      }
+    }
+
+    /* TOTAL */
+
+    const bebidaTop = (
+      ranking[0]?.nome || "BEBIDA"
+    ).toUpperCase();
+
+    const texto = `
+      NO TOTAL FORAM MAIS DE
+      <strong id="beb-total-litros">
+        ${totalLitros}L DE ${bebidaTop}
+      </strong>
+      NESSES 33 DIAS...
+    `;
+
+    const elTotal = document.getElementById(
+      "beb-total-texto"
+    );
+
+    if (elTotal) {
+      elTotal.innerHTML = texto;
+    }
+  }
+
+  function usarDadosFallback() {
+
+    console.warn(
+      "Sem dados de bebidas."
+    );
+  }
+
+  carregarEstatisticasBebidas();
+
+})();
+</script>

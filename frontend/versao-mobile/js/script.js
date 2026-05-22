@@ -29,21 +29,6 @@ function getAgora() {
 }
 
 function eventoFinalizado() {
-  const agora = getAgora();
-  const fim = new Date(2026, 6, 6, 16, 59, 59);
-
-  if (agora < fim) return false;
-
-  for (let mes = 0; mes <= 1; mes++) {
-    for (let dia = 1; dia <= 31; dia++) {
-      if (dentroDoEvento(mes, dia)) {
-        if (obterStatus(mes, dia) === "disponivel") {
-          return false;
-        }
-      }
-    }
-  }
-
   return true;
 }
 function gerenciarSwipe() {

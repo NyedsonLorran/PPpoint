@@ -1,10 +1,295 @@
+/* ===== SLIDE BEBIDAS ===== */
+
 .bg-bebidas {
-  background-image: url('./imagens/bebida.png'); 
-  background-size: cover;      
+  background-image: url('../imagens/fundostories.png');
+  background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+
+  position: relative;
+  overflow: hidden;
 }
 
-.bg-bebidas .retro-card {
-  color: #f5f5f5;
+.bg-bebidas::before {
+  content: '';
+
+  position: absolute;
+  inset: 0;
+
+  background: linear-gradient(
+    180deg,
+    rgba(5, 20, 60, 0.55) 0%,
+    rgba(5, 20, 60, 0.30) 40%,
+    rgba(5, 20, 60, 0.70) 70%,
+    rgba(5, 20, 60, 0.90) 100%
+  );
+
+  z-index: 0;
+}
+
+.bebidas-content {
+  position: relative;
+  z-index: 1;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  height: 100%;
+
+  padding: 10% 5% 6%;
+  box-sizing: border-box;
+}
+
+/* ===== HEADER ===== */
+
+.bebidas-header {
+  text-align: center;
+}
+
+.bebidas-title {
+  font-size: clamp(2rem, 9vw, 3.8rem);
+  font-weight: 900;
+  color: #fff;
+
+  text-transform: uppercase;
+  letter-spacing: 2px;
+
+  margin: 0 0 4px 0;
+  line-height: 1.1;
+
+  text-shadow:
+    0 0 20px rgba(0,120,255,0.6),
+    0 2px 8px rgba(0,0,0,0.8);
+}
+
+.bebidas-sub,
+.bebidas-sub2 {
+  font-size: clamp(0.75rem, 3.5vw, 1.1rem);
+  font-weight: 700;
+  color: #fff;
+
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+
+  margin: 0;
+
+  text-shadow: 0 1px 4px rgba(0,0,0,0.8);
+}
+
+.bebidas-sub2 {
+  margin-top: 4px;
+}
+
+/* ===== FOTO ===== */
+
+.bebidas-foto-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex: 1;
+  max-height: 32%;
+}
+
+.bebidas-foto {
+  max-height: 100%;
+  max-width: 70%;
+  object-fit: contain;
+
+  filter: drop-shadow(
+    0 8px 24px rgba(0,80,255,0.5)
+  );
+
+  animation: bebFlutuando 3s ease-in-out infinite;
+}
+
+@keyframes bebFlutuando {
+
+  0%,100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+/* ===== RANKING ===== */
+
+.bebidas-ranking {
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 10px;
+}
+
+.beb-rank-item {
+  display: flex;
+  align-items: stretch;
+
+  width: 100%;
+}
+
+/* ===== NUMERO ===== */
+
+.beb-rank-num {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 70px;
+
+  font-size: clamp(0.85rem, 3.8vw, 1.2rem);
+  font-weight: 900;
+  color: #fff;
+
+  position: relative;
+  z-index: 1;
+
+  padding: 10px 12px 16px;
+}
+
+/* ===== NOME ===== */
+
+.beb-rank-nome {
+  flex: 1;
+
+  display: flex;
+  align-items: center;
+
+  min-width: 0;
+
+  padding: 10px 14px;
+
+  font-size: clamp(0.8rem, 3.5vw, 1.1rem);
+  font-weight: 800;
+  color: #fff;
+
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ===== QUANTIDADE ===== */
+
+.beb-rank-qtd {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 60px;
+
+  font-size: clamp(0.85rem, 3.8vw, 1.2rem);
+  font-weight: 900;
+  color: #fff;
+
+  position: relative;
+
+  padding: 10px 14px;
+}
+
+/* ===== CORES ===== */
+
+.rank-1 .beb-rank-num {
+  background: #1565c0;
+
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% 70%,
+    50% 100%,
+    0 70%
+  );
+}
+
+.rank-1 .beb-rank-nome,
+.rank-1 .beb-rank-qtd {
+  background: #1976d2;
+}
+
+.rank-2 .beb-rank-num {
+  background: #6d0404;
+
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% 70%,
+    50% 100%,
+    0 70%
+  );
+}
+
+.rank-2 .beb-rank-nome,
+.rank-2 .beb-rank-qtd {
+  background: #8b1a1a;
+}
+
+.rank-3 .beb-rank-num {
+  background: #1b5e20;
+
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% 70%,
+    50% 100%,
+    0 70%
+  );
+}
+
+.rank-3 .beb-rank-nome,
+.rank-3 .beb-rank-qtd {
+  background: #2e7d32;
+}
+
+/* ===== BRILHO ===== */
+
+.beb-rank-qtd::after {
+  content: '✦';
+
+  position: absolute;
+
+  top: 50%;
+  left: 50%;
+
+  transform: translate(-50%, -50%);
+
+  font-size: 2em;
+
+  color: rgba(255,255,255,0.12);
+
+  pointer-events: none;
+}
+
+/* ===== TOTAL ===== */
+
+.bebidas-total {
+  text-align: center;
+
+  padding: 8px 12px;
+}
+
+.bebidas-total p {
+  margin: 0;
+
+  font-size: clamp(0.7rem, 3.2vw, 1rem);
+  font-weight: 700;
+  color: #fff;
+
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  line-height: 1.5;
+
+  text-shadow:
+    0 1px 6px rgba(0,0,0,0.9);
+}
+
+.bebidas-total strong {
+  color: #64b5f6;
+  font-weight: 900;
 }

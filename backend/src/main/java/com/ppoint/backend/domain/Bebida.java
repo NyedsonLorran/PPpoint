@@ -21,4 +21,7 @@ public class Bebida {
     private CategoriaBebida categoria;
 
     private String nome;
+
+    @Column(columnDefinition = "text")
+    private String foto;
 }

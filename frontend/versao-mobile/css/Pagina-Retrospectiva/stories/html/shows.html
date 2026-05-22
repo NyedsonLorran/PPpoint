@@ -1,7 +1,97 @@
+<link rel="stylesheet" href="./css/cantores.css">
 
-<div class="retro-slide bg-shows">
-  <div class="retro-card">
-    <h1></h1>
-    <p></p>
+<div class="retro-slide bg-cantores" id="slide-cantores">
+  <div class="cantores-content">
+
+    <!-- Cabeçalho -->
+    <div class="cantores-header">
+      <h1 class="cantores-title">PP POINT 2026</h1>
+      <p class="cantores-sub">VOCÊ ASSISTIU MUITO SHOW</p>
+      <p class="cantores-sub2">SEUS CANTORES FAVORITOS DO SÃO JOÃO FORAM...</p>
+    </div>
+
+    <!-- Ranking Top 5 -->
+    <div class="cantores-ranking">
+      <div class="cant-rank-item rank-1" id="cant-rank-1">
+        <span class="cant-rank-num">#01</span>
+        <span class="cant-rank-nome" id="cant-nome-1">—</span>
+      </div>
+      <div class="cant-rank-item rank-2" id="cant-rank-2">
+        <span class="cant-rank-num">#02</span>
+        <span class="cant-rank-nome" id="cant-nome-2">—</span>
+      </div>
+      <div class="cant-rank-item rank-3" id="cant-rank-3">
+        <span class="cant-rank-num">#03</span>
+        <span class="cant-rank-nome" id="cant-nome-3">—</span>
+      </div>
+      <div class="cant-rank-item rank-4" id="cant-rank-4">
+        <span class="cant-rank-num">#04</span>
+        <span class="cant-rank-nome" id="cant-nome-4">—</span>
+      </div>
+      <div class="cant-rank-item rank-5" id="cant-rank-5">
+        <span class="cant-rank-num">#05</span>
+        <span class="cant-rank-nome" id="cant-nome-5">—</span>
+      </div>
+    </div>
+
   </div>
 </div>
+
+<script>
+(function() {
+  const DEV_ORIGINS = ["localhost", "127.0.0.1"];
+  const API_URL = DEV_ORIGINS.includes(window.location.hostname)
+    ? "http://localhost:8080"
+    : "https://pppoint-backend.onrender.com";
+
+  async function carregarEstatisticasCantores() {
+    try {
+      const token = sessionStorage.getItem("token");
+      if (!token) return;
+
+      const res = await fetch(`${API_URL}/registros/usuario/cantores`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+
+      if (!res.ok) return;
+      const retro = await res.json();
+
+      if (!retro.top5 || retro.top5.length === 0) return;
+
+      // Foto do top 1
+      if (retro.fotoTop1) {
+        const imgTop1 = document.getElementById("cant-foto-top1");
+        if (imgTop1) {
+          imgTop1.src = retro.fotoTop1;
+          imgTop1.style.display = "block";
+        }
+      }
+
+      preencherSlide(retro.top5);
+
+    } catch (e) {
+      console.warn("Cantores retro: erro ao carregar", e);
+    }
+  }
+
+  function preencherSlide(top5) {
+    const nomes = ["cant-nome-1", "cant-nome-2", "cant-nome-3", "cant-nome-4", "cant-nome-5"];
+    const items = ["cant-rank-1", "cant-rank-2", "cant-rank-3", "cant-rank-4", "cant-rank-5"];
+
+    top5.slice(0, 5).forEach((item, i) => {
+      const elNome = document.getElementById(nomes[i]);
+      const elItem = document.getElementById(items[i]);
+      if (elNome) elNome.textContent = item.nome.toUpperCase();
+      if (elItem) elItem.style.display = "flex";
+    });
+
+    // Esconde linhas sem dado
+    for (let i = top5.length; i < 5; i++) {
+      const el = document.getElementById(items[i]);
+      if (el) el.style.display = "none";
+    }
+  }
+
+  carregarEstatisticasCantores();
+})();
+</script>

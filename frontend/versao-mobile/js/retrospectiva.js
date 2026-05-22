@@ -196,6 +196,10 @@ function fecharRetrospectiva() {
   document.body.style.overflow = "auto";
   clearInterval(intervaloSlide);
 
+  // Permite que o slide de bebidas recarregue na próxima abertura
+  window._bebidasJaCarregou = false;
+  document.dispatchEvent(new Event("retroFechada"));
+
   if (audioRetro) {
     try {
       audioRetro.pause();
@@ -213,6 +217,12 @@ async function renderizarSlide() {
   
   if (slidesPrecarregados[url]) {
     container.innerHTML = slidesPrecarregados[url];
+    // Executa scripts injetados via innerHTML (não rodam automaticamente)
+    container.querySelectorAll("script").forEach(antigoScript => {
+      const novoScript = document.createElement("script");
+      novoScript.textContent = antigoScript.textContent;
+      antigoScript.parentNode.replaceChild(novoScript, antigoScript);
+    });
   } else {
     container.innerHTML = `<div class="retro-slide">Erro ao carregar stories</div>`;
   }

@@ -1,11 +1,155 @@
+/* ===== SLIDE CANTORES ===== */
 
-.bg-shows {
-  background-image: url('./imagens/show.png');
+.bg-cantores {
+  background-image: url('./imagens/fundostories.png');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  position: relative;
+  overflow: hidden;
 }
 
-.bg-shows .retro-card {
-  color: #f5f5f5;
+.bg-cantores::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg,
+    rgba(60, 5, 80, 0.60) 0%,
+    rgba(60, 5, 80, 0.30) 40%,
+    rgba(60, 5, 80, 0.75) 70%,
+    rgba(60, 5, 80, 0.95) 100%
+  );
+  z-index: 0;
 }
+
+.cantores-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  padding: 10% 5% 6%;
+  box-sizing: border-box;
+}
+
+/* --- Cabeçalho --- */
+.cantores-header {
+  text-align: center;
+}
+
+.cantores-title {
+  font-size: clamp(2rem, 9vw, 3.8rem);
+  font-weight: 900;
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-shadow: 0 0 20px rgba(180,0,255,0.6), 0 2px 8px rgba(0,0,0,0.8);
+  margin: 0 0 4px 0;
+  line-height: 1.1;
+}
+
+.cantores-sub {
+  font-size: clamp(0.75rem, 3.5vw, 1.1rem);
+  font-weight: 700;
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin: 0;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.8);
+}
+
+.cantores-sub2 {
+  font-size: clamp(0.75rem, 3.5vw, 1.1rem);
+  font-weight: 700;
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin: 4px 0 0 0;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.8);
+}
+
+/* --- Ranking top 5 --- */
+.cantores-ranking {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cant-rank-item {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  width: 100%;
+  position: relative;
+}
+
+.cant-rank-num {
+  font-size: clamp(0.85rem, 3.8vw, 1.2rem);
+  font-weight: 900;
+  color: #fff;
+  padding: 10px 12px;
+  border-radius: 4px 0 0 0;
+  min-width: 52px;
+  text-align: center;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.cant-rank-nome {
+  flex: 1;
+  font-size: clamp(0.8rem, 3.5vw, 1.1rem);
+  font-weight: 800;
+  color: #fff;
+  padding: 10px 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border-radius: 0 4px 4px 0;
+}
+
+/* Cores por posição */
+.rank-1 .cant-rank-num {
+  background-color: #6a0dad;
+  clip-path: polygon(0 0, 100% 0, 100% 70%, 50% 100%, 0 70%);
+  padding-bottom: 16px;
+}
+.rank-1 .cant-rank-nome { background-color: #8e24aa; }
+.rank-1 .cant-rank-nota { background-color: #8e24aa; }
+
+.rank-2 .cant-rank-num {
+  background-color: #880e4f;
+  clip-path: polygon(0 0, 100% 0, 100% 70%, 50% 100%, 0 70%);
+  padding-bottom: 16px;
+}
+.rank-2 .cant-rank-nome { background-color: #ad1457; }
+.rank-2 .cant-rank-nota { background-color: #ad1457; }
+
+.rank-3 .cant-rank-num {
+  background-color: #4a148c;
+  clip-path: polygon(0 0, 100% 0, 100% 70%, 50% 100%, 0 70%);
+  padding-bottom: 16px;
+}
+.rank-3 .cant-rank-nome { background-color: #6a1b9a; }
+.rank-3 .cant-rank-nota { background-color: #6a1b9a; }
+
+.rank-4 .cant-rank-num {
+  background-color: #311b92;
+  clip-path: polygon(0 0, 100% 0, 100% 70%, 50% 100%, 0 70%);
+  padding-bottom: 16px;
+}
+.rank-4 .cant-rank-nome { background-color: #4527a0; }
+.rank-4 .cant-rank-nota { background-color: #4527a0; }
+
+.rank-5 .cant-rank-num {
+  background-color: #1a237e;
+  clip-path: polygon(0 0, 100% 0, 100% 70%, 50% 100%, 0 70%);
+  padding-bottom: 16px;
+}
+.rank-5 .cant-rank-nome { background-color: #283593; }
+.rank-5 .cant-rank-nota { background-color: #283593; }
