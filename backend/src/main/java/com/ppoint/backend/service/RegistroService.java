@@ -10,6 +10,12 @@ import com.ppoint.backend.dto.RetrospectivaBebidaDTO;
 import com.ppoint.backend.dto.RetrospectivaBebidaDTO.BebidaRankingDTO;
 import com.ppoint.backend.dto.RetrospectivaCantorDTO;
 import com.ppoint.backend.dto.RetrospectivaCantorDTO.CantorRankingDTO;
+import com.ppoint.backend.dto.RetrospectivaDiasDTO;
+import com.ppoint.backend.dto.RetrospectivaAmigosDTO;
+import com.ppoint.backend.dto.RetrospectivaAmigosDTO.AmigoRankingDTO;
+import com.ppoint.backend.dto.RetrospectivaResumoDTO;
+import com.ppoint.backend.dto.RetrospectivaResumoDTO.ShowResumoDTO;
+import com.ppoint.backend.dto.RetrospectivaResumoDTO.BebidaResumoDTO;
 import com.ppoint.backend.exception.ResourceNotFoundException;
 import com.ppoint.backend.repository.AvaliacaoShowRepository;
 import com.ppoint.backend.repository.BebidaRepository;
@@ -20,6 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
@@ -46,6 +53,10 @@ public class RegistroService {
         this.bebidaRepository = bebidaRepository;
         this.cantorRepository = cantorRepository;
     }
+
+    // =========================================================
+    // REGISTRAR DIA
+    // =========================================================
 
     @Transactional
     public RegistroResponseDTO registrarDia(UUID userId, RegistrarDiaDTO dto) {
@@ -80,14 +91,13 @@ public class RegistroService {
         return new RegistroResponseDTO(registro.getId(), "Dia registrado com sucesso!");
     }
 
-    /**
-     * Calcula o top 3 de bebidas mais consumidas pelo usuário e o total de litros.
-     * Retorna também a foto da bebida #1 para exibir no story.
-     */
+    // =========================================================
+    // RETROSPECTIVA BEBIDAS
+    // =========================================================
+
     public RetrospectivaBebidaDTO getRetrospectivaBebidas(UUID userId) {
         List<RegistroExperiencia> registros = registroRepository.findByUserId(userId);
 
-        // Soma consumo total por bebidaId
         Map<String, Integer> totaisPorBebida = new HashMap<>();
         for (RegistroExperiencia reg : registros) {
             if (reg.getConsumo() == null) continue;
@@ -96,18 +106,15 @@ public class RegistroService {
             );
         }
 
-        // Busca bebidas no banco (nome + foto)
         Map<String, Bebida> bebidaMapa = new HashMap<>();
         if (!totaisPorBebida.isEmpty()) {
             List<UUID> ids = totaisPorBebida.keySet().stream()
-                    .map(UUID::fromString)
-                    .collect(Collectors.toList());
+                    .map(UUID::fromString).collect(Collectors.toList());
             bebidaRepository.findAllById(ids).forEach(b ->
                 bebidaMapa.put(b.getId().toString(), b)
             );
         }
 
-        // Ordena por quantidade e pega top 3
         List<BebidaRankingDTO> top3 = totaisPorBebida.entrySet().stream()
                 .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
                 .limit(3)
@@ -122,7 +129,6 @@ public class RegistroService {
                 })
                 .collect(Collectors.toList());
 
-        // Total de litros — volume por bebida extraído do nome
         double totalMl = totaisPorBebida.entrySet().stream().mapToDouble(e -> {
             Bebida b = bebidaMapa.get(e.getKey());
             double ml = extrairVolumeMl(b != null ? b.getNome() : "");
@@ -130,22 +136,17 @@ public class RegistroService {
         }).sum();
         double totalLitros = Math.round((totalMl / 1000.0) * 10.0) / 10.0;
 
-        // Foto do top 1
         String fotoTop1 = top3.isEmpty() ? null : top3.get(0).fotoUrl();
-
         return new RetrospectivaBebidaDTO(top3, totalLitros, fotoTop1);
     }
 
-    /**
-     * Calcula o top 3 de cantores mais bem avaliados pelo usuário.
-     * Usa a média das notas dadas em cada avaliação de show.
-     * Retorna também a foto do cantor #1 para exibir no story.
-     */
+    // =========================================================
+    // RETROSPECTIVA CANTORES
+    // =========================================================
+
     public RetrospectivaCantorDTO getRetrospectivaCantores(UUID userId) {
         List<RegistroExperiencia> registros = registroRepository.findByUserId(userId);
 
-        // Para cada avaliação, guarda: cantorId -> {nota, createdAt}
-        // Mantém apenas a avaliação mais recente por cantor (caso avaliou mais de uma vez)
         record AvaliacaoInfo(double nota, OffsetDateTime data) {}
         Map<UUID, AvaliacaoInfo> melhorPorCantor = new HashMap<>();
 
@@ -155,7 +156,6 @@ public class RegistroService {
                 double nota = av.getNota().doubleValue();
                 OffsetDateTime data = av.getCreatedAt();
                 melhorPorCantor.merge(av.getCantorId(), new AvaliacaoInfo(nota, data), (existing, novo) -> {
-                    // Mantém o de nota maior; em empate, o mais recente
                     if (novo.nota() > existing.nota()) return novo;
                     if (novo.nota() == existing.nota() && novo.data() != null && existing.data() != null
                             && novo.data().isAfter(existing.data())) return novo;
@@ -168,36 +168,30 @@ public class RegistroService {
             return new RetrospectivaCantorDTO(List.of(), null);
         }
 
-        // Busca cantores no banco (nome + foto)
         Map<UUID, Cantor> cantorMapa = new HashMap<>();
         cantorRepository.findAllById(melhorPorCantor.keySet())
                 .forEach(c -> cantorMapa.put(c.getId(), c));
 
-        // Separa os que têm nota 5 dos demais
         List<Map.Entry<UUID, AvaliacaoInfo>> comNota5 = melhorPorCantor.entrySet().stream()
                 .filter(e -> e.getValue().nota() == 5.0)
                 .sorted((a, b) -> {
-                    // Mais recentes primeiro
                     OffsetDateTime da = a.getValue().data();
                     OffsetDateTime db = b.getValue().data();
                     if (da == null && db == null) return 0;
                     if (da == null) return 1;
                     if (db == null) return -1;
                     return db.compareTo(da);
-                })
-                .collect(Collectors.toList());
+                }).collect(Collectors.toList());
 
         List<Map.Entry<UUID, AvaliacaoInfo>> semNota5 = melhorPorCantor.entrySet().stream()
                 .filter(e -> e.getValue().nota() < 5.0)
                 .sorted((a, b) -> Double.compare(b.getValue().nota(), a.getValue().nota()))
                 .collect(Collectors.toList());
 
-        // Junta: nota 5 (mais recentes) primeiro, depois os demais (maior nota)
         List<Map.Entry<UUID, AvaliacaoInfo>> ordenados = new ArrayList<>(comNota5);
         ordenados.addAll(semNota5);
 
-        List<CantorRankingDTO> top5 = ordenados.stream()
-                .limit(5)
+        List<CantorRankingDTO> top5 = ordenados.stream().limit(5)
                 .map(e -> {
                     Cantor c = cantorMapa.get(e.getKey());
                     return new CantorRankingDTO(
@@ -206,39 +200,126 @@ public class RegistroService {
                             e.getValue().nota(),
                             c != null ? c.getFoto() : null
                     );
-                })
-                .collect(Collectors.toList());
+                }).collect(Collectors.toList());
 
-        // Foto do top 1
         String fotoTop1 = top5.isEmpty() ? null : top5.get(0).fotoUrl();
-
         return new RetrospectivaCantorDTO(top5, fotoTop1);
     }
 
-    /**
-     * Extrai o volume em ml do nome da bebida.
-     * Exemplos: "Beats 1L" -> 1000, "Beats 269ml" -> 269, "Beats Lata" -> 269 (padrão)
-     */
+    // =========================================================
+    // RETROSPECTIVA DIAS
+    // =========================================================
+
+    public RetrospectivaDiasDTO getRetrospectivaDias(UUID userId) {
+        List<RegistroExperiencia> registros = registroRepository.findByUserId(userId);
+
+        int totalDias = registros.size();
+
+        // Extrai datas únicas e ordena
+        List<LocalDate> datas = registros.stream()
+                .map(r -> LocalDate.parse(r.getDiaId(), DateTimeFormatter.ISO_LOCAL_DATE))
+                .distinct()
+                .sorted()
+                .collect(Collectors.toList());
+
+        // Maior sequência consecutiva
+        int maiorSequencia = 0;
+        int sequenciaAtual = datas.isEmpty() ? 0 : 1;
+        for (int i = 1; i < datas.size(); i++) {
+            if (datas.get(i).equals(datas.get(i - 1).plusDays(1))) {
+                sequenciaAtual++;
+            } else {
+                maiorSequencia = Math.max(maiorSequencia, sequenciaAtual);
+                sequenciaAtual = 1;
+            }
+        }
+        maiorSequencia = Math.max(maiorSequencia, sequenciaAtual);
+
+        // Finais de semana (sábado ou domingo)
+        long finaisDeSemana = datas.stream()
+                .filter(d -> d.getDayOfWeek() == DayOfWeek.SATURDAY
+                          || d.getDayOfWeek() == DayOfWeek.SUNDAY)
+                .count();
+
+        return new RetrospectivaDiasDTO(totalDias, maiorSequencia, (int) finaisDeSemana);
+    }
+
+    // =========================================================
+    // RETROSPECTIVA AMIGOS
+    // =========================================================
+
+    public RetrospectivaAmigosDTO getRetrospectivaAmigos(UUID userId) {
+        List<RegistroExperiencia> registros = registroRepository.findByUserId(userId);
+
+        // Conta aparições por instagram do acompanhante
+        Map<String, Integer> contagemPorInsta = new HashMap<>();
+        for (RegistroExperiencia reg : registros) {
+            String insta = reg.getAcompanhanteInsta();
+            if (insta != null && !insta.isBlank()) {
+                String normalizado = insta.trim().toLowerCase().replaceAll("^@", "");
+                contagemPorInsta.merge(normalizado, 1, Integer::sum);
+            }
+        }
+
+        List<AmigoRankingDTO> top3 = contagemPorInsta.entrySet().stream()
+                .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
+                .limit(3)
+                .map(e -> new AmigoRankingDTO(e.getKey(), e.getKey(), e.getValue()))
+                .collect(Collectors.toList());
+
+        return new RetrospectivaAmigosDTO(top3);
+    }
+
+    // =========================================================
+    // RETROSPECTIVA RESUMO (agrega tudo num único endpoint)
+    // =========================================================
+
+    public RetrospectivaResumoDTO getRetrospectivaResumo(UUID userId) {
+        // Dias
+        RetrospectivaDiasDTO dias = getRetrospectivaDias(userId);
+
+        // Bebida top 1
+        RetrospectivaBebidaDTO bebidas = getRetrospectivaBebidas(userId);
+        BebidaResumoDTO bebidaTop = null;
+        if (!bebidas.top3().isEmpty()) {
+            var b = bebidas.top3().get(0);
+            bebidaTop = new BebidaResumoDTO(b.nome(), b.quantidade(), b.fotoUrl());
+        }
+
+        // Shows top 3
+        RetrospectivaCantorDTO cantores = getRetrospectivaCantores(userId);
+        List<ShowResumoDTO> topShows = cantores.top5().stream()
+                .limit(3)
+                .map(c -> new ShowResumoDTO(c.nome(), c.nota()))
+                .collect(Collectors.toList());
+
+        // Dupla (acompanhante mais frequente)
+        RetrospectivaAmigosDTO amigos = getRetrospectivaAmigos(userId);
+        String dupla = amigos.top3().isEmpty() ? null : amigos.top3().get(0).instagram();
+
+        return new RetrospectivaResumoDTO(dias.totalDias(), topShows, bebidaTop, dupla);
+    }
+
+    // =========================================================
+    // UTILITÁRIOS
+    // =========================================================
+
     private double extrairVolumeMl(String nome) {
         if (nome == null) return 269.0;
         String lower = nome.toLowerCase();
 
-        // Padrão "XL" ex: 1L, 2L, 0.5L
         java.util.regex.Matcher mL = java.util.regex.Pattern
                 .compile("([\\d]+(?:[.,]\\d+)?)\\s*l\\b").matcher(lower);
         if (mL.find()) {
-            double litros = Double.parseDouble(mL.group(1).replace(",", "."));
-            return litros * 1000.0;
+            return Double.parseDouble(mL.group(1).replace(",", ".")) * 1000.0;
         }
 
-        // Padrão "Xml" ex: 269ml, 350ml
         java.util.regex.Matcher mMl = java.util.regex.Pattern
                 .compile("([\\d]+(?:[.,]\\d+)?)\\s*ml").matcher(lower);
         if (mMl.find()) {
             return Double.parseDouble(mMl.group(1).replace(",", "."));
         }
 
-        // Padrão lata genérica
         return 269.0;
     }
 }

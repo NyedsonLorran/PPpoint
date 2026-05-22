@@ -5,6 +5,9 @@ import com.ppoint.backend.dto.RegistrarDiaDTO;
 import com.ppoint.backend.dto.RegistroResponseDTO;
 import com.ppoint.backend.dto.RetrospectivaBebidaDTO;
 import com.ppoint.backend.dto.RetrospectivaCantorDTO;
+import com.ppoint.backend.dto.RetrospectivaDiasDTO;
+import com.ppoint.backend.dto.RetrospectivaAmigosDTO;
+import com.ppoint.backend.dto.RetrospectivaResumoDTO;
 import com.ppoint.backend.service.RegistroService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,18 +24,14 @@ public class RegistroController {
         this.registroService = registroService;
     }
 
-    /**
-     * POST /registros
-     * Registra o dia do usuário logado.
-     */
+    /** POST /registros — registra o dia do usuário logado. */
     @PostMapping
     public ResponseEntity<?> registrarDia(
             @RequestBody RegistrarDiaDTO dto,
             @AuthenticationPrincipal User usuario) {
 
-        if (usuario == null) {
+        if (usuario == null)
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Usuário não autenticado");
-        }
 
         try {
             RegistroResponseDTO resposta = registroService.registrarDia(usuario.getId(), dto);
@@ -42,37 +41,53 @@ public class RegistroController {
         }
     }
 
-    /**
-     * GET /registros/usuario/bebidas
-     * Retorna o top 3 de bebidas mais consumidas e o total de litros do usuário logado.
-     * Usado no story de bebidas da retrospectiva.
-     */
+    /** GET /registros/usuario/bebidas — top 3 bebidas + total de litros. */
     @GetMapping("/usuario/bebidas")
-    public ResponseEntity<?> getRetrospectivaBebidas(
-            @AuthenticationPrincipal User usuario) {
-
-        if (usuario == null) {
+    public ResponseEntity<?> getRetrospectivaBebidas(@AuthenticationPrincipal User usuario) {
+        if (usuario == null)
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Usuário não autenticado");
-        }
 
         RetrospectivaBebidaDTO retro = registroService.getRetrospectivaBebidas(usuario.getId());
         return ResponseEntity.ok(retro);
     }
 
-    /**
-     * GET /registros/usuario/cantores
-     * Retorna o top 3 de cantores mais bem avaliados e a média geral do usuário logado.
-     * Usado no story de cantores da retrospectiva.
-     */
+    /** GET /registros/usuario/cantores — top 5 cantores mais bem avaliados. */
     @GetMapping("/usuario/cantores")
-    public ResponseEntity<?> getRetrospectivaCantores(
-            @AuthenticationPrincipal User usuario) {
-
-        if (usuario == null) {
+    public ResponseEntity<?> getRetrospectivaCantores(@AuthenticationPrincipal User usuario) {
+        if (usuario == null)
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Usuário não autenticado");
-        }
 
         RetrospectivaCantorDTO retro = registroService.getRetrospectivaCantores(usuario.getId());
+        return ResponseEntity.ok(retro);
+    }
+
+    /** GET /registros/usuario/dias — total de dias, maior sequência e finais de semana. */
+    @GetMapping("/usuario/dias")
+    public ResponseEntity<?> getRetrospectivaDias(@AuthenticationPrincipal User usuario) {
+        if (usuario == null)
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Usuário não autenticado");
+
+        RetrospectivaDiasDTO retro = registroService.getRetrospectivaDias(usuario.getId());
+        return ResponseEntity.ok(retro);
+    }
+
+    /** GET /registros/usuario/amigos — top 3 acompanhantes mais frequentes. */
+    @GetMapping("/usuario/amigos")
+    public ResponseEntity<?> getRetrospectivaAmigos(@AuthenticationPrincipal User usuario) {
+        if (usuario == null)
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Usuário não autenticado");
+
+        RetrospectivaAmigosDTO retro = registroService.getRetrospectivaAmigos(usuario.getId());
+        return ResponseEntity.ok(retro);
+    }
+
+    /** GET /registros/usuario/resumo — resumão geral para o slide de resumo. */
+    @GetMapping("/usuario/resumo")
+    public ResponseEntity<?> getRetrospectivaResumo(@AuthenticationPrincipal User usuario) {
+        if (usuario == null)
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Usuário não autenticado");
+
+        RetrospectivaResumoDTO retro = registroService.getRetrospectivaResumo(usuario.getId());
         return ResponseEntity.ok(retro);
     }
 }

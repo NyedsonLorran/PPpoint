@@ -1,9 +1,304 @@
+/* ===== SLIDE RESUMO ===== */
 
 .bg-resumo {
-  background-image: url('./imagens/resumo.png');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  background-image: none !important;
+
+  background: linear-gradient(
+    180deg,
+    #03103a 0%,
+    #071a5e 55%,
+    #0a2070 100%
+  ) !important;
+
+  position: relative;
+  overflow: hidden;
 }
 
+.bg-resumo::before {
+  content: '';
 
+  position: absolute;
+  inset: 0;
+
+  background: linear-gradient(
+    180deg,
+    rgba(3, 10, 40, 0.60) 0%,
+    rgba(3, 10, 40, 0.35) 35%,
+    rgba(3, 10, 40, 0.70) 75%,
+    rgba(3, 10, 40, 0.92) 100%
+  );
+
+  z-index: 0;
+}
+
+.resumo-content {
+  position: relative;
+  z-index: 1;
+
+  display: flex;
+  flex-direction: column;
+
+  height: 100%;
+
+  padding: 10% 4% 8%;
+
+  box-sizing: border-box;
+  gap: 20px;
+}
+
+/* ===== CABEÇALHO ===== */
+
+.resumo-header {
+  text-align: center;
+}
+
+.resumo-title {
+  font-size: clamp(1.5rem, 7vw, 2.6rem);
+  font-weight: 900;
+
+  color: #fff;
+
+  text-transform: uppercase;
+  letter-spacing: 2px;
+
+  margin: 0;
+
+  line-height: 1.1;
+
+  text-shadow:
+    0 0 20px rgba(0,120,255,0.5),
+    0 2px 8px rgba(0,0,0,0.8);
+}
+
+/* ===== GRID ===== */
+
+.resumo-grid {
+  display: flex;
+  gap: 12px;
+
+  flex: 1;
+
+  align-items: flex-start;
+}
+
+.resumo-col {
+  flex: 1;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 18px;
+}
+
+/* ===== BLOCO ===== */
+
+.resumo-bloco {
+  display: flex;
+  flex-direction: column;
+
+  gap: 6px;
+}
+
+.resumo-label {
+  font-size: clamp(0.7rem, 3vw, 0.9rem);
+  font-weight: 700;
+
+  color: #fff;
+
+  text-transform: uppercase;
+  letter-spacing: 1px;
+
+  margin: 0;
+
+  text-shadow: 0 1px 4px rgba(0,0,0,0.7);
+}
+
+.resumo-label-dir {
+  font-size: clamp(0.65rem, 2.8vw, 0.82rem);
+  font-weight: 700;
+
+  color: #fff;
+
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+
+  margin: 0;
+
+  text-align: right;
+
+  text-shadow: 0 1px 4px rgba(0,0,0,0.7);
+}
+
+/* ===== CHIP ===== */
+
+.resumo-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 8px 14px 14px;
+
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% 70%,
+    50% 100%,
+    0 70%
+  );
+
+  min-width: 64px;
+
+  align-self: flex-start;
+}
+
+.chip-azul {
+  background: #1565c0;
+}
+
+.resumo-chip span {
+  font-size: clamp(1.1rem, 5.5vw, 1.7rem);
+  font-weight: 900;
+
+  color: #fff;
+
+  line-height: 1;
+}
+
+/* ===== SHOWS ===== */
+
+.resumo-bloco-show {
+  gap: 5px;
+}
+
+.resumo-show-item {
+  display: flex;
+  align-items: center;
+
+  gap: 0;
+}
+
+.resumo-show-num {
+  font-size: clamp(0.72rem, 3.2vw, 0.9rem);
+  font-weight: 900;
+
+  color: #fff;
+
+  padding: 7px 9px 12px;
+
+  flex-shrink: 0;
+
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% 70%,
+    50% 100%,
+    0 70%
+  );
+
+  min-width: 38px;
+
+  text-align: center;
+}
+
+.resumo-show-nome {
+  flex: 1;
+
+  font-size: clamp(0.7rem, 3vw, 0.86rem);
+  font-weight: 800;
+
+  color: #fff;
+
+  padding: 7px 10px;
+
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.show-rank-1 .resumo-show-num {
+  background: #6a0dad;
+}
+
+.show-rank-1 .resumo-show-nome {
+  background: #8e24aa;
+}
+
+.show-rank-2 .resumo-show-num {
+  background: #880e4f;
+}
+
+.show-rank-2 .resumo-show-nome {
+  background: #ad1457;
+}
+
+.show-rank-3 .resumo-show-num {
+  background: #4a148c;
+}
+
+.show-rank-3 .resumo-show-nome {
+  background: #6a1b9a;
+}
+
+/* ===== BEBIDA ===== */
+
+.resumo-bloco-bebida {
+  align-items: flex-end;
+
+  gap: 4px;
+}
+
+.resumo-bebida-img-wrapper {
+  display: flex;
+  justify-content: flex-end;
+
+  min-height: 70px;
+}
+
+.resumo-bebida-img-wrapper img {
+  max-height: 90px;
+  max-width: 80px;
+
+  object-fit: contain;
+
+  filter: drop-shadow(
+    0 4px 12px rgba(0,80,255,0.4)
+  );
+}
+
+.resumo-bebida-chip {
+  align-self: flex-end;
+}
+
+.resumo-bebida-nome {
+  font-size: clamp(0.68rem, 3vw, 0.85rem);
+  font-weight: 800;
+
+  color: #fff;
+
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+
+  text-align: right;
+
+  margin: 0;
+
+  text-shadow: 0 1px 4px rgba(0,0,0,0.8);
+}
+
+/* ===== DUPLA ===== */
+
+.resumo-dupla-insta {
+  font-size: clamp(0.85rem, 4vw, 1.1rem);
+  font-weight: 900;
+
+  color: #fff;
+
+  text-align: right;
+
+  margin: 0;
+
+  text-shadow: 0 1px 6px rgba(0,0,0,0.8);
+}

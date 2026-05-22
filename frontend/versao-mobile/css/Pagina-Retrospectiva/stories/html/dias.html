@@ -1,8 +1,92 @@
 <link rel="stylesheet" href="./css/dias.css">
 
-<div class="retro-slide bg-dias">
-  <div class="retro-card">
-    <h1></h1>
-    <p> </p>
+<div class="retro-slide bg-dias" id="slide-dias">
+
+  <div class="dias-content">
+
+    <div class="dias-header">
+      <h1 class="dias-title">MEU PP PONT 2026</h1>
+    </div>
+
+    <div class="dias-ranking">
+
+      <div class="dias-rank-item rank-azul" id="dias-item-total">
+        <span class="dias-rank-num" id="dias-total">—</span>
+        <span class="dias-rank-label">DIAS DE 33</span>
+      </div>
+
+      <div class="dias-rank-item rank-verde" id="dias-item-seguidos">
+        <span class="dias-rank-num" id="dias-seguidos">—</span>
+        <span class="dias-rank-label">
+          DIAS SEGUIDOS SEM<br>PARAR FOI SEU RECORDE
+        </span>
+      </div>
+
+      <div class="dias-rank-item rank-azul-claro" id="dias-item-fds">
+        <span class="dias-rank-num" id="dias-fds">—</span>
+        <span class="dias-rank-label">
+          FINAIS DE SEMANA<br>BATENDO PONTO NO PP
+        </span>
+      </div>
+
+    </div>
+
   </div>
+
 </div>
+
+<script>
+(function () {
+
+  const DEV_ORIGINS = ["localhost", "127.0.0.1"];
+
+  const API_URL = DEV_ORIGINS.includes(window.location.hostname)
+    ? "http://localhost:8080"
+    : "https://pppoint-backend.onrender.com";
+
+  async function carregarDias() {
+
+    try {
+
+      const token = sessionStorage.getItem("token");
+
+      if (!token) return;
+
+      const res = await fetch(`${API_URL}/registros/usuario/dias`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      if (!res.ok) return;
+
+      const dados = await res.json();
+
+      const elTotal = document.getElementById("dias-total");
+      const elSeguidos = document.getElementById("dias-seguidos");
+      const elFds = document.getElementById("dias-fds");
+
+      if (elTotal) {
+        elTotal.textContent = dados.totalDias ?? "0";
+      }
+
+      if (elSeguidos) {
+        elSeguidos.textContent = dados.maiorSequencia ?? "0";
+      }
+
+      if (elFds) {
+        elFds.textContent = dados.finaisDeSemana ?? "0";
+      }
+
+    } catch (e) {
+
+      console.warn("Dias retro: erro", e);
+
+    }
+
+  }
+
+  carregarDias();
+
+})();
+</script>

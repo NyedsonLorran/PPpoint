@@ -1,8 +1,228 @@
 <link rel="stylesheet" href="./css/resumo.css">
 
-<div class="retro-slide bg-resumo">
-  <div class="retro-card">
-    <h1>  </h1>
-    <p></p>
+<div class="retro-slide bg-resumo" id="slide-resumo">
+
+  <div class="resumo-content">
+
+    <div class="resumo-header">
+      <h1 class="resumo-title">
+        MEU RESUMO<br>
+        PP POINT 2026
+      </h1>
+    </div>
+
+    <!-- Grade -->
+    <div class="resumo-grid">
+
+      <!-- Coluna esquerda -->
+      <div class="resumo-col">
+
+        <!-- Dias -->
+        <div class="resumo-bloco">
+          <p class="resumo-label">DIAS</p>
+
+          <div class="resumo-chip chip-azul" id="resumo-dias-chip">
+            <span id="resumo-dias-val">—/33</span>
+          </div>
+        </div>
+
+        <!-- Top Shows -->
+        <div class="resumo-bloco resumo-bloco-show">
+
+          <p class="resumo-label">
+            MEU TOP SHOW
+          </p>
+
+          <div class="resumo-shows" id="resumo-shows">
+            <!-- preenchido via JS -->
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- Coluna direita -->
+      <div class="resumo-col">
+
+        <!-- Bebida -->
+        <div class="resumo-bloco resumo-bloco-bebida">
+
+          <p class="resumo-label-dir">
+            MINHA BEBIDA FOI
+          </p>
+
+          <div class="resumo-bebida-img-wrapper">
+
+            <img
+              id="resumo-bebida-img"
+              src=""
+              alt="bebida"
+              style="display:none"
+              onerror="this.style.display='none'"
+            >
+
+          </div>
+
+          <div class="resumo-chip chip-azul resumo-bebida-chip">
+            <span id="resumo-bebida-qtd">—</span>
+          </div>
+
+          <p
+            class="resumo-bebida-nome"
+            id="resumo-bebida-nome"
+          >
+            —
+          </p>
+
+        </div>
+
+        <!-- Dupla -->
+        <div class="resumo-bloco">
+
+          <p class="resumo-label-dir">
+            MINHA DUPLA
+          </p>
+
+          <p
+            class="resumo-dupla-insta"
+            id="resumo-dupla"
+          >
+            —
+          </p>
+
+        </div>
+
+      </div>
+
+    </div>
+
   </div>
+
 </div>
+
+<script>
+(function () {
+
+  const DEV_ORIGINS = ["localhost", "127.0.0.1"];
+
+  const API_URL = DEV_ORIGINS.includes(window.location.hostname)
+    ? "http://localhost:8080"
+    : "https://pppoint-backend.onrender.com";
+
+  async function carregarResumo() {
+
+    try {
+
+      const token = sessionStorage.getItem("token");
+
+      if (!token) return;
+
+      const res = await fetch(`${API_URL}/registros/usuario/resumo`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      if (!res.ok) return;
+
+      const d = await res.json();
+
+      /* ===== DIAS ===== */
+
+      const elDias = document.getElementById("resumo-dias-val");
+
+      if (elDias) {
+        elDias.textContent = `${d.totalDias ?? 0}/33`;
+      }
+
+      /* ===== SHOWS ===== */
+
+      const elShows = document.getElementById("resumo-shows");
+
+      if (
+        elShows &&
+        d.topShows &&
+        d.topShows.length > 0
+      ) {
+
+        const cls = [
+          "show-rank-1",
+          "show-rank-2",
+          "show-rank-3"
+        ];
+
+        const num = [
+          "#01",
+          "#02",
+          "#03"
+        ];
+
+        elShows.innerHTML = d.topShows
+          .slice(0, 3)
+          .map((s, i) => `
+            <div class="resumo-show-item ${cls[i]}">
+
+              <span class="resumo-show-num">
+                ${num[i]}
+              </span>
+
+              <span class="resumo-show-nome">
+                ${s.nome.toUpperCase()}
+              </span>
+
+            </div>
+          `)
+          .join("");
+      }
+
+      /* ===== BEBIDA ===== */
+
+      const elBebImg = document.getElementById("resumo-bebida-img");
+      const elBebQtd = document.getElementById("resumo-bebida-qtd");
+      const elBebNome = document.getElementById("resumo-bebida-nome");
+
+      if (d.bebidaTop) {
+
+        if (elBebImg && d.bebidaTop.fotoUrl) {
+
+          elBebImg.src = d.bebidaTop.fotoUrl;
+          elBebImg.style.display = "block";
+
+        }
+
+        if (elBebQtd) {
+          elBebQtd.textContent =
+            d.bebidaTop.quantidade ?? "—";
+        }
+
+        if (elBebNome) {
+          elBebNome.textContent =
+            (d.bebidaTop.nome ?? "—").toUpperCase();
+        }
+
+      }
+
+      /* ===== DUPLA ===== */
+
+      const elDupla = document.getElementById("resumo-dupla");
+
+      if (elDupla && d.dupla) {
+
+        elDupla.textContent = d.dupla.startsWith("@")
+          ? d.dupla
+          : "@" + d.dupla;
+
+      }
+
+    } catch (e) {
+
+      console.warn("Resumo retro: erro", e);
+
+    }
+
+  }
+
+  carregarResumo();
+
+})();
+</script>
