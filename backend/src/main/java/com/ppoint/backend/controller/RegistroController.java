@@ -41,9 +41,11 @@ public class RegistroController {
         }
     }
 
-    /** GET /registros/usuario/bebidas — top 3 bebidas + total de litros. */
+    /** GET /registros/usuario/bebidas — top 3 bebidas + total de litros da #1. */
     @GetMapping("/usuario/bebidas")
-    public ResponseEntity<?> getRetrospectivaBebidas(@AuthenticationPrincipal User usuario) {
+    public ResponseEntity<?> getRetrospectivaBebidas(
+            @AuthenticationPrincipal User usuario) {
+
         if (usuario == null)
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Usuário não autenticado");
 
@@ -53,7 +55,9 @@ public class RegistroController {
 
     /** GET /registros/usuario/cantores — top 5 cantores mais bem avaliados. */
     @GetMapping("/usuario/cantores")
-    public ResponseEntity<?> getRetrospectivaCantores(@AuthenticationPrincipal User usuario) {
+    public ResponseEntity<?> getRetrospectivaCantores(
+            @AuthenticationPrincipal User usuario) {
+
         if (usuario == null)
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Usuário não autenticado");
 
@@ -63,7 +67,9 @@ public class RegistroController {
 
     /** GET /registros/usuario/dias — total de dias, maior sequência e finais de semana. */
     @GetMapping("/usuario/dias")
-    public ResponseEntity<?> getRetrospectivaDias(@AuthenticationPrincipal User usuario) {
+    public ResponseEntity<?> getRetrospectivaDias(
+            @AuthenticationPrincipal User usuario) {
+
         if (usuario == null)
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Usuário não autenticado");
 
@@ -73,7 +79,9 @@ public class RegistroController {
 
     /** GET /registros/usuario/amigos — top 3 acompanhantes mais frequentes. */
     @GetMapping("/usuario/amigos")
-    public ResponseEntity<?> getRetrospectivaAmigos(@AuthenticationPrincipal User usuario) {
+    public ResponseEntity<?> getRetrospectivaAmigos(
+            @AuthenticationPrincipal User usuario) {
+
         if (usuario == null)
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Usuário não autenticado");
 
@@ -83,7 +91,9 @@ public class RegistroController {
 
     /** GET /registros/usuario/resumo — resumão geral para o slide de resumo. */
     @GetMapping("/usuario/resumo")
-    public ResponseEntity<?> getRetrospectivaResumo(@AuthenticationPrincipal User usuario) {
+    public ResponseEntity<?> getRetrospectivaResumo(
+            @AuthenticationPrincipal User usuario) {
+
         if (usuario == null)
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Usuário não autenticado");
 

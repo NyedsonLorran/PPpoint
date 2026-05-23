@@ -129,12 +129,15 @@ public class RegistroService {
                 })
                 .collect(Collectors.toList());
 
-        double totalMl = totaisPorBebida.entrySet().stream().mapToDouble(e -> {
-            Bebida b = bebidaMapa.get(e.getKey());
-            double ml = extrairVolumeMl(b != null ? b.getNome() : "");
-            return ml * e.getValue();
-        }).sum();
-        double totalLitros = Math.round((totalMl / 1000.0) * 10.0) / 10.0;
+        // Total de litros — apenas da bebida #1 (quantidade dela x volume unitário)
+        double totalLitros = 0.0;
+        if (!top3.isEmpty()) {
+            BebidaRankingDTO top1 = top3.get(0);
+            Bebida b1 = bebidaMapa.get(top1.bebidaId());
+            double mlUnitario = extrairVolumeMl(b1 != null ? b1.getNome() : "");
+            double totalMl = mlUnitario * top1.quantidade();
+            totalLitros = Math.round((totalMl / 1000.0) * 10.0) / 10.0;
+        }
 
         String fotoTop1 = top3.isEmpty() ? null : top3.get(0).fotoUrl();
         return new RetrospectivaBebidaDTO(top3, totalLitros, fotoTop1);
@@ -215,14 +218,12 @@ public class RegistroService {
 
         int totalDias = registros.size();
 
-        // Extrai datas únicas e ordena
         List<LocalDate> datas = registros.stream()
                 .map(r -> LocalDate.parse(r.getDiaId(), DateTimeFormatter.ISO_LOCAL_DATE))
                 .distinct()
                 .sorted()
                 .collect(Collectors.toList());
 
-        // Maior sequência consecutiva
         int maiorSequencia = 0;
         int sequenciaAtual = datas.isEmpty() ? 0 : 1;
         for (int i = 1; i < datas.size(); i++) {
@@ -235,7 +236,6 @@ public class RegistroService {
         }
         maiorSequencia = Math.max(maiorSequencia, sequenciaAtual);
 
-        // Finais de semana (sábado ou domingo)
         long finaisDeSemana = datas.stream()
                 .filter(d -> d.getDayOfWeek() == DayOfWeek.SATURDAY
                           || d.getDayOfWeek() == DayOfWeek.SUNDAY)
@@ -251,13 +251,20 @@ public class RegistroService {
     public RetrospectivaAmigosDTO getRetrospectivaAmigos(UUID userId) {
         List<RegistroExperiencia> registros = registroRepository.findByUserId(userId);
 
-        // Conta aparições por instagram do acompanhante
+        // O campo acompanhanteInsta pode conter múltiplos separados por vírgula
+        // ex: "@maria, @joao, @ana" → conta cada um individualmente
         Map<String, Integer> contagemPorInsta = new HashMap<>();
         for (RegistroExperiencia reg : registros) {
-            String insta = reg.getAcompanhanteInsta();
-            if (insta != null && !insta.isBlank()) {
-                String normalizado = insta.trim().toLowerCase().replaceAll("^@", "");
-                contagemPorInsta.merge(normalizado, 1, Integer::sum);
+            String campo = reg.getAcompanhanteInsta();
+            if (campo == null || campo.isBlank()) continue;
+
+            // Splita por vírgula, normaliza cada instagram e conta
+            String[] partes = campo.split(",");
+            for (String parte : partes) {
+                String normalizado = parte.trim().toLowerCase().replaceAll("^@", "");
+                if (!normalizado.isBlank()) {
+                    contagemPorInsta.merge(normalizado, 1, Integer::sum);
+                }
             }
         }
 
@@ -271,14 +278,12 @@ public class RegistroService {
     }
 
     // =========================================================
-    // RETROSPECTIVA RESUMO (agrega tudo num único endpoint)
+    // RETROSPECTIVA RESUMO
     // =========================================================
 
     public RetrospectivaResumoDTO getRetrospectivaResumo(UUID userId) {
-        // Dias
         RetrospectivaDiasDTO dias = getRetrospectivaDias(userId);
 
-        // Bebida top 1
         RetrospectivaBebidaDTO bebidas = getRetrospectivaBebidas(userId);
         BebidaResumoDTO bebidaTop = null;
         if (!bebidas.top3().isEmpty()) {
@@ -286,14 +291,12 @@ public class RegistroService {
             bebidaTop = new BebidaResumoDTO(b.nome(), b.quantidade(), b.fotoUrl());
         }
 
-        // Shows top 3
         RetrospectivaCantorDTO cantores = getRetrospectivaCantores(userId);
         List<ShowResumoDTO> topShows = cantores.top5().stream()
                 .limit(3)
                 .map(c -> new ShowResumoDTO(c.nome(), c.nota()))
                 .collect(Collectors.toList());
 
-        // Dupla (acompanhante mais frequente)
         RetrospectivaAmigosDTO amigos = getRetrospectivaAmigos(userId);
         String dupla = amigos.top3().isEmpty() ? null : amigos.top3().get(0).instagram();
 
