@@ -1,9 +1,29 @@
-function dentroDoEvento(mes, dia) {
-  return true;
+ function dentroDoEvento(mes, dia) {
+  if (mes === 0 && dia >= 3) return true;
+  if (mes === 1 && dia <= 5) return true;
+  return false;
 }
 
-function obterStatus(mes, dia) {
-  return "disponivel";
+ function obterStatus(mes, dia) {
+  if (!dentroDoEvento(mes, dia)) return "fora";
+
+  let mesReal = mes === 0 ? 5 : 6;''
+  let dataEvento = new Date(ano, mesReal, dia);
+
+  // início 17:00 do próprio dia
+  let inicio = new Date(dataEvento);
+  inicio.setHours(17, 0, 0, 0);
+
+  // fim 16:59 do dia seguinte
+  let fim = new Date(inicio);
+  fim.setDate(fim.getDate() + 1);
+  fim.setHours(16, 59, 59, 999);
+
+  const agora = getAgora();
+
+  if (agora < inicio) return "bloqueado";
+  if (agora >= inicio && agora <= fim) return "disponivel";
+  return "encerrado";
 }
 function renderizarCalendario() {
   const containerDias = document.getElementById("dias");
