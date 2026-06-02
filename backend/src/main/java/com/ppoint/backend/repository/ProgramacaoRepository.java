@@ -27,7 +27,7 @@ public interface ProgramacaoRepository extends JpaRepository<Programacao, UUID> 
             FROM Programacao p
             JOIN Dia d ON d.id = p.diaId
             WHERE d.data = :data
-            ORDER BY p.horario ASC
+            ORDER BY CASE WHEN HOUR(p.horario) < 6 THEN 1 ELSE 0 END ASC, p.horario ASC
             """)
     List<ProgramacaoItemDTO> findProgramacaoPorData(@Param("data") LocalDate data);
 

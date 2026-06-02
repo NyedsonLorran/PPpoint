@@ -89,7 +89,22 @@ async function renderizarProgramacao() {
   const hoje = new Date(agoraFixo.getFullYear(), agoraFixo.getMonth(), agoraFixo.getDate());
 
   grupo.forEach((dataIso, i) => {
-    const shows = programacoes[i];
+  let shows = [...programacoes[i]];
+
+  shows.sort((a, b) => {
+  const horaA = a.horario.substring(0, 5);
+  const horaB = b.horario.substring(0, 5);
+
+  const valorA = horaA < "06:00"
+    ? parseInt(horaA.replace(":", "")) + 2400
+    : parseInt(horaA.replace(":", ""));
+
+  const valorB = horaB < "06:00"
+    ? parseInt(horaB.replace(":", "")) + 2400
+    : parseInt(horaB.replace(":", ""));
+
+  return valorA - valorB;
+});
 
     const [anoD, mesD, diaD] = dataIso.split("-").map(Number);
     const dataEvento = new Date(anoD, mesD - 1, diaD);
