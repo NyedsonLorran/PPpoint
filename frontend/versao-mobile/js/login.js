@@ -68,9 +68,9 @@ async function registrar() {
 
   if (btn && btn.disabled) return;
 
-  const email = document.getElementById("cadastroEmail").value;
+  const email = document.getElementById("cadastroEmail").value.trim();
   const senha = document.getElementById("cadastroSenha").value;
-  const usuario = document.getElementById("cadastroUsuario").value;
+  const usuario = document.getElementById("cadastroUsuario").value.trim();
   const senhaConf = document.getElementById("cadastroSenhaConfirm").value;
 
   if (!email || !senha || !usuario || !senhaConf) {
@@ -105,17 +105,25 @@ async function registrar() {
       _emailPendente = email;
       _tipoCodigo = "REGISTRO";
       _esconderPaineis();
-      document.getElementById("labelEmailCodigo").innerText =
-        `Código enviado para ${email}`;
+      document.getElementById("labelEmailCodigo").innerText = `Código enviado para ${email}`;
       document.getElementById("inputCodigo").value = "";
       document.getElementById("codigoVerificacaoForm").style.display = "block";
-    } else {
+      return;
+    } 
+    
+    let msgErro = "Erro desconhecido ao criar conta.";
+    try {
       const data = await res.json();
-      alert("Erro: " + data.message);
+      if (data && data.message) msgErro = data.message;
+    } catch (jsonErr) {
+      console.error("Não foi possível ler o JSON de erro do servidor:", jsonErr);
     }
+    
+    alert("Erro: " + msgErro);
 
   } catch (e) {
-    alert("Erro ao conectar com o servidor.");
+    console.error(e);
+    alert("Erro ao conectar com o servidor. Verifique sua conexão de rede.");
   } finally {
     if (btn && texto && loader) {
       btn.disabled = false;

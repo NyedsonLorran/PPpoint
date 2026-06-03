@@ -1,19 +1,17 @@
 @font-face {
   font-family: 'Antone';
-  src: url('/frontend/versao-mobile/css/fonts/Antone\ DEMO.ttf') format('truetype');
+  src: url('../fonts/Antone\ DEMO.ttf') format('truetype');
 }
 
 @font-face {
   font-family: 'Geometos';
-  src: url('/frontend/versao-mobile/css/fonts/Geometos\ Rounded.ttf') format('truetype');
+  src: url('../fonts/Geometos\ Rounded.ttf') format('truetype');
 }
 
 @font-face {
   font-family: 'Crochet';
-  src: url('/frontend/versao-mobile/css/fonts/Crochet.otf') format('truetype');
+  src: url('../fonts/Crochet.otf') format('truetype');
 }
-
-
 
 .carrossel-programacao {
   position: relative;
@@ -98,6 +96,7 @@
 }
 
 .hora {
+  font-family: 'Geometos', Arial, sans-serif;
   background-color: #991710;
   font-weight: bold;
   color: #ffffff;
