@@ -201,7 +201,10 @@
         </button>
       </div>
 
-      <button onclick="fazerLogin()"> Entrar</button>
+      <button onclick="fazerLogin()">
+        <span class="texto-btn">Entrar</span>
+        <span class="loader" style="display: none;"></span>
+      </button>
 
       <!-- <button class="btn-google" id="btnGoogleLogin" onclick="loginComGoogle()">
         <i class="fa-brands fa-google"></i> Entrar com Google
@@ -242,7 +245,10 @@
         <input type="password" id="cadastroSenhaConfirm" placeholder="Confirmar senha">
       </div>
 
-      <button onclick="registrar()">Criar</button>
+      <button onclick="registrar()">
+        <span class="texto-btn">Criar</span>
+        <span class="loader" style="display: none;"></span>
+      </button>
 
       <p>
         Já tem uma conta?
@@ -259,7 +265,10 @@
         <input type="text" id="inputCodigo" placeholder="Código de 6 dígitos"
                maxlength="6" inputmode="numeric">
       </div>
-      <button onclick="verificarCodigo()">Confirmar</button>
+      <button onclick="verificarCodigo()">
+        <span class="texto-btn">Confirmar</span>
+        <span class="loader" style="display: none;"></span>
+      </button>
       <span class="esqueci-senha" onclick="reenviarCodigo()">Reenviar código</span>
       <p>
         <span class="link-login" onclick="mostrarLogin()">Voltar ao login</span>
@@ -275,7 +284,10 @@
         <input type="text" id="inputCodigoReset" placeholder="Código de 6 dígitos"
                maxlength="6" inputmode="numeric">
       </div>
-      <button onclick="verificarCodigoReset()">Confirmar</button>
+      <button onclick="verificarCodigoReset()">
+        <span class="texto-btn">Confirmar</span>
+        <span class="loader" style="display: none;"></span>
+      </button>
       <span class="esqueci-senha" onclick="reenviarCodigoReset()">Reenviar código</span>
       <p>
         <span class="link-login" onclick="abrirEsqueciSenha()">Voltar</span>

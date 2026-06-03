@@ -7,8 +7,8 @@ const API_URL = DEV_ORIGINS.includes(window.location.hostname)
 const nomesMeses = ["Jun", "Jul"];
 let mesAtual = 0; 
 const ano = 2026;
-                        //  A   M   D  H   M  S 
-const agoraFixo = new Date(2026, 6, 6, 17, 0, 0); //  para testes
+                        //  A   M  D   H  M  S 
+const agoraFixo = new Date()
 let diaSelecionado = null;
 let streamRecurso = null;
 let fotoCapturada = null;  
@@ -29,25 +29,40 @@ function getAgora() {
 }
 
 function eventoFinalizado() {
-  return true;
+    const agora = getAgora();
+    const fim = new Date(2026, 6, 6, 17, 0, 0);
+
+    if (agora < fim) {
+        return false;
+    }
+
+    for (let mes = 0; mes <= 1; mes++) {
+        for (let dia = 1; dia <= 31; dia++) {
+            if (typeof dentroDoEvento === "function" && dentroDoEvento(mes, dia)) {
+                if (typeof obterStatus === "function" && obterStatus(mes, dia) === "disponivel") {
+                    return false; 
+                }
+            }
+        }
+    }
+
+    return true;
 }
+
 function gerenciarSwipe() {
     const diferenca = touchStartX - touchEndX;
     const paginas = ["programacao", "ponto", "retrospectiva"];
     
-    // Swipe para a Esquerda (Próxima página)
     if (diferenca > swipeThreshold) {
         let proximoIndex = (ultimoIndex + 1) % paginas.length;
         mostrarPagina(paginas[proximoIndex]);
     } 
-    // Swipe para a Direita (Página anterior)
     else if (diferenca < -swipeThreshold) {
         let anteriorIndex = (ultimoIndex - 1 + paginas.length) % paginas.length;
         mostrarPagina(paginas[anteriorIndex]);
     }
 }
 
-// Ouvintes de eventos de toque
 window.addEventListener('touchstart', e => {
     touchStartX = e.changedTouches[0].screenX;
 }, { passive: true });
@@ -122,8 +137,18 @@ function mostrarPagina(pagina) {
         }
     }
 
-    if (pagina === "retrospectiva" && typeof initRetrospectiva === "function") {
-        initRetrospectiva();
+    if (pagina === "retrospectiva") {
+        if (typeof iniciarContadorRetro === "function") {
+            iniciarContadorRetro();
+        }
+        if (typeof initRetrospectiva === "function") {
+            initRetrospectiva();
+        }
+    } else {
+        if (window.intervaloRetro) {
+            clearInterval(window.intervaloRetro);
+            window.intervaloRetro = null;
+        }
     }
 
     const btnLogin = document.getElementById("btnLogin");
@@ -142,7 +167,6 @@ window.addEventListener("DOMContentLoaded", async () => {
   renderizarCalendario();
   atualizarProgramacao();
 
-  // Carrega dias do backend, posiciona no dia atual e renderiza
   await carregarDiasDisponiveis();
   irParaDiaAtual();
   renderizarProgramacao();

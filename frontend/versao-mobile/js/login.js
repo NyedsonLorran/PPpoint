@@ -62,6 +62,12 @@ function mostrarCadastro() {
 }
 
 async function registrar() {
+  const btn = document.querySelector("#registerForm button");
+  const texto = btn?.querySelector(".texto-btn");
+  const loader = btn?.querySelector(".loader");
+
+  if (btn && btn.disabled) return;
+
   const email = document.getElementById("cadastroEmail").value;
   const senha = document.getElementById("cadastroSenha").value;
   const usuario = document.getElementById("cadastroUsuario").value;
@@ -75,6 +81,12 @@ async function registrar() {
   if (senha !== senhaConf) {
     alert("As senhas não conferem!");
     return;
+  }
+
+  if (btn && texto && loader) {
+    btn.disabled = true;
+    texto.style.display = "none";
+    loader.style.display = "inline-block";
   }
 
   try {
@@ -104,13 +116,31 @@ async function registrar() {
 
   } catch (e) {
     alert("Erro ao conectar com o servidor.");
+  } finally {
+    if (btn && texto && loader) {
+      btn.disabled = false;
+      texto.style.display = "inline";
+      loader.style.display = "none";
+    }
   }
 }
 
 // Verificação de email após cadastro ou login bloqueado
 async function verificarCodigo() {
+  const btn = document.querySelector("#codigoVerificacaoForm button");
+  const texto = btn?.querySelector(".texto-btn");
+  const loader = btn?.querySelector(".loader");
+
+  if (btn && btn.disabled) return;
+
   const codigo = document.getElementById("inputCodigo").value.trim();
   if (codigo.length !== 6) { alert("Digite o código de 6 dígitos."); return; }
+
+  if (btn && texto && loader) {
+    btn.disabled = true;
+    texto.style.display = "none";
+    loader.style.display = "inline-block";
+  }
 
   try {
     const res = await fetch(`${API_URL}/auth/email-verification`, {
@@ -128,6 +158,12 @@ async function verificarCodigo() {
     }
   } catch (e) {
     alert("Erro ao conectar com o servidor.");
+  } finally {
+    if (btn && texto && loader) {
+      btn.disabled = false;
+      texto.style.display = "inline";
+      loader.style.display = "none";
+    }
   }
 }
 
@@ -146,6 +182,12 @@ async function reenviarCodigo() {
 }
 
 async function fazerLogin() {
+  const btn = document.querySelector("#loginForm button");
+  const texto = btn?.querySelector(".texto-btn");
+  const loader = btn?.querySelector(".loader");
+
+  if (btn && btn.disabled) return;
+
   const emailInput = document.getElementById("loginUsuario").value;
   const senhaInput = document.getElementById("loginSenha").value;
 
@@ -154,27 +196,10 @@ async function fazerLogin() {
     return; 
   }
 
-
-  const DEV = true;
-
-  //  FAKE GENTE É PARA TESTER SEM BEACKEND PQ TA FODA
-  if (DEV && emailInput === "teste@gmail.com" && senhaInput === "111111") {
-    sessionStorage.setItem("token", "fake-token");
-    sessionStorage.setItem("role", "ADMIN");
-
-    localStorage.setItem("usuarioLogado", JSON.stringify({
-      usuario: emailInput,
-      email: emailInput
-    }));
-
-    fecharLoginCadastro();
-    definirLogado(true);
-    await carregarDiasDisponiveis();
-    irParaDiaAtual();
-    renderizarProgramacao();
-    renderizarCalendario();
-
-    return; 
+  if (btn && texto && loader) {
+    btn.disabled = true;
+    texto.style.display = "none";
+    loader.style.display = "inline-block";
   }
 
   try {
@@ -209,6 +234,12 @@ async function fazerLogin() {
   } catch (e) {
     console.error(e);
     alert("Erro ao conectar com o servidor.");
+  } finally {
+    if (btn && texto && loader) {
+      btn.disabled = false;
+      texto.style.display = "inline";
+      loader.style.display = "none";
+    }
   }
 }
 
@@ -333,8 +364,20 @@ function abrirEsqueciSenha() {
 }
 
 async function enviarRecuperacao() {
+  const btn = document.querySelector(".janela-recuperacao button");
+  const texto = btn?.querySelector(".texto-btn");
+  const loader = btn?.querySelector(".loader");
+
+  if (btn && btn.disabled) return;
+
   const email = document.getElementById("emailRecuperacao").value;
   if (!email) { alert("Digite um email válido!"); return; }
+
+  if (btn && texto && loader) {
+    btn.disabled = true;
+    texto.style.display = "none";
+    loader.style.display = "inline-block";
+  }
 
   try {
     const res = await fetch(`${API_URL}/auth/forgot-password`, {
@@ -358,13 +401,31 @@ async function enviarRecuperacao() {
     }
   } catch (e) {
     alert("Erro ao conectar com o servidor.");
+  } finally {
+    if (btn && texto && loader) {
+      btn.disabled = false;
+      texto.style.display = "inline";
+      loader.style.display = "none";
+    }
   }
 }
 
 // Verificação do código de reset de senha
 async function verificarCodigoReset() {
+  const btn = document.querySelector("#codigoResetForm button");
+  const texto = btn?.querySelector(".texto-btn");
+  const loader = btn?.querySelector(".loader");
+
+  if (btn && btn.disabled) return;
+
   const codigo = document.getElementById("inputCodigoReset").value.trim();
   if (codigo.length !== 6) { alert("Digite o código de 6 dígitos."); return; }
+
+  if (btn && texto && loader) {
+    btn.disabled = true;
+    texto.style.display = "none";
+    loader.style.display = "inline-block";
+  }
 
   try {
     const res = await fetch(`${API_URL}/auth/check-reset`, {
@@ -383,6 +444,12 @@ async function verificarCodigoReset() {
     }
   } catch (e) {
     alert("Erro ao conectar com o servidor.");
+  } finally {
+    if (btn && texto && loader) {
+      btn.disabled = false;
+      texto.style.display = "inline";
+      loader.style.display = "none";
+    }
   }
 }
 
@@ -402,6 +469,12 @@ async function reenviarCodigoReset() {
 
 // Redefinição da nova senha
 async function redefinirSenha() {
+  const btn = document.querySelector("#novaSenhaForm button");
+  const texto = btn?.querySelector(".texto-btn");
+  const loader = btn?.querySelector(".loader");
+
+  if (btn && btn.disabled) return;
+
   const novaSenha      = document.getElementById("inputNovaSenha").value;
   const confirmarSenha = document.getElementById("inputConfirmarSenha").value;
   const codigo         = document.getElementById("inputCodigoNovaSenha").value;
@@ -409,6 +482,12 @@ async function redefinirSenha() {
   if (!novaSenha || !confirmarSenha) { alert("Preencha todos os campos!"); return; }
   if (novaSenha !== confirmarSenha)  { alert("As senhas não conferem!"); return; }
   if (novaSenha.length < 6)          { alert("Mínimo 6 caracteres."); return; }
+
+  if (btn && texto && loader) {
+    btn.disabled = true;
+    texto.style.display = "none";
+    loader.style.display = "inline-block";
+  }
 
   try {
     const res = await fetch(`${API_URL}/auth/reset-password`, {
@@ -432,6 +511,12 @@ async function redefinirSenha() {
     }
   } catch (e) {
     alert("Erro ao conectar com o servidor.");
+  } finally {
+    if (btn && texto && loader) {
+      btn.disabled = false;
+      texto.style.display = "inline";
+      loader.style.display = "none";
+    }
   }
 }
 
@@ -444,6 +529,3 @@ function usuarioEAdmin() {
 
   return role.toUpperCase() === "ADMIN";
 }
-
-
-

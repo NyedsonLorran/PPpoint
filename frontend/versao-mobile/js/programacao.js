@@ -89,22 +89,22 @@ async function renderizarProgramacao() {
   const hoje = new Date(agoraFixo.getFullYear(), agoraFixo.getMonth(), agoraFixo.getDate());
 
   grupo.forEach((dataIso, i) => {
-  let shows = [...programacoes[i]];
+    let shows = [...programacoes[i]];
 
-  shows.sort((a, b) => {
-  const horaA = a.horario.substring(0, 5);
-  const horaB = b.horario.substring(0, 5);
+    shows.sort((a, b) => {
+      const horaA = a.horario.substring(0, 5);
+      const horaB = b.horario.substring(0, 5);
 
-  const valorA = horaA < "06:00"
-    ? parseInt(horaA.replace(":", "")) + 2400
-    : parseInt(horaA.replace(":", ""));
+      const valorA = horaA < "06:00"
+        ? parseInt(horaA.replace(":", "")) + 2400
+        : parseInt(horaA.replace(":", ""));
 
-  const valorB = horaB < "06:00"
-    ? parseInt(horaB.replace(":", "")) + 2400
-    : parseInt(horaB.replace(":", ""));
+      const valorB = horaB < "06:00"
+        ? parseInt(horaB.replace(":", "")) + 2400
+        : parseInt(horaB.replace(":", ""));
 
-  return valorA - valorB;
-});
+      return valorA - valorB;
+    });
 
     const [anoD, mesD, diaD] = dataIso.split("-").map(Number);
     const dataEvento = new Date(anoD, mesD - 1, diaD);
@@ -120,7 +120,6 @@ async function renderizarProgramacao() {
     const div = document.createElement("div");
     div.classList.add("card-dia", classeStatus);
 
-    // AQUI CRIA O BOTÃO
     let botaoEditar = "";
 
     if (usuarioEAdmin() === true) {
@@ -133,7 +132,9 @@ async function renderizarProgramacao() {
 
     const showsHtml = shows.length > 0
       ? shows.map(s => {
-          const hora = s.horario ? s.horario.substring(0, 5) : "--:--";
+          const horaOriginal = s.horario ? s.horario.substring(0, 5) : "00:00";
+          const hora = (horaOriginal === "00:00" || horaOriginal === "-") ? "-" : horaOriginal;
+          
           const artista = s.nome || "Artista";
           const fotoHtml = s.foto
             ? `<img src="${s.foto}" alt="${artista}" class="foto-cantor" onerror="this.style.display='none'">`
@@ -148,7 +149,6 @@ async function renderizarProgramacao() {
         }).join("")
       : `<div class="show"><span class="artista">A confirmar</span></div>`;
 
-    //  INSERE O BOTÃO DE EDITAR NO CARD SE FOR ADMIN
     div.innerHTML = `
       <div class="data-dia">
         <span class="semana">${diaSemanaTexto}</span>

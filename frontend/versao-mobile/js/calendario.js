@@ -25,6 +25,7 @@
   if (agora >= inicio && agora <= fim) return "disponivel";
   return "encerrado";
 }
+
 function renderizarCalendario() {
   const containerDias = document.getElementById("dias");
   const labelMes = document.getElementById("Mes");

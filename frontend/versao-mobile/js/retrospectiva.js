@@ -70,43 +70,54 @@ function renderizarExplicacaoPublica() {
 }
 
 function renderizarContadorPrivado() {
-  const container = document.getElementById("retro-container-dinamico");
-  const user = getUsuarioLogado();
-  
-  container.innerHTML = `
-    <div class="retro-info-card">
-      <h3>Olá, ${user.nome || 'Programador'}!</h3>
-      <p>Estamos preparando seus momentos. Ela estará disponível em:</p>
-      <div id="contadorRetro" class="cronometro">--d --h --m --s</div>
-    </div>
-  `;
+    const el = document.getElementById("contadorRetro");
+    if (el) {
+        let nomeUsuario = "Programador";
+        try {
+            const user = typeof getUsuarioLogado === "function" ? getUsuarioLogado() : null;
+            if (user) nomeUsuario = user.nome || user.usuario || "Programador";
+        } catch (e) {}
+        
+        const textoRetro = document.getElementById("textoRetro");
+        if (textoRetro) {
+            textoRetro.innerHTML = ` ${nomeUsuario}<br>SUA RETROSPECTIVA ESTARÁ<br>DISPONÍVEL EM:`;
+        }
+    }
 }
 
 function iniciarContadorRetro() {
-    const el = document.getElementById("contadorRetro");
-    if (!el) return;
+    renderizarContadorPrivado();
 
-    if (window.intervaloRetro) clearInterval(window.intervaloRetro);
+    if (window.intervaloRetro) {
+        clearInterval(window.intervaloRetro);
+    }
 
-    window.intervaloRetro = setInterval(() => {
-        const agora = getAgora();
-        const fim = new Date(2026, 6, 6, 17, 0, 0); 
+    const atualizarTela = () => {
+        const el = document.getElementById("contadorRetro");
+        if (!el) return;
+
+        const agora = new Date();
+        const fim = new Date(2026, 6, 6, 17, 0, 0);
         const diff = fim - agora;
 
         if (diff <= 0) {
             clearInterval(window.intervaloRetro);
-            initRetrospectiva();
+            if (typeof initRetrospectiva === "function") initRetrospectiva();
             return;
         }
 
         const dias = Math.floor(diff / 86400000);
-        const horas = Math.floor((diff / 3600000) % 24);
-        const min = Math.floor((diff / 60000) % 60);
-        const seg = Math.floor((diff / 1000) % 60);
+        const horas = Math.floor((diff % 86400000) / 3600000);
+        const minutos = Math.floor((diff % 3600000) / 60000);
+        const segundos = Math.floor((diff % 60000) / 1000);
 
         const format = (n) => String(n).padStart(2, "0");
-        el.innerText = `${dias}d ${format(horas)}h ${format(min)}m ${format(seg)}s`;
-    }, 1000);
+
+        el.innerText = `${format(dias)}d ${format(horas)}h ${format(minutos)}m ${format(segundos)}s`;
+    };
+
+    atualizarTela();
+    window.intervaloRetro = setInterval(atualizarTela, 1000);
 }
 
 function liberarRetro() {

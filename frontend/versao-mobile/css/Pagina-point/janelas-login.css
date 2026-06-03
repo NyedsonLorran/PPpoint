@@ -68,7 +68,7 @@
   cursor: pointer;
 }
 
-#loginForm button,
+#loginForm button,#codigoVerificacaoForm button,
 #registerForm button {
   font-weight: 600;
   width: 100%;
@@ -153,8 +153,7 @@
   pointer-events: none;
 }
 
-#loginForm h2, 
-#registerForm h2 {
+#loginForm h2, #codigoVerificacaoForm h2, #registerForm h2 {
   margin: 15px;
   white-space: nowrap;
   color: white;
