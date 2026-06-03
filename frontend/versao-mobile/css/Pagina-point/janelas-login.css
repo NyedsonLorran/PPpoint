@@ -68,7 +68,8 @@
   cursor: pointer;
 }
 
-#loginForm button,#codigoVerificacaoForm button,
+#loginForm button,
+#codigoVerificacaoForm button,
 #registerForm button {
   font-weight: 600;
   width: 100%;
@@ -227,6 +228,32 @@
 #janela-esqueci-senha .input-com-icone i {
   color: #e9e7e7 ;
 }
+
+#loginForm button, 
+#codigoVerificacaoForm button, 
+#registerForm button,
+.janela-recuperacao button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px; 
+}
+
+.loader {
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: #ffffff;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 
 .fechar {
   position: absolute;
