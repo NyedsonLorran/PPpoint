@@ -25,7 +25,7 @@ Projeto desenvolvido por
     <td align="center">
       <a href="https://github.com/MatheusMonteiro10">
         <img src="https://github.com/MatheusMonteiro10.png" width="100px;" style="border-radius:50%" /><br/>
-        <sub><b>Diogo Lira</b></sub>
+        <sub><b>Matheus Monteiro</b></sub>
       </a>
     </td>
   </tr>
