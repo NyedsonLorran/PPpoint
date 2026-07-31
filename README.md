@@ -1,5 +1,18 @@
 
 # PPoint
+
+<p align="center">
+  <img width="366" src="https://github.com/user-attachments/assets/a64c43ae-7dfb-4fa2-b5d4-c435e80f9dab" />
+</p>
+
+<p align="center">
+  <img width="373" src="https://github.com/user-attachments/assets/95618d81-39e4-4e82-b2e4-2dc83fd328f2" />
+</p>
+
+<p align="center">
+  <img width="368" src="https://github.com/user-attachments/assets/cb468d83-4e0a-4f2b-a090-48e7537dc62e" />
+</p>
+
 O PPoint é um projeto web desenvolvido em grupo com o objetivo de transformar a experiência do maior São João do mundo em algo mais interativo, inspirado no modelo de retrospectiva do Spotify Wrapped.
 A ideia surgiu justamente dessa referência: a forma como o Spotify transforma dados de uso em uma experiência visual e personalizada foi o ponto de partida para pensar o projeto aplicado a eventos.
 
