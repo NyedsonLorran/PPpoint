@@ -6,29 +6,36 @@ O PPoint é um projeto web desenvolvido em grupo com o objetivo de transformar a
 
 A ideia surgiu justamente dessa referência: a forma como o Spotify transforma dados de uso em uma experiência visual e personalizada foi o ponto de partida para pensar o projeto aplicado a eventos.
 
+
 <table>
+  <tr>
     <td align="center">
       <a href="https://github.com/nyedsonlorran">
         <sub>
-          <b>Nyedson Lorran</b>
+          <b>Nyedson Lorran</b><br/>
+          <span>Front-end</span>
         </sub>
       </a>
     </td>
     <td align="center">
       <a href="https://github.com/ViniciusGbasilio">
         <sub>
-          <b>Vinicius Basilio</b>
+          <b>Vinicius Basilio</b><br/>
+          <span>Banco de Dados</span>
         </sub>
       </a>
     </td>
     <td align="center">
-      <a href="MatheusMonteiro10">
+      <a href="https://github.com/MatheusMonteiro10">
         <sub>
-          <b>Diogo Lira</b>
+          <b>Matheus Monteiro</b><br/>
+          <span>Back-end</span>
         </sub>
       </a>
     </td>
+  </tr>
 </table>
+
 
 
 <br clear="both">
