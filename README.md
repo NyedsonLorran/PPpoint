@@ -1,4 +1,5 @@
 
+
 # PPoint
 
 <img align="right" width="300" src="https://github.com/user-attachments/assets/8ee82d45-b4ed-4f72-b76c-756b29fdd777" />
@@ -8,7 +9,7 @@ A ideia surgiu justamente dessa referência: a forma como o Spotify transforma d
 
 <br clear="both">
 
-<img align="left" width="300" src="https://github.com/user-attachments/assets/968ccc66-cc07-4ee3-a2da-994af8554133" />
+<img align="left" width="300" src="https://github.com/user-attachments/assets/4c87f64d-026b-4959-9c4e-40f40f6cc62b" />
 
 ## Sobre a ideia
 
