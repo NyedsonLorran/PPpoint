@@ -6,8 +6,6 @@ O PPoint é um projeto web desenvolvido em grupo com o objetivo de transformar a
 
 A ideia surgiu justamente dessa referência: a forma como o Spotify transforma dados de uso em uma experiência visual e personalizada foi o ponto de partida para pensar o projeto aplicado a eventos.
 
-<br clear="both">
-
 Projeto desenvolvido por
 
 <table align="center">
