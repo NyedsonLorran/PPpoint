@@ -6,8 +6,9 @@ O PPoint é um projeto web desenvolvido em grupo com o objetivo de transformar a
 
 A ideia surgiu justamente dessa referência: a forma como o Spotify transforma dados de uso em uma experiência visual e personalizada foi o ponto de partida para pensar o projeto aplicado a eventos.
 
+<br clear="both">
 
-## Projeto desenvolvido por
+<h2>Projeto desenvolvido por</h2>
 
 <table align="center">
   <tr>
@@ -32,15 +33,11 @@ A ideia surgiu justamente dessa referência: a forma como o Spotify transforma d
   </tr>
 </table>
 
-
-
-
-
 <br clear="both">
 
 <img align="left" width="300" src="https://github.com/user-attachments/assets/4c87f64d-026b-4959-9c4e-40f40f6cc62b" />
 
-## Sobre a ideia
+<h2>Sobre a ideia</h2>
 
 Em eventos grandes, é comum acompanhar a programação no momento, mas depois não lembrar exatamente o que foi vivido. O PPoint foi pensado para resolver isso, permitindo que o usuário acompanhe o evento e registre sua própria experiência ao longo dos dias.
 
@@ -58,7 +55,7 @@ Com isso, a ideia é evoluir para uma retrospectiva personalizada, semelhante ao
 
 <img align="right" width="300" src="https://github.com/user-attachments/assets/5d24bc26-ab08-4bc9-b350-a89e20a39cc7" />
 
-## Como o site funciona na prática
+<h2>Como o site funciona na prática</h2>
 
 O funcionamento do PPoint foi pensado de forma simples e centrada no usuário. Ao acessar o sistema, o usuário pode navegar pela programação dos dias do evento e interagir com ela.
 
@@ -82,7 +79,7 @@ A ideia central é que, ao final, o usuário tenha uma espécie de “retrospect
 
 <br clear="both">
 
-## Desenvolvimento em grupo
+<h2>Desenvolvimento em grupo</h2>
 
 O projeto foi desenvolvido em equipe, com o objetivo de que cada integrante pudesse praticar e desenvolver diferentes habilidades dentro do desenvolvimento de software.
 
@@ -94,7 +91,7 @@ Houve divisão de responsabilidades, mas todos tiveram contato com as principais
 
 Essa dinâmica permitiu que cada pessoa evoluísse tecnicamente e também entendesse melhor como as partes de um sistema se conectam.
 
-## Tecnologias utilizadas
+<h2>Tecnologias utilizadas</h2>
 
 O projeto foi construído com:
 
@@ -105,7 +102,7 @@ O projeto foi construído com:
 
 A escolha por tecnologias mais diretas foi intencional, com foco no aprendizado prático e no entendimento completo do funcionamento da aplicação.
 
-## Design e interface
+<h2>Design e interface</h2>
 
 Uma das principais preocupações foi a interface.
 
@@ -118,7 +115,7 @@ A referência no Spotify influenciou principalmente:
 
 A proposta foi criar uma experiência simples, mas agradável e intuitiva.
 
-## Desafios
+<h2>Desafios</h2>
 
 Um dos principais desafios foi o design.
 
@@ -129,7 +126,7 @@ A tentativa de se aproximar de uma experiência como a do Spotify exigiu um nív
 * ajustes finos de layout
 * adaptação para diferentes tamanhos de tela
 
-## Objetivo do projeto
+<h2>Objetivo do projeto</h2>
 
 O PPoint foi desenvolvido principalmente como prática.
 
