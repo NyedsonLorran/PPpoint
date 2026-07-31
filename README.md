@@ -27,7 +27,7 @@ Com isso, a ideia é evoluir para uma retrospectiva personalizada, semelhante ao
 
 <br clear="both">
 
-<img align="right" width="300" src="https://github.com/user-attachments/assets/6b8d4596-8d63-4f14-806d-10ba963aa7b5" />
+<img align="right" width="300" src="https://github.com/user-attachments/assets/5d24bc26-ab08-4bc9-b350-a89e20a39cc7" />
 
 ## Como o site funciona na prática
 
