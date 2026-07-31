@@ -8,7 +8,7 @@ A ideia surgiu justamente dessa referência: a forma como o Spotify transforma d
 
 <br clear="both">
 
-<h2>Projeto desenvolvido por</h2>
+Projeto desenvolvido por
 
 <table align="center">
   <tr>
