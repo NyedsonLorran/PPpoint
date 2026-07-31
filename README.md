@@ -9,22 +9,29 @@ A ideia surgiu justamente dessa referência: a forma como o Spotify transforma d
 
 ## Projeto desenvolvido por
 
-<p align="center">
-  <a href="https://github.com/nyedsonlorran">
-    <img src="https://github.com/nyedsonlorran.png" width="80px;" style="border-radius:50%" /><br/>
-    <sub><b>Nyedson Lorran</b></sub>
-  </a>
-  &nbsp;&nbsp;&nbsp;
-  <a href="https://github.com/ViniciusGbasilio">
-    <img src="https://github.com/ViniciusGbasilio.png" width="80px;" style="border-radius:50%" /><br/>
-    <sub><b>Vinicius Basilio</b></sub>
-  </a>
-  &nbsp;&nbsp;&nbsp;
-  <a href="https://github.com/MatheusMonteiro10">
-    <img src="https://github.com/MatheusMonteiro10.png" width="80px;" style="border-radius:50%" /><br/>
-    <sub><b>Diogo Lira</b></sub>
-  </a>
-</p>
+<table align="center">
+  <tr>
+    <td align="center">
+      <a href="https://github.com/nyedsonlorran">
+        <img src="https://github.com/nyedsonlorran.png" width="100px;" style="border-radius:50%" /><br/>
+        <sub><b>Nyedson Lorran</b></sub>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/ViniciusGbasilio">
+        <img src="https://github.com/ViniciusGbasilio.png" width="100px;" style="border-radius:50%" /><br/>
+        <sub><b>Vinicius Basilio</b></sub>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/MatheusMonteiro10">
+        <img src="https://github.com/MatheusMonteiro10.png" width="100px;" style="border-radius:50%" /><br/>
+        <sub><b>Diogo Lira</b></sub>
+      </a>
+    </td>
+  </tr>
+</table>
+
 
 
 
